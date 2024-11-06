@@ -27,7 +27,7 @@ rm -rf feeds/packages/utils/v2dat
 
 
 rm -rf feeds/luci/applications/luci-app-openclash
-cp -rf feeds/smpackage/luci-app-openclash   feeds/luci/applications/luci-app-openclash
+#cp -rf feeds/smpackage/luci-app-openclash   feeds/luci/applications/luci-app-openclash
 
 
 ./scripts/feeds install -a 
