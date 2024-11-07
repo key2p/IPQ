@@ -12,6 +12,10 @@ git config http.proxy http://192.168.0.25:9090
 export http_proxy=http://192.168.0.25:9090
 export https_proxy=http://192.168.0.25:9090
 
+# patch make
+curl -O http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.2.1-1.2_amd64.deb
+dpkg -i *.deb
+
 git clone $REPO_URL -b $REPO_BRANCH openwrt
 cd $OPENWRT_PATH 
 
@@ -56,7 +60,7 @@ find dl -size -1024c -exec rm -f {} \;
 # Compile Firmware
 cd $OPENWRT_PATH
 echo -e "$(nproc) thread compile"
-make -j$(nproc) || make -j$(nproc) || make -j$(nproc) || make -j4 || make -j2 || make -j1 || make -j1 V=s
+make -j$(nproc) || make -j$(nproc) V=sc || make -j$(nproc) || make -j4 || make -j2 V=sc || make -j1 || make -j1 V=s
 
 echo "status=success"
 export DATE=$(date +"%Y-%m-%d %H:%M:%S")
