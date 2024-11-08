@@ -21,7 +21,7 @@ RUN pwd && ls -al && \
     useradd work && (mkdir -p /home/work || true) && \
     chown -R work:work /builder && chown -R work:work /home/work && \     
     chmod +x build_openwrt.sh && \
-    su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh 2>&1 | tee /builder/build.log" 
+    su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh > /builder/build.log" 
 
 COPY /builder/build.log     ./bin_x64
 COPY /builder/openwrt/bin   ./bin_x64
