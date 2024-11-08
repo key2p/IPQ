@@ -1,7 +1,7 @@
 FROM openwrt_builder:24.10
 
-ENV REPO_URL=https://github.com/LiBwrt-op/openwrt-6.x \
-    REPO_BRANCH=openwrt-24.10 \
+ENV REPO_URL=https://github.com/immortalwrt/immortalwrt.git \
+    REPO_BRANCH=master \
     CONFIG_FILE=configs/x86_64.config \
     DIY_SCRIPT=diy-script.sh \
     CLASH_KERNEL=amd64 \
@@ -21,9 +21,9 @@ RUN pwd && ls -al && \
     useradd work && (mkdir -p /home/work || true) && \
     chown -R work:work /builder && chown -R work:work /home/work && \     
     chmod +x build_openwrt.sh && \
-    curl -v -L -O http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.2.1-1.2_amd64.deb && dpkg -i *.deb && \
-    su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh" 
+    su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh 2>&1 | tee /builder/build.log" 
 
-COPY /builder/openwrt/bin ./bin_x64
+COPY /builder/build.log     ./bin_x64
+COPY /builder/openwrt/bin   ./bin_x64
 
 # docker build --rm -f build_x86_64.dockerfile .

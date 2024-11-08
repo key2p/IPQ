@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ex
 
+export BUILD_START=$(date)
+echo ${BUILD_START}
+
 export GITHUB_WORKSPACE=${WORK_DIR}
 export 
 
@@ -81,6 +84,8 @@ echo "FILE_DATE=$FILE_DATE"
 export FIRMWARE_PATH=$PWD
 echo "FIRMWARE_PATH=$FIRMWARE_PATH"
 
+export BUILD_END=$(date)
+
 # release
 echo "固件信息(WIFI版本)"
 echo " 平台架构: ${DEVICE_TARGET}-${DEVICE_SUBTARGET} 用于 ${FIRMWARE_TAG} 平台"
@@ -92,3 +97,4 @@ echo " 默认密码: password"
 echo " 🧊 固件版本"
 echo " 固件编译前最后一次➦[主源码](${REPO_URL})更新记录"
 echo " ${VERSION_INFO}"
+echo " 开始时间 ${BUILD_START} 结束时间 ${BUILD_END}"
