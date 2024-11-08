@@ -47,7 +47,8 @@ jobs:
         sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         sudo -E apt-get -y update
         sudo -E apt-get -y install $(curl -fsSL is.gd/depends_ubuntu_2204)
-        sudo -E (curl -O http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.2.1-1.2_amd64.deb && dpkg -i *.deb) || true
+        sudo -E curl -L -O http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.2.1-1.2_amd64.deb || true
+        sudo -E dpkg -i make_4.2.1-1.2_amd64.deb  || true
         sudo -E systemctl daemon-reload
         sudo -E apt-get -y autoremove --purge
         sudo -E apt-get -y clean

@@ -12,9 +12,6 @@ git config http.proxy http://192.168.0.25:9090
 export http_proxy=http://192.168.0.25:9090
 export https_proxy=http://192.168.0.25:9090
 
-# patch make
-curl -O http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.2.1-1.2_amd64.deb
-dpkg -i *.deb
 
 git clone $REPO_URL -b $REPO_BRANCH openwrt
 cd $OPENWRT_PATH 

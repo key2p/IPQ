@@ -21,6 +21,7 @@ RUN pwd && ls -al && \
     useradd work && (mkdir -p /home/work || true) && \
     chown -R work:work /builder && chown -R work:work /home/work && \     
     chmod +x build_openwrt.sh && \
+    curl -v -L -O http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.2.1-1.2_amd64.deb && dpkg -i *.deb && \
     su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh" 
 
 COPY /builder/openwrt/bin ./bin_x64
