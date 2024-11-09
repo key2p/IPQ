@@ -1,4 +1,4 @@
-name: IPQ6000-wifi
+name: ax5-jdc
 
 on:
   workflow_dispatch:
