@@ -27,3 +27,4 @@ COPY /builder/build.log     ./bin_x64
 COPY /builder/openwrt/bin   ./bin_x64
 
 # docker build --rm -f build_x86_64.dockerfile .
+# docker run -it -v $PWD:/builder/bin_x64 openwrt_builder:24.10 /bin/bash

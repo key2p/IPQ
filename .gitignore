@@ -1,0 +1,3 @@
+# git config --global --add safe.directory /root/xxx
+openwrt
+builder
