@@ -74,7 +74,8 @@ cd $OPENWRT_PATH/bin/targets/*/*
 
 cat sha256sums
 cp $OPENWRT_PATH/.config build.config
-mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
+mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages || true
+mv -f $OPENWRT_PATH/bin/packages/*/*/*.apk packages || true
 tar -zcf Packages.tar.gz packages
 rm -rf packages feeds.buildinfo version.buildinfo
 
