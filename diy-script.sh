@@ -10,8 +10,26 @@ rm -rf feeds/packages/multimedia/{ffmpeg*, fswebcam}
 
 # TTYD 免登录
 sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
+
+# apk version 兼容
 sed -i 's/PKG_VERSION/PKG_SRC_VERSION/g' feeds/packages/net/vlmcsd/Makefile
 sed -i '/svn1113/i\\PKG_VERSION:=1.1.13' feeds/packages/net/vlmcsd/Makefile
+sed -i '/PKG_SOURCE_URL/i\\PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_SRC_VERSION)' feeds/packages/net/vlmcsd/Makefile
+
+sed -i '/PKG_VERSION/d' feeds/luci/themes/luci-theme-argon/Makefile
+sed -i '/PKG_RELEASE/d' feeds/luci/themes/luci-theme-argon/Makefile
+
+sed -i '/PKG_VERSION/d' feeds/luci/applications/luci-app-arpbind/Makefile
+sed -i '/PKG_RELEASE/d' feeds/luci/applications/luci-app-arpbind/Makefile
+
+sed -i '/PKG_VERSION/d' feeds/luci/applications/luci-app-autoreboot/Makefile
+sed -i '/PKG_RELEASE/d' feeds/luci/applications/luci-app-autoreboot/Makefile
+
+sed -i '/PKG_VERSION/d' feeds/luci/applications/luci-app-*/Makefile
+sed -i '/PKG_RELEASE/d' feeds/luci/applications/luci-app-*/Makefile
+
+# nftables 最新的patch不兼容
+rm package/network/utils/nftables/patches/*
 
 # 移除要替换的包
 rm -rf feeds/packages/net/mosdns
@@ -23,6 +41,9 @@ rm -rf feeds/luci/applications/luci-app-mosdns
 rm -rf feeds/luci/applications/luci-app-netdata
 rm -rf feeds/luci/applications/luci-app-serverchan
 rm -rf feeds/luci/applications/luci-theme-bootstrap*
+rm -rf feeds/luci/applications/luci-app-openclash
+rm -rf feeds/luci/applications/luci-app-passwall
+rm -rf feeds/luci/applications/luci-app-homeproxy
 
 # 移除不需要的包
 rm -rf feeds/smpackage/{adguardhome,base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
@@ -36,6 +57,9 @@ rm feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg || tr
 # msd_lite
 git clone --depth=1 https://github.com/ximiTech/luci-app-msd_lite package/luci-app-msd_lite
 git clone --depth=1 https://github.com/ximiTech/msd_lite package/msd_lite
+
+sed -i '/PKG_VERSION/d' package/luci-app-*/Makefile
+sed -i '/PKG_RELEASE/d' package/luci-app-*/Makefile
 
 # 修复 hostapd 报错
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch
