@@ -29,7 +29,7 @@ sed -i '/PKG_VERSION/d' feeds/luci/applications/luci-app-*/Makefile
 sed -i '/PKG_RELEASE/d' feeds/luci/applications/luci-app-*/Makefile
 
 # nftables 最新的patch不兼容
-rm package/network/utils/nftables/patches/*
+# rm package/network/utils/nftables/patches/*
 
 # 移除要替换的包
 rm -rf feeds/packages/net/mosdns
