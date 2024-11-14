@@ -10,8 +10,11 @@ dd_reboot() {
     losetup "${LOOP_DEV}" "${ROOT_DISK}2"
     resize2fs -f "${LOOP_DEV}"
 
-    sync && (eject /dev/sr0 || eject /dev/cdrom || eject -s /dev/sr0 || eject -s /dev/cdrom) || true
-    sync && reboot || true
+    cp /bin/busybox /tmp/busybox
+    touch  /tmp/ddok
+
+    sync && (eject /dev/sr0 ;eject /dev/cdrom ; eject -s /dev/sr0 ; eject -s /dev/cdrom) || true
+    sync && /tmp/busybox reboot || true
 
     echo "dd ok, wait reboot..."
     sleep 3
@@ -75,7 +78,5 @@ echo "root: $ROOT_DISK"
 [ -e /dd.img.gz ] && (gunzip -dc /dd.img.gz | dd of=$ROOT_DISK) &&  touch /tmp/ddok
 [ -e /dd.img.xz ] && (unxz -dc /dd.img.xz | dd of=$ROOT_DISK) &&  touch /tmp/ddok
 
-[ -e /tmp/ddok ] && (dd_reboot $ROOT_DISK; echo 'reboot'; /bin/busybox reboot; echo 'reboot fail'; exit 0)
-
-exec /bin/busybox sh
-reboot
+[ -e /tmp/ddok ] && (dd_reboot $ROOT_DISK; echo 'reboot'; /bin/busybox reboot; /tmp/busybox reboot; echo 'reboot fail'; exit 0)
+[ ! -e /tmp/ddok] && (exec /bin/busybox sh; reboot)
