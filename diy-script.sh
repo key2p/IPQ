@@ -29,6 +29,8 @@ sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.
 
 #sed -i '/PKG_VERSION/d' feeds/luci/applications/luci-app-*/Makefile
 #sed -i '/PKG_RELEASE/d' feeds/luci/applications/luci-app-*/Makefile
+#sed -i '/PKG_VERSION/d' package/luci-app-*/Makefile
+#sed -i '/PKG_RELEASE/d' package/luci-app-*/Makefile
 
 # nftables 最新的patch不兼容
 # rm package/network/utils/nftables/patches/*
@@ -59,9 +61,6 @@ rm feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg || tr
 # msd_lite
 #git clone --depth=1 https://github.com/ximiTech/luci-app-msd_lite package/luci-app-msd_lite
 #git clone --depth=1 https://github.com/ximiTech/msd_lite package/msd_lite
-
-sed -i '/PKG_VERSION/d' package/luci-app-*/Makefile
-sed -i '/PKG_RELEASE/d' package/luci-app-*/Makefile
 
 # 修复 hostapd 报错
 cp -f $GITHUB_WORKSPACE/scripts/011-fix-mbo-modules-build.patch package/network/services/hostapd/patches/011-fix-mbo-modules-build.patch || true

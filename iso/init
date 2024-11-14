@@ -18,6 +18,8 @@ dd_reboot() {
 
     echo "dd ok, wait reboot..."
     sleep 3
+
+    echo b > /proc/sysrq-trigger
 }
 
 export PATH="$PATH:/usr/bin:/bin:/usr/sbin:/sbin"
