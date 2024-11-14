@@ -11,8 +11,8 @@ ENV REPO_URL=https://github.com/immortalwrt/immortalwrt.git \
     FIRMWARE_TAG=X86_64 \
     TZ=Asia/Shanghai
 
-ENV OPENWRT_PATH=/builder/openwrt
-ENV WORK_DIR=/builder
+ENV OPENWRT_PATH=/builder/openwrt \
+    WORK_DIR=/builder
 
 WORKDIR /builder    
        

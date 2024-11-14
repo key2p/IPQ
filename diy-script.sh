@@ -40,14 +40,16 @@ rm -rf feeds/packages/net/mosdns
 rm -rf feeds/packages/net/msd_lite
 rm -rf feeds/packages/net/smartdns
 rm -rf feeds/luci/themes/luci-theme-netgear
-rm -rf feeds/luci/themes/luci-theme-bootstrap*
+#rm -rf feeds/luci/themes/luci-theme-bootstrap*
 rm -rf feeds/luci/applications/luci-app-mosdns
 rm -rf feeds/luci/applications/luci-app-netdata
 rm -rf feeds/luci/applications/luci-app-serverchan
-rm -rf feeds/luci/applications/luci-theme-bootstrap*
+#rm -rf feeds/luci/applications/luci-theme-bootstrap*
 rm -rf feeds/luci/applications/luci-app-openclash
 rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf feeds/luci/applications/luci-app-homeproxy
+
+# 删除 bootstrp 会导致luci 安装失败
 
 # 移除不需要的包
 rm -rf feeds/smpackage/{adguardhome,base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
