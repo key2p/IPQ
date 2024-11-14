@@ -123,7 +123,7 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
-
+        cd ../ && bash iso/build_iso.sh && mv iso/*.iso $OPENWRT_PATH/bin/targets/x86/64/ || true
     - name: Check Space Usage
       if: (!cancelled())
       run: df -hT

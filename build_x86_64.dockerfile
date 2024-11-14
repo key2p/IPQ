@@ -15,18 +15,18 @@ ENV OPENWRT_PATH=/builder/openwrt
 ENV WORK_DIR=/builder
 
 WORKDIR /builder    
-COPY . /builder
        
 RUN pwd && ls -al && \
     useradd work && (mkdir -p /home/work || true) && \
     chown -R work:work /builder && chown -R work:work /home/work && \     
     chmod +x build_openwrt.sh && \
-    su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh > /builder/build.log" 
+    su -p work -c "export HOME=/home/work && cd /builder && ./build_openwrt.sh" 
 
-COPY /builder/build.log     ./bin_x64
-COPY /builder/openwrt/bin   ./bin_x64
+#COPY /builder/build.log     ./bin_x64
+#COPY /builder/openwrt/bin   ./bin_x64
 
-# docker build --rm -f build_x86_64.dockerfile .
-# docker run -it -v $PWD:/builder/bin_x64 openwrt_builder:24.10 /bin/bash
+# docker build --rm -v $PWD:/builder  -f build_x86_64.dockerfile .
+# docker run --rm -it -v $PWD:/builder openwrt_builder:24.10 /bin/bash
 #
+# cp ../diy-script.sh ./diy.sh &&  ./diy.sh
 # cp ../configs/x86_64.config ./.config &&  make defconfig && make -j8

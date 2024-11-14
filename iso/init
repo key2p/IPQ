@@ -1,0 +1,81 @@
+#!/bin/sh
+
+dd_reboot() {
+    ROOT_DISK=$1
+    echo $ROOT_DISK
+
+    parted -f -s "${ROOT_DISK}" resizepart 2 100%
+
+    LOOP_DEV="$(losetup -f)"
+    losetup "${LOOP_DEV}" "${ROOT_DISK}2"
+    resize2fs -f "${LOOP_DEV}"
+
+    sync && (eject /dev/sr0 || eject /dev/cdrom || eject -s /dev/sr0 || eject -s /dev/cdrom) || true
+    sync && reboot || true
+
+    echo "dd ok, wait reboot..."
+    sleep 3
+}
+
+export PATH="$PATH:/usr/bin:/bin:/usr/sbin:/sbin"
+
+mount -t proc -o noexec,nosuid,nodev proc /proc
+mount -t sysfs -o noexec,nosuid,nodev sysfs /sys
+mkdir -p /sys/firmware/efi/efivars || true
+mount -t efivars -o noexec,nosuid,nodev efivars /sys/firmware/efi/efivars || true
+
+mount -t devtmpfs -o exec,nosuid,mode=0755,size=512K devtmpfs /dev || mount -t tmpfs -o exec,nosuid,mode=0755,size=512K tmpfs /dev
+mkdir -p /dev/shm
+mount -t tmpfs -o nodev,nosuid,noexec shm /dev/shm
+mount -t tmpfs -o nodev,nosuid,exec shm /tmp
+mount -t tmpfs -o nodev,nosuid,exec shm /var
+
+mknod -m 666 /dev/null c 1 3
+mknod -m 660 /dev/kmsg c 1 11
+mknod -m 666 /dev/ptmx c 5 2
+mknod -m 622 /dev/console c 5 1
+mknod -m 666 /dev/zero c 1 5
+mknod -m 666 /dev/tty c 5 0
+mknod -m 444 /dev/random c 1 8
+mknod -m 444 /dev/urandom c 1 9
+
+mkdir -m 755 /dev/pts
+mount -t devpts -o gid=5,mode=0620,noexec,nosuid devpts /dev/pts
+
+mkdir -p /dev/shm
+mount -t tmpfs -o nodev,nosuid,noexec shm /dev/shm
+
+mkdir -p /var/lock
+chmod 1777 /var/lock
+mkdir -p /var/log
+mkdir -p /var/run
+mkdir -p /var/state
+mkdir -p /var/tmp
+
+touch /var/log/wtmp
+touch /var/log/lastlog
+
+mkdir -p /tmp/resolv.conf.d
+touch /tmp/resolv.conf.d/resolv.conf.auto
+ln -sf /tmp/resolv.conf.d/resolv.conf.auto /tmp/resolv.conf.auto
+ln -sf /tmp/resolv.conf.d/resolv.conf.auto /tmp/resolv.conf
+
+grep -q debugfs /proc/filesystems && /bin/mount -o noatime -t debugfs debugfs /sys/kernel/debug
+grep -q pstore /proc/filesystems && /bin/mount -o noatime -t pstore pstore /sys/fs/pstore
+grep -q bpf /proc/filesystems && /bin/mount -o nosuid,nodev,noexec,noatime,mode=0700 -t bpf bpffs /sys/fs/bpf
+
+echo /sbin/mdev > /proc/sys/kernel/hotplug
+/sbin/mdev -s
+
+set -- $(cat /proc/cmdline)
+
+ROOT_DISK=$(fdisk -l | grep "^Disk" | grep /dev | grep -v -E "(loop|mapp|sr)" | awk '{print $2}' | cut -d : -f 1 | head -n 1)
+echo "root: $ROOT_DISK" 
+
+[ -e /dd.img.gz ] && (gunzip -dc /dd.img.gz | dd of=$ROOT_DISK) &&  touch /tmp/ddok
+[ -e /dd.img.xz ] && (unxz -dc /dd.img.xz | dd of=$ROOT_DISK) &&  touch /tmp/ddok
+
+[ -e /tmp/ddok ] && (dd_reboot $ROOT_DISK; echo 'reboot'; /bin/busybox reboot; echo 'reboot fail'; exit 0)
+
+exec /bin/busybox sh
+reboot

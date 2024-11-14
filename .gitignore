@@ -1,3 +1,6 @@
 # git config --global --add safe.directory /root/xxx
 openwrt
 builder
+iso/src
+iso/src_old
+iso/*.iso
