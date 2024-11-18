@@ -9,7 +9,25 @@ rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,sm
 rm -rf feeds/packages/multimedia/{ffmpeg*, fswebcam}
 
 # TTYD 免登录
-sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
+sed -i 's|/bin/login|/bin/login -f root|g'  feeds/packages/utils/ttyd/files/ttyd.config
+
+# 修改默认root密码
+BASEROOT=package/base-files/files
+sed -i 's/root:::0:/root:$1$0h4E33CP$XGfQTT4OQs09r0bwAV0n01::0:/g'  $BASEROOT/etc/shadow
+
+mkdir -p $BASEROOT/root/.ssh || true
+mkdir -p $BASEROOT/etc/dropbear || true
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDK/NfUjqCn9qyv1zmr5hoON+Epjl1Ked8fQXntKrugSoYhJ7M6idPf+tSUpf38oiVsAghriNNZXOHyklHbDjMKXE/bu6g9XrzxlfW5yTcrdW1MV/ob2woVBr1zPQSGdgxon7g2mwP1zp0z3zboFobH+/Bjfi4sck0xW4ZOf+SgkZ8AfE2Nz79Y7H9dPUonuDR0MG9r+gve8Czt9Nq3n5tGnTgJzqnKKFRFM/S65aZUzMM7MGserndLRRPInG81cp1d149zugU2C0hEoxE6TMkG38PlCVkPDTYWBKf3NOB2qfaYKKootrqpfRCOytwGXRvbC1qH+WpGqGCnkhIK5ysx root@test' >> $BASEROOT/root/.ssh/authorized_keys
+
+chmod 0700 $BASEROOT/root/.ssh || true
+chmod 0600 $BASEROOT/root/.ssh/authorized_keys || true
+cp $BASEROOT/root/.ssh/authorized_keys $BASEROOT/etc/dropbear/authorized_keys
+
+echo "sed -i '/RootPasswordAuth/d' /etc/config/dropbear"    >> $BASEROOT/etc/uci-defaults/50-root-passwd
+echo "sed -i '/PasswordAuth/d' /etc/config/dropbear"        >> $BASEROOT/etc/uci-defaults/50-root-passwd
+echo "echo -e '\toption RootPasswordAuth ''off''' >> /etc/config/dropbear"  >> $BASEROOT/etc/uci-defaults/50-root-passwd
+echo "echo -e '\toption PasswordAuth ''off''' >> /etc/config/dropbear"      >> $BASEROOT/etc/uci-defaults/50-root-passwd
+chmod +x $BASEROOT/etc/uci-defaults/50-root-passwd
 
 # apk version 兼容
 # 已经修复 https://github.com/immortalwrt/packages/commit/001736d8358b9d2fee29cbd361bf4686b9444436#diff-d28cb23b7a55bd2aea0639ff73a970401c844e6a6098ba96aa947cf83763fbcbR3
