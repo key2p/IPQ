@@ -9,6 +9,7 @@ rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,sm
 rm -rf feeds/packages/multimedia/{ffmpeg*, fswebcam}
 
 # xdp-tools
+# https://github.com/QiuSimons/luci-app-daed/blob/master/daed/Makefile
 rm -rf package/network/utils/xdp-tools
 git clone https://github.com/sbwml/package_network_utils_xdp-tools.git package/network/utils/xdp-tools -b openwrt-24.10
 
