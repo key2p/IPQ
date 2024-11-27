@@ -170,7 +170,7 @@ echo 'CONFIG_MODULE_COMPRESS=y' 	            >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_MODULE_COMPRESS_ZSTD=y' 	        >> ${MAIN_KCONFIG_FILE}
 
 # Append a timestamp or something to the localversion to make it unique:
-echo "$( cat localversion )-$( date +%s )" > localversion
+# echo "$( cat localversion )-$( date +%s )" > localversion
 export DEBFULLNAME="Alexandre Frade"
 export DEBEMAIL="kernel@xanmod.org"
 export KDEB_CHANGELOG_DIST="bookworm"
