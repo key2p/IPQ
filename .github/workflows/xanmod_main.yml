@@ -78,7 +78,6 @@ jobs:
       run: |      
         sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
         export PATH="/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:$PATH"
-        cd $WORK_DIR
         bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
         mkdir -p $WORK_DIR/debs || true
         mv -f $WORK_DIR/*.deb $WORK_DIR/debs/
