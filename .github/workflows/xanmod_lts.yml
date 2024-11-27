@@ -22,7 +22,9 @@ jobs:
         echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
         echo "已安装内存详细信息:"
         echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
-        echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT && date
+        echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" &&
+        df -hT && date
+        set -ex
         xanmod_regex='ChangeLog-([0-9.]+)-'
         xanmod_ver=$(curl "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" | grep ChangeLog | head -n 1)
         [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
