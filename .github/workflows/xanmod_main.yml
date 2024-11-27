@@ -73,6 +73,8 @@ jobs:
         echo "WORK_DIR=$PWD" >> $GITHUB_ENV
 
     - name: Compile Firmware
+      env:
+        DEBIAN_FRONTEND: noninteractive
       id: compile
       run: |      
         sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh

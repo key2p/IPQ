@@ -88,6 +88,8 @@ sed -i 's/CONFIG_F2FS_FS=[mny]/CONFIG_F2FS_FS=n/g' 		${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_GFS2_FS=[mny]/CONFIG_GFS2_FS=n/g' 		${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_JFFS2_FS=[mny]/CONFIG_JFFS2_FS=n/g' 		${MAIN_KCONFIG_FILE}
 
+sed -i '/CONFIG_GPIO_BT8XX/e' ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_GPIO_BT8XX=n' >> ${MAIN_KCONFIG_FILE}
 
 echo 'CONFIG_DEBUG_INFO_NONE=y' >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_DEBUG_INFO_DWARF4=n' >> ${MAIN_KCONFIG_FILE}
@@ -107,17 +109,8 @@ echo 'CONFIG_FUNCTION_TRACER=y' >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_FTRACE_SYSCALLS=y' >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_BPF_LSM=y' >> ${MAIN_KCONFIG_FILE}
 
-# build opt
-echo 'CONFIG_LTO_CLANG_THIN=y' 			>> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_DEBUG_INFO_COMPRESSED_ZLIB=y' 	>> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y' 	>> ${MAIN_KCONFIG_FILE}
-   
-sed -i '/CONFIG_GPIO_BT8XX/e' ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_GPIO_BT8XX=n' >> ${MAIN_KCONFIG_FILE}
-
-
 ##### cloud 
-sed -i 's/CONFIG_HW_CONSOLE=[mny]/CONFIG_HW_CONSOLE=n/y'		${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_HW_CONSOLE=[mny]/CONFIG_HW_CONSOLE=n/g'		${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_UBSAN=[mny]/CONFIG_UBSAN=n/g' 		${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FONTS=[mny]/CONFIG_FONTS=n/g' 		${MAIN_KCONFIG_FILE}
@@ -167,6 +160,11 @@ sed -i 's/CONFIG_LEDS/# CONFIG_LEDS/g' 				${MAIN_KCONFIG_FILE}
 
 #### cloud end
 
+# build opt
+echo 'CONFIG_LTO_CLANG_THIN=y' 			>> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_DEBUG_INFO_COMPRESSED_ZLIB=y' 	>> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y' 	>> ${MAIN_KCONFIG_FILE}
+   
 # Append a timestamp or something to the localversion to make it unique:
 echo "$( cat localversion )-$( date +%s )" > localversion
 export DEBFULLNAME="Alexandre Frade"
