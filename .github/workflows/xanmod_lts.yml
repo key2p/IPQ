@@ -6,8 +6,6 @@ on:
     - cron: 0 22 * * 1
 
 env:
-  KERNEL_BASE_VER: 6.6
-  KERNEL_BASE_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.tar.xz
   TZ: Asia/Shanghai
 
 jobs:
@@ -22,16 +20,26 @@ jobs:
         echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
         echo "已安装内存详细信息:"
         echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
-        echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" &&
-        df -hT && date
+        echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT && date
         set -ex
+        curl -L "https://dl.xanmod.org/changelog/?C=M;O=D" > /dev/shm/changelog
+        kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://xanmod.key2p.com/?version=lts")
+        kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
+        kernel_regex='"([0-9.]+)/"'
+        [[ $kernel_ver =~ $kernel_regex ]] && export KERNEL_BASE_VER=${BASH_REMATCH[1]}    
+        [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
+
         curl -L "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" > /dev/shm/changelog
         xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
-        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D")
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://xanmod.key2p.com/?version=${KERNEL_BASE_VER}")
         xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
         [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
         xanmod_regex='ChangeLog-([0-9.]+)-'
         [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+        echo "KERNEL_BASE_VER=${KERNEL_BASE_VER}" >> $GITHUB_ENV
+        echo "KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_BASE_VER}.tar.xz" >> $GITHUB_ENV
 
     - name: Initialization Environment
       env:

@@ -24,7 +24,7 @@ jobs:
         set -ex
         curl -L "https://dl.xanmod.org/changelog/?C=M;O=D" > /dev/shm/changelog
         kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
-        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://dl.xanmod.org/changelog/?C=M;O=D")
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://xanmod.key2p.com/?version=all")
         kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
         [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
         kernel_regex='"([0-9.]+)/"'
@@ -33,7 +33,7 @@ jobs:
 
         curl -L "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" > /dev/shm/changelog
         xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
-        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D")
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://xanmod.key2p.com/?version=${KERNEL_BASE_VER}")
         xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
         [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
         xanmod_regex='ChangeLog-([0-9.]+)-'
