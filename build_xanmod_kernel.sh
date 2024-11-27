@@ -165,9 +165,9 @@ echo 'CONFIG_LTO_CLANG_THIN=y' 			>> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_DEBUG_INFO_COMPRESSED_ZLIB=y' 	    >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y' 	>> ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_KERNEL_/#CONFIG_KERNEL_/g'  	${MAIN_KCONFIG_FILE}
-echo 'CONFIG_KERNEL_ZSTD=y' 	                >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_KERNEL_XZ=y' 	                >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_MODULE_COMPRESS=y' 	            >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_MODULE_COMPRESS_ZSTD=y' 	        >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_MODULE_COMPRESS_XZ=y' 	        >> ${MAIN_KCONFIG_FILE}
 
 # Append a timestamp or something to the localversion to make it unique:
 # echo "$( cat localversion )-$( date +%s )" > localversion
