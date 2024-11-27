@@ -6,8 +6,6 @@ on:
     - cron: 0 23 * * 1
 
 env:
-  KERNEL_BASE_VER: 6.12
-  KERNEL_BASE_URL: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.tar.xz
   TZ: Asia/Shanghai
 
 jobs:
@@ -23,14 +21,31 @@ jobs:
         echo "已安装内存详细信息:"
         echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
         echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT && date
+        set -ex
+        curl -L "https://dl.xanmod.org/changelog/?C=M;O=D" > /dev/shm/changelog
+        kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://dl.xanmod.org/changelog/?C=M;O=D")
+        kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
+        kernel_regex='"([0-9.]+)/"'
+        [[ $kernel_ver =~ $kernel_regex ]] && export KERNEL_BASE_VER=${BASH_REMATCH[1]}
+        [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
+
+        curl -L "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" > /dev/shm/changelog
+        xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D")
+        xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
         xanmod_regex='ChangeLog-([0-9.]+)-'
-        xanmod_ver=$(curl "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" | grep ChangeLog | head -n 1)
         [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+        echo "KERNEL_BASE_VER=${KERNEL_BASE_VER}" >> $GITHUB_ENV
+        echo "KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_BASE_VER}.tar.xz" >> $GITHUB_ENV
 
     - name: Initialization Environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
         [ -z "${XANMOD_PATCH_VER}"  ] && echo "invalid xanmod version ${XANMOD_PATCH_VER}, exit" && exit 1
         echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/edge/${XANMOD_PATCH_VER}-xanmod1/patch-${XANMOD_PATCH_VER}-xanmod1.xz/download" >> $GITHUB_ENV
         docker rmi $(docker images -q)
