@@ -45,9 +45,9 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
         [ -z "${XANMOD_PATCH_VER}"  ] && echo "invalid xanmod version ${XANMOD_PATCH_VER}, exit" && exit 1
         echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/lts/${XANMOD_PATCH_VER}-xanmod1/patch-${XANMOD_PATCH_VER}-xanmod1.xz/download" >> $GITHUB_ENV
-        docker rmi $(docker images -q)
         sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY
         sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         sudo -E systemctl daemon-reload
@@ -69,7 +69,7 @@ jobs:
       run: |
         df -hT $GITHUB_WORKSPACE
         mkdir -p build || true
-        echo "WORK_DIR=$PWD" >> $GITHUB_ENV
+        echo "WORK_DIR=/dev/shm/build_linux" >> $GITHUB_ENV
 
     - name: Compile Firmware
       env:
