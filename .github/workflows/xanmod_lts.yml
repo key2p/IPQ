@@ -76,6 +76,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       id: compile
       run: |      
+        set -ex
         sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
         export PATH="/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:$PATH"
         bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
@@ -85,6 +86,7 @@ jobs:
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
         cd $WORK_DIR/debs/
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
+        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Check Space Usage
       if: (!cancelled())
