@@ -202,16 +202,16 @@ create_package() {
 	if [ "$DEB_RULES_REQUIRES_ROOT" = "no" ]; then
 		dpkg_deb_opts="--root-owner-group"
 	else
-		chown -R root:root "$pdir"
+		sudo -E chown -R root:root "$pdir"
 	fi
 	# a+rX in case we are in a restrictive umask environment like 0077
 	# ug-s in case we build in a setuid/setgid directory
-	chmod -R go-w,a+rX,ug-s "$pdir"
+	sudo -E chmod -R go-w,a+rX,ug-s "$pdir"
 
 	# Create the package
 	#dpkg-gencontrol -p$pname -P"$pdir"
-    	cp ./debian/control "$pdir/DEBIAN/"
-	dpkg-deb $dpkg_deb_opts ${KDEB_COMPRESS:+-Z$KDEB_COMPRESS} --build "$pdir" ..
+	sudo -E cp ./debian/control "$pdir/DEBIAN/"
+	sudo -E dpkg-deb $dpkg_deb_opts ${KDEB_COMPRESS:+-Z$KDEB_COMPRESS} --build "$pdir" ..
 }
 
 tools_version=$lv$pv$xv
