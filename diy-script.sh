@@ -10,19 +10,18 @@ rm -rf feeds/packages/multimedia/{ffmpeg*, fswebcam}
 
 # xdp-tools
 # https://github.com/QiuSimons/luci-app-daed/blob/master/daed/Makefile
-rm -rf package/network/utils/xdp-tools
-git clone https://github.com/sbwml/package_network_utils_xdp-tools.git package/network/utils/xdp-tools -b openwrt-24.10
+#rm -rf package/network/utils/xdp-tools
+#git clone https://github.com/sbwml/package_network_utils_xdp-tools.git package/network/utils/xdp-tools -b openwrt-24.10
 
-
-rm -rf feeds/packages/libs/libpfring/patches/*.patch
-sed -i '/PKG_SOURCE_URL/d' feeds/packages/libs/libpfring/Makefile
-sed -i '/PKG_VERSION/d' feeds/packages/libs/libpfring/Makefile
-sed -i '/PKG_SOURCE_VERSION/d' feeds/packages/libs/libpfring/Makefile
-sed -i '/PKG_MIRROR_HASH/d' feeds/packages/libs/libpfring/Makefile
-sed -i '/PKG_SOURCE_PROTO/i\\PKG_SOURCE_URL:=https://github.com/key2p/PF_RING.git' feeds/packages/libs/libpfring/Makefile
-sed -i '/PKG_SOURCE_PROTO/i\\PKG_SOURCE_VERSION:=0fcd4b7bc931c498c5e0b95d5097e2d0a4b2f6e9' feeds/packages/libs/libpfring/Makefile
-sed -i '/PKG_SOURCE_PROTO/i\\PKG_VERSION:=8.8' feeds/packages/libs/libpfring/Makefile
-sed -i 's/libpthread/libbpf +libxdp +libpthread/g' feeds/packages/libs/libpfring/Makefile
+#rm -rf feeds/packages/libs/libpfring/patches/*.patch
+#sed -i '/PKG_SOURCE_URL/d' feeds/packages/libs/libpfring/Makefile
+#sed -i '/PKG_VERSION/d' feeds/packages/libs/libpfring/Makefile
+#sed -i '/PKG_SOURCE_VERSION/d' feeds/packages/libs/libpfring/Makefile
+#sed -i '/PKG_MIRROR_HASH/d' feeds/packages/libs/libpfring/Makefile
+#sed -i '/PKG_SOURCE_PROTO/i\\PKG_SOURCE_URL:=https://github.com/key2p/PF_RING.git' feeds/packages/libs/libpfring/Makefile
+#sed -i '/PKG_SOURCE_PROTO/i\\PKG_SOURCE_VERSION:=0fcd4b7bc931c498c5e0b95d5097e2d0a4b2f6e9' feeds/packages/libs/libpfring/Makefile
+#sed -i '/PKG_SOURCE_PROTO/i\\PKG_VERSION:=8.8' feeds/packages/libs/libpfring/Makefile
+#sed -i 's/libpthread/libbpf +libxdp +libpthread/g' feeds/packages/libs/libpfring/Makefile
 
 # TTYD 免登录
 sed -i 's|/bin/login|/bin/login -f root|g'  feeds/packages/utils/ttyd/files/ttyd.config
