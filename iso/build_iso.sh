@@ -11,6 +11,7 @@ ISO=${OPENWRT_DIR}/iso/wrt-dd-x64.iso
 BOOT_DIR=${OPENWRT_DIR}/staging_dir/target-x86_64_musl/image/grub2
 KERNEL_PATH=${OPENWRT_DIR}/build_dir/target-x86_64_musl/linux-x86_64/bzImage
 
+# https://alpinelinux.org/downloads/
 ROOTFS_PATH=/dev/shm/minirootfs.tar.gz
 ROOTFS_URL=https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-minirootfs-3.20.3-x86_64.tar.gz
 [ -e $ROOTFS_PATH ] || curl -L ${ROOTFS_URL} -o /dev/shm/minirootfs.tar.gz
@@ -33,7 +34,7 @@ rm $WORK_DIR/root/lib/libcrypt*
 cp ${ROOT_DIR}/iso/iso_grub.cfg $WORK_DIR/.boot/boot/grub/grub.cfg
 cp ${KERNEL_PATH} $WORK_DIR/.boot/boot/vmlinuz
 
-cat ${BOOT_DIR}/cdboot.img ${BOOT_DIR}/eltorito.img > .boot/boot/grub/eltorito.img
+cat ${BOOT_DIR}/cdboot.img ${BOOT_DIR}/eltorito.img > $WORK_DIR/.boot/boot/grub/eltorito.img
 mkfs.fat -C $WORK_DIR/.boot/boot/grub/isoboot.img -S 512 1440
 mmd -i $WORK_DIR/.boot/boot/grub/isoboot.img ::/efi ::/efi/boot
 mcopy -i $WORK_DIR/.boot/boot/grub/isoboot.img ${BOOT_DIR}/iso-bootx64.efi ::/efi/boot/bootx64.efi
