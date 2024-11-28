@@ -70,6 +70,7 @@ jobs:
         sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
         export PATH="/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:$PATH"
         bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
+        rm -rf $WORK_DIR || true
         mkdir -p $WORK_DIR/debs || true
         mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
@@ -101,4 +102,4 @@ jobs:
 
     - name: clean
       run: |
-        [ ! -z $OPENWRT_PATH ] && (rm -rf $OPENWRT_PATH || true)
+        [ ! -z $WORK_DIR ] && (rm -rf $WORK_DIR || true)
