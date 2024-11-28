@@ -22,4 +22,4 @@ ENTRYPOINT ["./start.sh"]
 ## docker build --shm-size 512M --tag github-runner-2.321 -f github_runner.dockerfile .
 ##
 ## ## run
-## docker run -e http_proxy=socks5h://192.168.0.25:9090 -e https_proxy=socks5h://192.168.0.25:9090 -e GITHUB_ACCESS_TOKEN=<YOUR-GITHUB-TOKEN> -e ACCESS_TOKEN=<YOUR-GITHUB-ACCESS-TOKEN> -v /dev/shm:/dev/shm --name runner --detach --restart unless-stopped github-runner-2.321
+## docker run -e http_proxy=socks5h://192.168.0.25:9090 -e https_proxy=socks5h://192.168.0.25:9090 -e RUNNER_REPOSITORY_URL=<YOUR-REPO-URL> -e ACCESS_TOKEN=<YOUR-GITHUB-ACCESS-TOKEN> -v /dev/shm:/dev/shm --name runner --detach --restart unless-stopped github-runner-2.321

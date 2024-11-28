@@ -1,9 +1,16 @@
 #!/bin/bash
 
-if [[ ! -z $http_proxy ]]; then
-    echo "set git http proxy ${http_proxy}."
-    git config --global http.proxy $http_proxy || true
-    sudo -E git config --global http.proxy $http_proxy || true
+if [[ ! -z $https_proxy ]]; then
+    echo "set git http proxy ${https_proxy}."
+    git config --global http.proxy $https_proxy || true
+    sudo -E git config --global http.proxy $https_proxy || true
+fi
+
+if [[ ! -z $apt_proxy ]]; then
+    echo "set apt http proxy ${apt_proxy}."
+    (echo -e "Acquire::http::Proxy \"${apt_proxy}\";\nAcquire::https::Proxy \"${apt_proxy}\";" | sudo -E tee /etc/apt/apt.conf.d/01proxy) || true
+else    
+    sudo rm /etc/apt/apt.conf.d/01proxy || true
 fi
 
 if [[ -z $RUNNER_TOKEN && -z $GITHUB_ACCESS_TOKEN ]]; then

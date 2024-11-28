@@ -3,7 +3,7 @@ name: xanmod lts kernel deb
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 22 * * 1
+    - cron: 0 21 * * 1
 
 env:
   TZ: Asia/Shanghai
@@ -11,6 +11,7 @@ env:
 jobs:
   Build:
     runs-on: [self-hosted, Linux]
+    
     steps:
     - name: Check Xanmod Version
       run: |
@@ -97,3 +98,6 @@ jobs:
           - ⚽ 固件源码: ${{ env.XANMOD_PATCH }}
           - 💝 源码分支: ${{ env.KERNEL_BASE_VER }}
           - 🚀 内核版本: ${{ env.XANMOD_PATCH_VER }}
+
+    - name: clean
+      run:  [ ! -z $WORK_DIR ] && (rm -rf $WORK_DIR || true)

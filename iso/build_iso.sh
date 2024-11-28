@@ -1,9 +1,12 @@
 #!/bin/sh
 
-ROOT_DIR=$PWD
-OPENWRT_DIR=${ROOT_DIR}/openwrt
-WORK_DIR=${ROOT_DIR}/iso/src
-ISO=${ROOT_DIR}/iso/wrt-dd-x64.iso
+[ ! -e $OPENWRT_PATH ] && echo "openwrt dir invalid" && exit 1
+[ ! -e $GITHUB_WORKSPACE ] && echo "root dir invalid" && exit 1
+
+ROOT_DIR=$GITHUB_WORKSPACE
+OPENWRT_DIR=$OPENWRT_PATH
+WORK_DIR=${OPENWRT_DIR}/iso/src
+ISO=${OPENWRT_DIR}/iso/wrt-dd-x64.iso
 
 BOOT_DIR=${OPENWRT_DIR}/staging_dir/target-x86_64_musl/image/grub2
 KERNEL_PATH=${OPENWRT_DIR}/build_dir/target-x86_64_musl/linux-x86_64/bzImage
@@ -12,8 +15,8 @@ ROOTFS_PATH=/dev/shm/minirootfs.tar.gz
 ROOTFS_URL=https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-minirootfs-3.20.3-x86_64.tar.gz
 [ -e $ROOTFS_PATH ] || curl -L ${ROOTFS_URL} -o /dev/shm/minirootfs.tar.gz
 
-rm -rf $WORK_DIR
-mkdir -p $WORK_DIR
+rm -rf $WORK_DIR || true
+mkdir -p $WORK_DIR || true
 cd $WORK_DIR
 
 mkdir -p $WORK_DIR/.boot/boot/grub
@@ -35,7 +38,7 @@ mkfs.fat -C $WORK_DIR/.boot/boot/grub/isoboot.img -S 512 1440
 mmd -i $WORK_DIR/.boot/boot/grub/isoboot.img ::/efi ::/efi/boot
 mcopy -i $WORK_DIR/.boot/boot/grub/isoboot.img ${BOOT_DIR}/iso-bootx64.efi ::/efi/boot/bootx64.efi
 
-cp -fa ${OPENWRT_DIR}/build_dir/target-x86_64_musl/root-x86/lib/{libgcc_s.so.1,libubox.so.20240329,libubus.so.20241020} $WORK_DIR/root/lib/
+cp -fa ${OPENWRT_DIR}/build_dir/target-x86_64_musl/root-x86/lib/{libgcc_s.so.1,libubox.so*,libubus.so*} $WORK_DIR/root/lib/
 cp -fa ${OPENWRT_DIR}/build_dir/target-x86_64_musl/root-x86/usr/lib/{libparted*,libblk*,libncu*,libread*,libcom_err*,libe2p*,libf2fs*,libext2fs*,libuuid*} $WORK_DIR/root/usr/lib/
 cp -fa ${OPENWRT_DIR}/build_dir/target-x86_64_musl/root-x86/sbin/parted $WORK_DIR/root/sbin
 cp -fa ${OPENWRT_DIR}/build_dir/target-x86_64_musl/root-x86/usr/sbin/resize2fs $WORK_DIR/root/sbin
