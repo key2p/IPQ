@@ -145,4 +145,5 @@ jobs:
           - ${{ env.VERSION_INFO }}
 
     - name: clean
-      run:  [ ! -z $OPENWRT_PATH ] && (rm -rf $OPENWRT_PATH || true)
+      run: |
+        [ ! -z $OPENWRT_PATH ] && (rm -rf $OPENWRT_PATH || true)

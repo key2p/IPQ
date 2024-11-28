@@ -100,4 +100,5 @@ jobs:
           - 🚀 内核版本: ${{ env.XANMOD_PATCH_VER }}
 
     - name: clean
-      run:  [ ! -z $WORK_DIR ] && (rm -rf $WORK_DIR || true)
+      run: |
+        [ ! -z $OPENWRT_PATH ] && (rm -rf $OPENWRT_PATH || true)
