@@ -52,20 +52,12 @@ jobs:
         sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
         sudo -E timedatectl set-timezone "$TZ" || true
 
-    - name: Combine Disks
-      uses: easimon/maximize-build-space@master
-      with:
-        swap-size-mb: 1024
-        temp-reserve-mb: 100
-        root-reserve-mb: 1024
-
     - name: Checkout
       uses: actions/checkout@main
 
     - name: Clone Source Code
       run: |
         df -hT $GITHUB_WORKSPACE
-        mkdir -p build || true
         echo "WORK_DIR=/dev/shm/build_linux" >> $GITHUB_ENV
 
     - name: Compile Firmware
@@ -78,7 +70,7 @@ jobs:
         export PATH="/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:$PATH"
         bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
         mkdir -p $WORK_DIR/debs || true
-        mv -f $WORK_DIR/*.deb $WORK_DIR/debs/
+        mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
         cd $WORK_DIR/debs/

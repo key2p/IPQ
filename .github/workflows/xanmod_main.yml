@@ -53,20 +53,12 @@ jobs:
         sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
         sudo -E timedatectl set-timezone "$TZ" || true
 
-    - name: Combine Disks
-      uses: easimon/maximize-build-space@master
-      with:
-        swap-size-mb: 1024
-        temp-reserve-mb: 100
-        root-reserve-mb: 1024
-
     - name: Checkout
       uses: actions/checkout@main
 
     - name: Clone Source Code
       run: |
         df -hT $GITHUB_WORKSPACE
-        mkdir -p build || true
         echo "WORK_DIR=/dev/shm/build_linux" >> $GITHUB_ENV
 
     - name: Compile Firmware
