@@ -98,7 +98,7 @@ jobs:
       run: |
         cd $OPENWRT_PATH
         mkdir -p files/etc/uci-defaults
-        cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
+        cp $GITHUB_WORKSPACE/scripts/init-settings.sh files/etc/uci-defaults/99-init-settings || true
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j$(nproc)  || make -j$(nproc) V=s || make -j4 || make -j4 || make -j2 || make -j1 || make -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
