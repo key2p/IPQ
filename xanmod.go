@@ -84,7 +84,7 @@ func worker_notice(notice_url string, msg_chan chan NoticeMsg) {
 							msg_msg = msg_msg[0:12]
 						}
 
-						msg_str += fmt.Sprintf("%s_%s+%0a", msg_type, msg_msg)
+						msg_str += fmt.Sprintf("%s_%s+%%0a", msg_type, msg_msg)
 						msg_count += 1
 
 						if msg_count >= 8 {

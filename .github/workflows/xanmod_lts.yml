@@ -105,7 +105,7 @@ jobs:
 
     - name: clean
       run: |
-        [ ! -z $WORK_DIR ] && (rm -rf $WORK_DIR || true)
+        [ ! -z $WORK_DIR ] && (sudo -E rm -rf $WORK_DIR || true)
 
     - name: report
       if: steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == ''

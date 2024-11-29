@@ -148,7 +148,7 @@ jobs:
 
     - name: clean
       run: |
-        [ ! -z $OPENWRT_PATH ] && (rm -rf $OPENWRT_PATH || true)
+        [ ! -z $OPENWRT_PATH ] && (sudo -E rm -rf $OPENWRT_PATH || true)
 
     - name: report
       if: steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == ''
