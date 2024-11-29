@@ -221,7 +221,7 @@ tools_version=$lv$pv$xv
 tools_packagename=linux-tools
 tools_destdir=./linux-tools-tmp
 tools_destdir=`readlink -f $tools_destdir`
-sudo -E rm -rf $tools_destdir
+sudo -E rm -rf $tools_destdir || true
 
 make -C ./tools/perf prefix=/usr DESTDIR=$tools_destdir install  NO_LIBZSTD=1 NO_LIBPERL=1  NO_LIBBABELTRACE=1
 make -C ./tools/power/cpupower DESTDIR=$tools_destdir prefix=/usr install  NO_LIBZSTD=1 NO_LIBPERL=1 NO_LIBBABELTRACE=1
