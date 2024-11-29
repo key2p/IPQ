@@ -149,3 +149,8 @@ jobs:
     - name: clean
       run: |
         [ ! -z $OPENWRT_PATH ] && (rm -rf $OPENWRT_PATH || true)
+
+    - name: report
+      if: steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == ''
+      run: |
+        curl "https://xanmod.key2p.com/notice?t=编译失败&msg=AX5" || true
