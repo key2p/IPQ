@@ -37,6 +37,7 @@ jobs:
         xanmod_ver=$(grep ChangeLog /dev/shm/changelog | head -n 1)
         [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
         xanmod_regex='ChangeLog-([0-9.]+)-'
+        xanmod_regex='ChangeLog-([0-9.]+-xanmod[0-9]+)'
         [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
         echo "KERNEL_BASE_VER=${KERNEL_BASE_VER}" >> $GITHUB_ENV
         echo "KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_BASE_VER}.tar.xz" >> $GITHUB_ENV
@@ -47,7 +48,7 @@ jobs:
       run: |
         [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
         [ -z "${XANMOD_PATCH_VER}"  ] && echo "invalid xanmod version ${XANMOD_PATCH_VER}, exit" && exit 1
-        echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/edge/${XANMOD_PATCH_VER}-xanmod1/patch-${XANMOD_PATCH_VER}-xanmod1.xz/download" >> $GITHUB_ENV
+        echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/edge/${XANMOD_PATCH_VER}/patch-${XANMOD_PATCH_VER}.xz/download" >> $GITHUB_ENV
         sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY || true
         sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
