@@ -9,7 +9,7 @@ export XANMOD_CONFIG=config_x86-64-v2
 #export KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.tar.xz
 #export XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/edge/6.12.1-xanmod1/patch-6.12.1-xanmod1.xz/download
 
-rm -rf ${WORK_DIR} || true
+sudo -E rm -rf ${WORK_DIR} || true
 mkdir -p ${WORK_DIR} || true
 
 ## https://blobfolio.com/2024/building-a-custom-xanmod-kernel-on-ubuntu-23-10/
@@ -221,7 +221,7 @@ tools_version=$lv$pv$xv
 tools_packagename=linux-tools
 tools_destdir=./linux-tools-tmp
 tools_destdir=`readlink -f $tools_destdir`
-rm -rf $tools_destdir
+sudo -E rm -rf $tools_destdir
 
 make -C ./tools/perf prefix=/usr DESTDIR=$tools_destdir install  NO_LIBZSTD=1 NO_LIBPERL=1  NO_LIBBABELTRACE=1
 make -C ./tools/power/cpupower DESTDIR=$tools_destdir prefix=/usr install  NO_LIBZSTD=1 NO_LIBPERL=1 NO_LIBBABELTRACE=1

@@ -14,7 +14,7 @@ apt update -y &&  apt install -y curl libc6 libgcc-s1 libicu-dev liblzma5 libstd
 
 curl -L https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-19.1.4-x86_64.tar.xz -o /dev/shm/llvm19.tar.xz
 
-rm -rf /opt/llvm19_krl || true
+sudo -E rm -rf /opt/llvm19_krl || true
 mkdir -p /opt/llvm19_krl || true
 
 cd /opt/llvm19_krl && tar -xJf /dev/shm/llvm19.tar.xz

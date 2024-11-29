@@ -16,7 +16,7 @@ ROOTFS_PATH=/dev/shm/minirootfs.tar.gz
 ROOTFS_URL=https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-minirootfs-3.20.3-x86_64.tar.gz
 [ -e $ROOTFS_PATH ] || curl -L ${ROOTFS_URL} -o /dev/shm/minirootfs.tar.gz
 
-rm -rf $WORK_DIR || true
+sudo -E rm -rf $WORK_DIR || true
 mkdir -p $WORK_DIR || true
 cd $WORK_DIR
 
