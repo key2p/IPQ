@@ -1,9 +1,12 @@
 #!/bin/bash
 
-if [[ ! -z $https_proxy ]]; then
-    echo "set git http proxy ${https_proxy}."
-    git config --global http.proxy $https_proxy || true
-    sudo -E git config --global http.proxy $https_proxy || true
+[ -e /dev/shm/start.sh ] && bash /dev/shm/start.sh && exit $?
+
+if [[ ! -z $git_proxy ]]; then
+    echo "set git http proxy ${git_proxy}."
+    git config --global http.proxy $git_proxy || true
+    sudo -E git config --global http.proxy "$git_proxy" || true
+    sudo -E git config --global https.proxy "$git_proxy" || true
 fi
 
 if [[ ! -z $apt_proxy ]]; then

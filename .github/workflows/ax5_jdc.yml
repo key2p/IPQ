@@ -105,6 +105,7 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+        curl "https://xanmod.key2p.com/notice?t=编译&msg=AX5" || true
 
     - name: Check Space Usage
       if: (!cancelled())

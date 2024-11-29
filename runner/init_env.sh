@@ -17,6 +17,7 @@ echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main" >> /etc/apt/s
 
 mkdir -p /etc/apt/trusted.gpg.d/ || true
 curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+apt update -y
 
 # common config
 timedatectl set-timezone "Asia/Shanghai" || (ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && dpkg-reconfigure -f noninteractive tzdata)
@@ -31,7 +32,7 @@ apt install -y --no-install-suggests --no-install-recommends curl libc6 libgcc-s
   pkg-config libdwarf-dev libdw-dev systemtap-sdt-dev libunwind-dev python3-dev libzstd-dev libcap-dev libnuma-dev libtraceevent-dev uuid-dev libpfm4-dev libbfd-dev libbabeltrace-dev libperl-dev libpci-dev 
   
 # for openwrt build  
-apt-get update -y && apt install -y --no-install-suggests --no-install-recommends dosfstools xorriso mtools sudo ack antlr3 asciidoc autoconf make automake autopoint binutils bison btrfs-progs \
+apt install -y --no-install-suggests --no-install-recommends dosfstools xorriso mtools sudo ack antlr3 asciidoc autoconf make automake autopoint binutils bison btrfs-progs \
   build-essential bzip2 ca-certificates ccache cmake coreutils cpio curl device-tree-compiler fastjar flex g++-multilib gawk gcc-multilib \
   gettext git git-core gperf gzip haveged intltool jq libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev \
   libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool libz-dev lrzsz mkisofs msmtp nano ninja-build \

@@ -106,6 +106,8 @@ jobs:
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
         cd $GITHUB_WORKSPACE && bash iso/build_iso.sh && mv $OPENWRT_PATH/iso/*.iso $OPENWRT_PATH/bin/targets/x86/64/ || true
+        curl "https://xanmod.key2p.com/notice?t=编译&msg=WRT_X86" || true
+
     - name: Check Space Usage
       if: (!cancelled())
       run: df -hT

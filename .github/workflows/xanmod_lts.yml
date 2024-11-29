@@ -78,6 +78,7 @@ jobs:
         cd $WORK_DIR/debs/
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
+        curl "https://xanmod.key2p.com/notice?t=编译&msg=${KERNEL_BASE_VER}" || true
 
     - name: Check Space Usage
       if: (!cancelled())
