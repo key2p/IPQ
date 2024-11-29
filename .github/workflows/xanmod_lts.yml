@@ -23,9 +23,7 @@ jobs:
         echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT && date
         set -ex
         sudo -E rm -f /dev/shm/changelog || true
-        curl -L "https://dl.xanmod.org/changelog/?C=M;O=D" > /dev/shm/changelog
-        kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
-        [ -z "${kernel_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://xanmod.key2p.com/?version=lts")
+        curl -L "https://xanmod.key2p.com/?version=lts" > /dev/shm/changelog
         kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
         [ -z "${kernel_ver}" ] && (cat /dev/shm/changelog; exit 1)
         kernel_regex='"([0-9.]+)/"'
