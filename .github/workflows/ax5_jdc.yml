@@ -105,7 +105,6 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
         echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
-        curl "https://xanmod.key2p.com/notice?t=编译&msg=AX5" || true
 
     - name: Check Space Usage
       if: (!cancelled())
@@ -150,7 +149,12 @@ jobs:
       run: |
         [ ! -z $OPENWRT_PATH ] && (sudo -E rm -rf $OPENWRT_PATH || true)
 
-    - name: report
-      if: steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == ''
+    - name: report ok
+      if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
       run: |
-        curl "https://xanmod.key2p.com/notice?t=编译失败&msg=AX5" || true
+        cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&msg=AX5" || true
+
+    - name: report fail
+      if: ${{ always() && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
+      run: |
+        cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&msg=AX5" || true

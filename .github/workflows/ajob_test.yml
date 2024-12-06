@@ -1,0 +1,73 @@
+name: test ci
+
+on:
+  workflow_dispatch:
+
+env:
+  REPO_URL: https://github.com/immortalwrt/immortalwrt.git
+  REPO_BRANCH: master
+  CONFIG_FILE: configs/x86_64.config
+  DIY_SCRIPT: diy-script.sh
+  FIRMWARE_RELEASE: true
+  FIRMWARE_TAG: X86_64
+  TZ: Asia/Shanghai
+
+jobs:
+  Build:
+    runs-on: [self-hosted, Linux]
+
+    steps:
+    - name: Check Server Performance
+      run: |
+        echo "警告⚠"
+        echo "分配的服务器性能有限,若选择的插件过多,务必注意CPU性能!"
+        echo -e "已知CPU型号(降序): 7763,8370C,8272CL,8171M,E5-2673\n"
+        echo "--------------------------CPU信息--------------------------"
+        echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+        echo "CPU核心数量: $(nproc)"
+
+    - name: Clone Source Code
+      run: |
+        df -hT $GITHUB_WORKSPACE
+        sudo -E rm -rf /dev/shm/build_x86 || true
+        mkdir -p /dev/shm/build_x86 || true
+        cd /dev/shm/build_x86
+        echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV     
+
+    - name: Compile Firmware
+      id: compile
+      run: |
+        echo "start build"
+        echo "make ok"
+        echo "status=success" >> $GITHUB_OUTPUT
+        echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+        echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+        echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
+
+    - name: Check Space Usage
+      if: (!cancelled())
+      run: df -hT
+
+    - name: Organize Files
+      if: steps.compile.outputs.status == 'success'
+      run: |
+        echo "org"
+
+    - name: Upload Firmware To Release
+      if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
+      run: |
+        echo "Upload"
+
+    - name: clean
+      run: |
+        [ ! -z $OPENWRT_PATH ] && (sudo -E rm -rf $OPENWRT_PATH || true)
+
+    - name: report ok
+      if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
+      run: |
+        cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&msg=testok" || true
+
+    - name: report fail
+      if: ${{ always() && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
+      run: |
+        cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&msg=testok" || true

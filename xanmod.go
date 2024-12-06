@@ -77,8 +77,8 @@ func worker_notice(notice_url string, msg_chan chan NoticeMsg) {
 						msg_type := msg.Type
 						msg_msg := msg.Msg
 						
-						if len(msg_type) > 6 {
-							msg_type = msg_type[0:6]
+						if len(msg_type) > 12 {
+							msg_type = msg_type[0:12]
 						}
 						if len(msg_msg) > 12 {
 							msg_msg = msg_msg[0:12]
@@ -122,9 +122,11 @@ func worker_notice(notice_url string, msg_chan chan NoticeMsg) {
 func main() {
 	re_kernel_lts := regexp.MustCompile(`<tr><td>([0-9.]+)</td>`)
 	re_xanmod_lts := regexp.MustCompile(`/releases/lts/([0-9]+\.[0-9]+)`)
+	re_xanmod_main := regexp.MustCompile(`/releases/main/([0-9]+\.[0-9]+)`)
 
 	fmt.Printf("%s %q\n", date_now_string(), re_kernel_lts.FindStringSubmatch("<tr><td>6.6</td><tr><td>6.1</td>"))
 	fmt.Printf("%s %q\n", date_now_string(), re_xanmod_lts.FindStringSubmatch("master.dl.sourceforge.net/project/xanmod/releases/lts/6.6.63-xanmod1"))
+	fmt.Printf("%s %q\n", date_now_string(), re_xanmod_main.FindStringSubmatch(" ]&nbsp;&nbsp;&nbsp;&nbsp;[ <a href=\"https://master.dl.sourceforge.net/project/xanmod/releases/main/6.11.11-xanmod1"))
 
 	notice_chan := make(chan NoticeMsg, 64)
 	notice_token := os.Getenv("MIAO_URL")
@@ -151,48 +153,55 @@ func main() {
         version := queryParams.Get("version")
 
 		requestURL := ""
-		if version == "lts" {
-			lts_version := ""
+		if version == "lts" || version == "main" {
+			krl_version := ""
 
-			requestURL = "https://www.kernel.org/category/releases.html"		
+			// requestURL = "https://www.kernel.org/category/releases.html"		
+			// res, err := http.Get(requestURL)
+			// if err == nil {
+			// 	defer res.Body.Close()
+			// 	data, err := io.ReadAll(res.Body)
+			// 	if err == nil {
+			// 		data_str := string(data)
+			// 		matchs := re_kernel_lts.FindStringSubmatch(data_str)
+			// 		if len(matchs) == 2 {
+			// 			krl_version = matchs[1]
+			// 		}				
+			// 	}
+			// } else {
+
+			requestURL := "https://xanmod.org/"
 			res, err := http.Get(requestURL)
 			if err == nil {
 				defer res.Body.Close()
+
 				data, err := io.ReadAll(res.Body)
 				if err == nil {
 					data_str := string(data)
-					matchs := re_kernel_lts.FindStringSubmatch(data_str)
+
+					re_xanmod := re_xanmod_lts
+					if version == "main"{
+						re_xanmod = re_xanmod_main
+					}
+
+					matchs := re_xanmod.FindStringSubmatch(data_str)
 					if len(matchs) == 2 {
-						lts_version = matchs[1]
+						krl_version = matchs[1]
 					}				
 				}
-			} else {
-				requestURL = "https://xanmod.org/"
-				res, err = http.Get(requestURL)
-				if err == nil {
-					defer res.Body.Close()
-
-					data, err := io.ReadAll(res.Body)
-					if err == nil {
-						data_str := string(data)
-						matchs := re_xanmod_lts.FindStringSubmatch(data_str)
-						if len(matchs) == 2 {
-							lts_version = matchs[1]
-						}				
-					}
-				}
 			}
+			
 
-			if len(lts_version) > 0 {
+			if len(krl_version) > 0 {
 				w.WriteHeader(200)
-				_, _ = w.Write([]byte(fmt.Sprintf("<a href=\"%s/\">%s/</a>", lts_version, lts_version)))						
+				_, _ = w.Write([]byte(fmt.Sprintf("<a href=\"%s/\">%s/</a>", krl_version, krl_version)))						
 				return
 			}
 
 			version = "all"
 		}
 
-		if len(version) == 0 || version == "all" {
+		if len(version) == 0 || version == "all" || version == "edge" {
 			requestURL = fmt.Sprintf("https://dl.xanmod.org/changelog/?C=M;O=D")			
 		} else {
 			requestURL = fmt.Sprintf("https://dl.xanmod.org/changelog/%s/?C=M;O=D", version)

@@ -29,13 +29,13 @@ jobs:
         [ -z "${kernel_ver}" ] && (cat /dev/shm/changelog; exit 1)
 
         kernel_regex='"([0-9.]+)/"'
-        [[ $kernel_ver =~ $kernel_regex ]] && export KERNEL_BASE_VER=${BASH_REMATCH[1]}    
+        [[ $kernel_ver =~ $kernel_regex ]] && export KERNEL_BASE_VER=${BASH_REMATCH[1]}
         [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
 
         curl -L "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" > /dev/shm/changelog
-        xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt"  | head -n 1)
-        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; wget -qO /dev/shm/changelog "https://xanmod.key2p.com/?version=${KERNEL_BASE_VER}")
-        xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt"  | head -n 1)
+        xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt" | head -n 1)
+        [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; curl -L "https://xanmod.key2p.com/?version=${KERNEL_BASE_VER}" > /dev/shm/changelog) || true
+        xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt" | head -n 1)
         [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
 
         xanmod_regex='ChangeLog-([0-9.]+-xanmod[0-9]+)'
@@ -57,6 +57,11 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@main
+
+    - name: Setup Go 1.23.x
+      uses: actions/setup-go@v5
+      with:
+          go-version: '1.23.x'
 
     - name: Clone Source Code
       run: |
@@ -80,7 +85,7 @@ jobs:
         cd $WORK_DIR/debs/
         echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
-        curl "https://xanmod.key2p.com/notice?t=编译&msg=${KERNEL_BASE_VER}" || true
+        go build -ldflags "-s -w" $GITHUB_WORKSPACE/xanmod.go && upx xanmod || true
 
     - name: Check Space Usage
       if: (!cancelled())
@@ -107,7 +112,12 @@ jobs:
       run: |
         [ ! -z $WORK_DIR ] && (sudo -E rm -rf $WORK_DIR || true)
 
-    - name: report
-      if: steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == ''
+    - name: report ok
+      if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
       run: |
-        curl "https://xanmod.key2p.com/notice?t=编译失败&msg=${KERNEL_BASE_VER}" || true
+        cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&msg=${KERNEL_BASE_VER}" || true
+
+    - name: report fail
+      if: ${{ always() && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
+      run: |
+        cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&msg=${KERNEL_BASE_VER}" || true
