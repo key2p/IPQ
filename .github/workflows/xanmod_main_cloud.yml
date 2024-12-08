@@ -1,0 +1,117 @@
+name: xanmod main cloud kernel deb
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 23 * * 2
+
+env:
+  TZ: Asia/Shanghai
+  BUILD_TYPE: cloud
+
+jobs:
+  Build:
+    runs-on: [self-hosted, Linux]
+
+    steps:
+      - name: Check Xanmod Version
+        run: |
+          echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+          echo "CPU核心数量: $(nproc)"
+          echo -e "CPU型号信息:$(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}')\n"
+          echo "已安装内存详细信息:"
+          echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
+          echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT && date
+          set -ex
+          sudo -E rm -f /dev/shm/changelog || true
+
+          curl -L "https://xanmod.key2p.com/?version=main" > /dev/shm/changelog
+          kernel_ver=$(grep "/</a>" /dev/shm/changelog | head -n 1)
+          [ -z "${kernel_ver}" ] && (cat /dev/shm/changelog; exit 1)
+
+          kernel_regex='"([0-9.]+)/"'
+          [[ $kernel_ver =~ $kernel_regex ]] && export KERNEL_BASE_VER=${BASH_REMATCH[1]}
+          [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
+
+          curl -L "https://dl.xanmod.org/changelog/${KERNEL_BASE_VER}/?C=M;O=D" > /dev/shm/changelog
+          xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt" | head -n 1)
+          [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; curl -L "https://xanmod.key2p.com/?version=${KERNEL_BASE_VER}" > /dev/shm/changelog) || true
+          xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt" | head -n 1)
+          [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
+
+          xanmod_regex='ChangeLog-([0-9.]+-xanmod[0-9]+)'
+          [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+          echo "KERNEL_BASE_VER=${KERNEL_BASE_VER}" >> $GITHUB_ENV
+          echo "KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_BASE_VER}.tar.xz" >> $GITHUB_ENV
+
+      - name: Initialization Environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          [ -z "${KERNEL_BASE_VER}"  ] && echo "invalid kernel version ${KERNEL_BASE_VER}, exit" && exit 1
+          [ -z "${XANMOD_PATCH_VER}"  ] && echo "invalid xanmod version ${XANMOD_PATCH_VER}, exit" && exit 1
+          echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/main/${XANMOD_PATCH_VER}/patch-${XANMOD_PATCH_VER}.xz/download" >> $GITHUB_ENV
+          sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY || true
+          sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+          sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
+          sudo -E timedatectl set-timezone "$TZ" || true
+
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Clone Source Code
+        run: |
+          df -hT $GITHUB_WORKSPACE
+          echo "WORK_DIR=/dev/shm/build_linux" >> $GITHUB_ENV
+
+      - name: Compile Firmware
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        id: compile
+        run: |
+          set -ex
+          sudo -E rm -rf $WORK_DIR || true
+          sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
+          export PATH="/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:$PATH"
+          bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
+          mkdir -p $WORK_DIR/debs || true
+          mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true
+          echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+          echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+          cd $WORK_DIR/debs/
+          echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Check Space Usage
+        if: (!cancelled())
+        run: df -hT
+
+      - name: Upload Firmware To Release
+        if: steps.compile.outputs.status == 'success'
+        uses: ncipollo/release-action@v1
+        with:
+          name: R${{ env.DATE }} ${{env.BUILD_TYPE}} kernel for ${{ env.KERNEL_BASE_VER }}
+          allowUpdates: true
+          tag: ${{env.BUILD_TYPE}}_${{ env.KERNEL_BASE_VER }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: ${{ env.FIRMWARE_PATH }}/*
+          body: |
+            **This is XanMod Cloud Kernel for ${{ env.KERNEL_BASE_VER }}**
+            ### 📒 固件信息(x86_64版本)
+            - ⚽ 固件源码: ${{ env.XANMOD_PATCH }}
+            - 💝 源码分支: ${{ env.KERNEL_BASE_VER }}
+            - 🚀 内核版本: ${{ env.XANMOD_PATCH_VER }}
+
+      - name: clean
+        run: |
+          [ ! -z $WORK_DIR ] && (sudo -E rm -rf $WORK_DIR || true)
+
+      - name: report ok
+        if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
+        run: |
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&msg=C_${KERNEL_BASE_VER}" || true
+
+      - name: report fail
+        if: ${{ always() && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
+        run: |
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&msg=C_${KERNEL_BASE_VER}" || true
