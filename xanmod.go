@@ -123,6 +123,7 @@ func main() {
 	re_kernel_lts := regexp.MustCompile(`<tr><td>([0-9.]+)</td>`)
 	re_xanmod_lts := regexp.MustCompile(`/releases/lts/([0-9]+\.[0-9]+)`)
 	re_xanmod_main := regexp.MustCompile(`/releases/main/([0-9]+\.[0-9]+)`)
+	re_xanmod_edge := regexp.MustCompile(`/releases/edge/([0-9]+\.[0-9]+)`)
 
 	fmt.Printf("%s %q\n", date_now_string(), re_kernel_lts.FindStringSubmatch("<tr><td>6.6</td><tr><td>6.1</td>"))
 	fmt.Printf("%s %q\n", date_now_string(), re_xanmod_lts.FindStringSubmatch("master.dl.sourceforge.net/project/xanmod/releases/lts/6.6.63-xanmod1"))
@@ -153,7 +154,7 @@ func main() {
         version := queryParams.Get("version")
 
 		requestURL := ""
-		if version == "lts" || version == "main" {
+		if version == "lts" || version == "main" || version == "edge" {
 			krl_version := ""
 
 			// requestURL = "https://www.kernel.org/category/releases.html"		
@@ -182,6 +183,8 @@ func main() {
 					re_xanmod := re_xanmod_lts
 					if version == "main"{
 						re_xanmod = re_xanmod_main
+					} else if version == "edge"{
+						re_xanmod = re_xanmod_edge
 					}
 
 					matchs := re_xanmod.FindStringSubmatch(data_str)
@@ -201,7 +204,7 @@ func main() {
 			version = "all"
 		}
 
-		if len(version) == 0 || version == "all" || version == "edge" {
+		if len(version) == 0 || version == "all" {
 			requestURL = fmt.Sprintf("https://dl.xanmod.org/changelog/?C=M;O=D")			
 		} else {
 			requestURL = fmt.Sprintf("https://dl.xanmod.org/changelog/%s/?C=M;O=D", version)
@@ -220,4 +223,6 @@ func main() {
 	})
 
     http.ListenAndServe(":2083", nil)
+
+	// go build -o /dev/shm/xanmod  -ldflags "-s -w" xanmod.go && upx /dev/shm/xanmod && ./xanmod
 }
