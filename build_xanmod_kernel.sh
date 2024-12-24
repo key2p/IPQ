@@ -178,6 +178,7 @@ sed -i 's/CONFIG_TABLET/# CONFIG_TABLET/g'             ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CHARGER_/# CONFIG_CHARGER_/g'             ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_BATTERY/# CONFIG_BATTERY/g'             ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_LEDS/# CONFIG_LEDS/g'                 ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TOUCHSCREEN/# CONFIG_TOUCHSCREEN/g'             ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ARCNET=[mny]/CONFIG_ARCNET=n/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_B53=[mny]/CONFIG_B53=n/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_JOYSTICK/#CONFIG_JOYSTICK/g'              ${MAIN_KCONFIG_FILE}
@@ -398,6 +399,8 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_ISDN=[mny]/CONFIG_ISDN=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_KEYBOARD_LKKBD=[mny]/CONFIG_KEYBOARD_LKKBD=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_INPUT_MISC=[mny]/CONFIG_INPUT_MISC=n/g'              ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_SERIAL_/# CONFIG_SERIAL_/g'          ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_SERIO=[mny]/CONFIG_SERIO=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_SERIO_SERPORT=[mny]/CONFIG_SERIO_SERPORT=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_SERIO_CT82C710=[mny]/CONFIG_SERIO_CT82C710=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_SERIO_PCIPS2=[mny]/CONFIG_SERIO_PCIPS2=n/g'              ${MAIN_KCONFIG_FILE}
