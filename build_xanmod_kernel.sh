@@ -670,8 +670,10 @@ echo 'CONFIG_MODULE_COMPRESS_XZ=y'              >> ${MAIN_KCONFIG_FILE}
  
 echo 'CONFIG_HAVE_KERNEL_BZIP2=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZO=n/g'               >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_HAVE_KERNEL_LZ4=n/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_ZSTD=m/g'              >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HAVE_KERNEL_LZ4=y/g'               >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_LZ4=y/g'                    >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 
 # CONFIG_KALLSYMS=y, so no need System.map file
 [  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
