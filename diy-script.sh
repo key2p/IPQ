@@ -26,7 +26,7 @@ rm -rf feeds/packages/multimedia/{ffmpeg*, fswebcam}
 # TTYD 免登录
 sed -i 's|/bin/login|/bin/login -f root|g'  feeds/packages/utils/ttyd/files/ttyd.config
 
-# 修改默认root密码
+# 修改默认root密码 1Gxx
 BASEROOT=package/base-files/files
 sed -i 's/root:::0:/root:$1$0h4E33CP$XGfQTT4OQs09r0bwAV0n01::0:/g'  $BASEROOT/etc/shadow
 
