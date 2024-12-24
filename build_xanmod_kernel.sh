@@ -631,7 +631,9 @@ fi
 
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_NF_/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
+
+# 和 xanmod fullcone 冲突
+#sed -i '/^CONFIG_NF_/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NETFILTER=[mny]/CONFIG_NETFILTER=y/g'      ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_NETFILTER_INGRESS=[mny]/CONFIG_NETFILTER_INGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_NETFILTER_EGRESS=[mny]/CONFIG_NETFILTER_EGRESS=y/g'        ${MAIN_KCONFIG_FILE} 
