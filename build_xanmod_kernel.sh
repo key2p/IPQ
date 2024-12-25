@@ -199,6 +199,9 @@ sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISO9660_FS=[mny]/CONFIG_ISO9660_FS=y/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=y/g'    ${MAIN_KCONFIG_FILE}
 
+# hyperv_storage depends
+sed -i 's/CONFIG_SCSI_FC_ATTRS=[mny]/CONFIG_SCSI_FC_ATTRS=y/g'      ${MAIN_KCONFIG_FILE}
+
 # fs
 sed -i 's/CONFIG_AIX_PARTITION=[mny]/CONFIG_AIX_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_OSF_PARTITION=[mny]/CONFIG_OSF_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
@@ -738,11 +741,14 @@ fi
 
 # 支持睡眠Sleep，禁用休眠; 禁用老系统选项
 sed -i '/HIBERNAT/s/=y/=n/'                                             ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SYSVIPC=[mny]/CONFIG_SYSVIPC=n/g'                      ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_SYSVIPC_COMPAT=[mny]/CONFIG_SYSVIPC_COMPAT=n/g'        ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_USELIB=[mny]/CONFIG_USELIB=n/g'                        ${MAIN_KCONFIG_FILE} 
-sed -i 's/CONFIG_X86_16BIT=[mny]/CONFIG_X86_16BIT=n/g'                ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_COMPAT=[mny]/CONFIG_COMPAT=n/g'              ${MAIN_KCONFIG_FILE} 
-sed -i 's/CONFIG_COMPAT_32=[mny]/CONFIG_COMPAT_32=n/g'        ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_X86_16BIT=[mny]/CONFIG_X86_16BIT=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_COMPAT=[mny]/CONFIG_COMPAT=n/g'                        ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_COMPAT_32=[mny]/CONFIG_COMPAT_32=n/g'                  ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_IA32_EMULATION=[mny]/CONFIG_IA32_EMULATION=n/g'        ${MAIN_KCONFIG_FILE} 
+
 
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
