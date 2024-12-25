@@ -36,21 +36,34 @@ cat arch/x86/Makefile | grep KBUILD_CFLAGS
 cp -a CONFIGS/xanmod/gcc/${XANMOD_CONFIG} .config
 export MAIN_KCONFIG_FILE=.config
 
+sed -i 's/CONFIG_X86_MSR=[mny]/CONFIG_X86_MSR=y/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_X86_CPUID=[mny]/CONFIG_X86_CPUID=y/g'      ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_COMPAT/s/=y/=m/'                           ${MAIN_KCONFIG_FILE}
+
 # enable kvm,hyperv,vmware and disable xen
 sed -i 's/CONFIG_XEN=[mny]/CONFIG_XEN=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_XEN/# CONFIG_XEN/g'                        ${MAIN_KCONFIG_FILE}
-
+sed -i 's/CONFIG_JAILHOUSE_GUEST=[mny]/CONFIG_JAILHOUSE_GUEST=n/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ACRN_GUEST=[mny]/CONFIG_ACRN_GUEST=n/g'                    ${MAIN_KCONFIG_FILE}
+ 
 sed -i 's/CONFIG_HAVE_KVM=[mny]/CONFIG_HAVE_KVM=y/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_KVM=[mny]/CONFIG_KVM=m/g'                  ${MAIN_KCONFIG_FILE}
 
 # hyperv
-sed -i 's/CONFIG_HYPERV=[mny]/CONFIG_HYPERV=m/g'                        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERVISOR_GUEST=[mny]/CONFIG_HYPERVISOR_GUEST=y/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_HYPERV=[mny]/CONFIG_HYPERV=y/g'                        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_NET=[mny]/CONFIG_HYPERV_NET=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_KEYBOARD=[mny]/CONFIG_HYPERV_KEYBOARD=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_VSOCKETS=[mny]/CONFIG_HYPERV_VSOCKETS=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_STORAGE=[mny]/CONFIG_HYPERV_STORAGE=y/g'        ${MAIN_KCONFIG_FILE}
 
+sed -i 's/CONFIG_PCI_HYPERV=[mny]/CONFIG_PCI_HYPERV=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_PCI_HYPERV/s/=m/=y/'                                   ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_HYPERV/s/=m/=y/'                                       ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_VMWARE/s/=m/=y/'                                       ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_VIRTIO/s/=m/=y/'                                       ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_VSOCKETS=[mny]/CONFIG_VSOCKETS=y/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VMXNET3=[mny]/CONFIG_VMXNET3=y/g'                      ${MAIN_KCONFIG_FILE}
 
 # disable gpu
@@ -61,17 +74,41 @@ sed -i 's/CONFIG_DRM_XE=[mny]/CONFIG_DRM_XE=n/g'                ${MAIN_KCONFIG_F
 sed -i 's/CONFIG_INPUT_TOUCHSCREEN=[mny]/CONFIG_INPUT_TOUCHSCREEN=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SURFACE_PLATFORMS=[mny]/CONFIG_SURFACE_PLATFORMS=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_AGP=[mny]/CONFIG_AGP=n/g'                              ${MAIN_KCONFIG_FILE}
-
+sed -i 's/CONFIG_ACPI_VIDEO=[mny]/CONFIG_ACPI_VIDEO=n/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VGA_ARB=[mny]/CONFIG_VGA_ARB=n/g'                      ${MAIN_KCONFIG_FILE}
+ 
 # ktls
 sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_DH=[mny]/CONFIG_CRYPTO_DH=m/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ECC=[mny]/CONFIG_CRYPTO_ECC=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ECDH=[mny]/CONFIG_CRYPTO_ECDH=m/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_ECDSA=[mny]/CONFIG_CRYPTO_ECDSA=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_CURVE25519=[mny]/CONFIG_CRYPTO_CURVE25519=m/g'  ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_CRYPTO_AKCIPHER2=[mny]/CONFIG_CRYPTO_AKCIPHER2=m/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AKCIPHER=[mny]/CONFIG_CRYPTO_AKCIPHER=m/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_KPP2=[mny]/CONFIG_CRYPTO_KPP2=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_KPP=[mny]/CONFIG_CRYPTO_KPP=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ACOMP2=[mny]/CONFIG_CRYPTO_ACOMP2=m/g'          ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_CRYPTO_CBC=[mny]/CONFIG_CRYPTO_CBC=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CTS=[mny]/CONFIG_CRYPTO_CTS=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_GENIV=[mny]/CONFIG_CRYPTO_GENIV=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SEQIV=[mny]/CONFIG_CRYPTO_SEQIV=m/g'            ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_CRYPTO_HMAC=[mny]/CONFIG_CRYPTO_HMAC=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_MD5=[mny]/CONFIG_CRYPTO_MD5=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA1=[mny]/CONFIG_CRYPTO_SHA1=m/g'              ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_SHA1_SSSE3=[mny]/CONFIG_CRYPTO_SHA1_SSSE3=y/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA1_SSSE3=[mny]/CONFIG_CRYPTO_SHA1_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA256=[mny]/CONFIG_CRYPTO_SHA256=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA512=[mny]/CONFIG_CRYPTO_SHA512=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA3=[mny]/CONFIG_CRYPTO_SHA3=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA512_SSSE3=[mny]/CONFIG_CRYPTO_SHA512_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_CRYPTO_HW=[mny]/CONFIG_CRYPTO_HW=m/g'                  ${MAIN_KCONFIG_FILE}
+
 sed -i 's/CONFIG_CRYPTO_CRCT10DIF=[mny]/CONFIG_CRYPTO_CRCT10DIF=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_CRC64_ROCKSOFT=[mny]/CONFIG_CRYPTO_CRC64_ROCKSOFT=m/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_BLAKE2S_X86=[mny]/CONFIG_CRYPTO_BLAKE2S_X86=m/g'            ${MAIN_KCONFIG_FILE}
@@ -82,6 +119,7 @@ sed -i 's/CONFIG_CRYPTO_LIB_SHA1=[mny]/CONFIG_CRYPTO_LIB_SHA1=m/g'              
 sed -i 's/CONFIG_CRYPTO_LIB_SHA256=[mny]/CONFIG_CRYPTO_LIB_SHA256=m/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ASYMMETRIC_KEY_TYPE=[mny]/CONFIG_ASYMMETRIC_KEY_TYPE=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=[mny]/CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ASN1=[mny]/CONFIG_ASN1=m/g'                                                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X509_CERTIFICATE_PARSER=[mny]/CONFIG_X509_CERTIFICATE_PARSER=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_MESSAGE_PARSER=[mny]/CONFIG_PKCS7_MESSAGE_PARSER=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_TEST_KEY=[mny]/CONFIG_PKCS7_TEST_KEY=n/g'                            ${MAIN_KCONFIG_FILE}
@@ -99,8 +137,6 @@ sed -i 's/CONFIG_CRYPTO_CAST6=[mny]/CONFIG_CRYPTO_CAST6=n/g'                  ${
 sed -i 's/CONFIG_CRYPTO_DES=[mny]/CONFIG_CRYPTO_DES=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=n/g'                  ${MAIN_KCONFIG_FILE}
 
-
-
 # input 
 sed -i 's/CONFIG_MOUSE_PS2=[mny]/CONFIG_MOUSE_PS2=m/g'       ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MOUSE_PS2_/#CONFIG_MOUSE_PS2_/g'            ${MAIN_KCONFIG_FILE}
@@ -108,13 +144,26 @@ sed -i '/^CONFIG_RMI4/s/=y/=m/'                              ${MAIN_KCONFIG_FILE
 sed -i '/^CONFIG_GPIO/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_SENSORS/s/=y/=m/'                           ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_PWM/s/=y/=m/'                               ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_INPUT_VIVALDIFMAP=[mny]/CONFIG_INPUT_VIVALDIFMAP=m/g'       ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_EXTCON=[mny]/CONFIG_EXTCON=m/g'             ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_REMOTEPROC=[mny]/CONFIG_REMOTEPROC=m/g'     ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_INPUT_VIVALDIFMAP=[mny]/CONFIG_INPUT_VIVALDIFMAP=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ACCESSIBILITY=[mny]/CONFIG_ACCESSIBILITY=m/g'                  ${MAIN_KCONFIG_FILE}
 
+sed -i 's/CONFIG_UDMABUF=[mny]/CONFIG_UDMABUF=m/g'           ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RTC_NVMEM=[mny]/CONFIG_RTC_NVMEM=m/g'       ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_EDAC=[mny]/CONFIG_EDAC=m/g'                 ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_LIRC=[mny]/CONFIG_LIRC=m/g'                 ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SPI=[mny]/CONFIG_SPI=m/g'                   ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_PVPANIC =[mny]/CONFIG_PVPANIC =m/g'         ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RAPIDIO=[mny]/CONFIG_RAPIDIO=m/g'           ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CARDBUS =[mny]/CONFIG_CARDBUS =m/g'         ${MAIN_KCONFIG_FILE}
+    
+    
 # disable for android
 sed -i '/^CONFIG_LIBNVDIMM/s/=y/=m/'                         ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DAX/s/=y/=m/'                               ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DAX/s/=y/=m/'                               ${MAIN_KCONFIG_FILE}
-
+ 
 # wireless and sfc, bt
 sed -i 's/CONFIG_WIRELESS=[mny]/CONFIG_WIRELESS=n/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_WIRELESS_HOTKEY=[mny]/CONFIG_WIRELESS_HOTKEY=n/g'      ${MAIN_KCONFIG_FILE}
@@ -145,12 +194,29 @@ sed -i 's/CONFIG_MEDIA_SUPPORT=[mny]/CONFIG_MEDIA_SUPPORT=n/g' ${MAIN_KCONFIG_FI
 sed -i 's/CONFIG_VIDEO_DEV=[mny]/CONFIG_VIDEO_DEV=n/g'          ${MAIN_KCONFIG_FILE}
 
 # sata, ahci
-sed -i 's/CONFIG_SATA_AHCI=[mny]/CONFIG_SATA_AHCI=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SCSI=[mny]/CONFIG_SCSI=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SATA_AHCI=[mny]/CONFIG_SATA_AHCI=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISO9660_FS=[mny]/CONFIG_ISO9660_FS=y/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=y/g'    ${MAIN_KCONFIG_FILE}
 
 # fs
+sed -i 's/CONFIG_AIX_PARTITION=[mny]/CONFIG_AIX_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_OSF_PARTITION=[mny]/CONFIG_OSF_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_AMIGA_PARTITION=[mny]/CONFIG_AMIGA_PARTITION=n/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ATARI_PARTITION=[mny]/CONFIG_ATARI_PARTITION=n/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MAC_PARTITION=[mny]/CONFIG_MAC_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MINIX_SUBPARTITION=[mny]/CONFIG_MINIX_SUBPARTITION=n/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SOLARIS_X86_PARTITION=[mny]/CONFIG_SOLARIS_X86_PARTITION=n/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_UNIXWARE_DISKLABEL=[mny]/CONFIG_UNIXWARE_DISKLABEL=n/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_LDM_PARTITION=[mny]/CONFIG_LDM_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SGI_PARTITION=[mny]/CONFIG_SGI_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ULTRIX_PARTITION=[mny]/CONFIG_ULTRIX_PARTITION=n/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SUN_PARTITION=[mny]/CONFIG_SUN_PARTITION=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_KARMA_PARTITION=[mny]/CONFIG_KARMA_PARTITION=n/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SYSV68_PARTITION=[mny]/CONFIG_SYSV68_PARTITION=n/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CMDLINE_PARTITION=[mny]/CONFIG_CMDLINE_PARTITION=n/g'          ${MAIN_KCONFIG_FILE}
+
 sed -i 's/CONFIG_BCACHEFS_FS=[mny]/CONFIG_BCACHEFS_FS=n/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_BCACHE=[mny]/CONFIG_BCACHE=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_BTRFS_FS=[mny]/CONFIG_BTRFS_FS=n/g'            ${MAIN_KCONFIG_FILE}
@@ -160,7 +226,11 @@ sed -i 's/CONFIG_GFS2_FS=[mny]/CONFIG_GFS2_FS=n/g'              ${MAIN_KCONFIG_F
 sed -i 's/CONFIG_JFFS2_FS=[mny]/CONFIG_JFFS2_FS=n/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_TEXTSEARCH=[mny]/CONFIG_TEXTSEARCH=m/g'        ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_SQUASHFS=[mny]/CONFIG_SQUASHFS=m/g'            ${MAIN_KCONFIG_FILE}
-
+sed -i 's/CONFIG_FS_ENCRYPTION=[mny]/CONFIG_FS_ENCRYPTION=m/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ECRYPT_FS=[mny]/CONFIG_ECRYPT_FS=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_UNICODE=[mny]/CONFIG_UNICODE=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TRUSTED_KEYS=[mny]/CONFIG_TRUSTED_KEYS=m/g'    ${MAIN_KCONFIG_FILE}
+ 
 sed -i '/CONFIG_GPIO_BT8XX/e' ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_GPIO_BT8XX=n' >> ${MAIN_KCONFIG_FILE}
 
@@ -191,7 +261,20 @@ sed -i 's/CONFIG_SECURITY_IPE=[mny]/CONFIG_SECURITY_IPE=y/g'              ${MAIN
   
 ##### for server, no pc or laptop
 #sed -i 's/CONFIG_HW_CONSOLE=[mny]/CONFIG_HW_CONSOLE=n/g'        ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=m/g'         ${MAIN_KCONFIG_FILE}
+
+# network
+sed -i '/^CONFIG_XFRM/s/=y/=m/'                         ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_DCB/s/=y/=m/'                          ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_DNS_RESOLVER/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MCTP=[mny]/CONFIG_MCTP=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_NET_NCSI=[mny]/CONFIG_NET_NCSI=m/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_HAMRADIO=[mny]/CONFIG_HAMRADIO=m/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RXKAD=[mny]/CONFIG_RXKAD=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RFKILL=[mny]/CONFIG_RFKILL=m/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TUN=[mny]/CONFIG_TUN=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MDIO_DEVICE=[mny]/CONFIG_MDIO_DEVICE=m/g'              ${MAIN_KCONFIG_FILE}
+  
 
 sed -i 's/CONFIG_UBSAN=[mny]/CONFIG_UBSAN=n/g'         ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FONTS=[mny]/CONFIG_FONTS=n/g'         ${MAIN_KCONFIG_FILE}
@@ -247,7 +330,7 @@ sed -i 's/CONFIG_ACPI_DEBUGGER=[mny]/CONFIG_ACPI_DEBUGGER=m/g'      ${MAIN_KCONF
 sed -i 's/CONFIG_IOSF_MBI_DEBUG=[mny]/CONFIG_IOSF_MBI_DEBUG=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NETFS_DEBUG=[mny]/CONFIG_NETFS_DEBUG=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SCHED_DEBUG=[mny]/CONFIG_SCHED_DEBUG=m/g'          ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_FW_LOADER_DEBUG=[mny]/CONFIG_FW_LOADER_DEBUG=m/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_FW_LOADER_DEBUG=[mny]/CONFIG_FW_LOADER_DEBUG=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MEMTEST=[mny]/CONFIG_MEMTEST=n/g'                  ${MAIN_KCONFIG_FILE}
 
 # disable isa bus
@@ -272,7 +355,6 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   # 二分
   #sed -i 's/CONFIG_PC104=[mny]/CONFIG_PC104=n/g'                        ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_GART_IOMMU=[mny]/CONFIG_GART_IOMMU=n/g'              ${MAIN_KCONFIG_FILE}
-  #sed -i 's/CONFIG_X86_16BIT=[mny]/CONFIG_X86_16BIT=n/g'                ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_X86_PLATFORM_DEVICES=[mny]/CONFIG_X86_PLATFORM_DEVICES=n/g'              ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_ACPI_AC=[mny]/CONFIG_ACPI_AC=n/g'                       ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_ACPI_BATTERY=[mny]/CONFIG_ACPI_BATTERY=n/g'             ${MAIN_KCONFIG_FILE}
@@ -654,11 +736,14 @@ fi
         
 #### cloud end
 
+# 支持睡眠Sleep，禁用休眠; 禁用老系统选项
+sed -i '/HIBERNAT/s/=y/=n/'                                             ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SYSVIPC_COMPAT=[mny]/CONFIG_SYSVIPC_COMPAT=n/g'        ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_USELIB=[mny]/CONFIG_USELIB=n/g'                        ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_X86_16BIT=[mny]/CONFIG_X86_16BIT=n/g'                ${MAIN_KCONFIG_FILE}
+
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
-
-# 支持睡眠Sleep，禁用休眠
-sed -i '/HIBERNAT/s/=y/=n/'                                 ${MAIN_KCONFIG_FILE}
 
 # 和 xanmod fullcone 冲突
 #sed -i '/^CONFIG_NF_/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
@@ -694,6 +779,7 @@ echo 'CONFIG_DEBUG_INFO_COMPRESSED_XZ=y'      >> ${MAIN_KCONFIG_FILE}
 
 echo 'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y'     >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_KERNEL_XZ=y'                       >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_MODULE_STRIPPED=y'                 >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_MODULE_COMPRESS=y'                 >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_MODULE_COMPRESS_XZ=y'              >> ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_XZ_DEC_POWERPC=[mny]/CONFIG_XZ_DEC_POWERPC=n/g'          ${MAIN_KCONFIG_FILE}
@@ -701,12 +787,31 @@ sed -i 's/CONFIG_XZ_DEC_ARM=[mny]/CONFIG_XZ_DEC_ARM=n/g'                  ${MAIN
 sed -i 's/CONFIG_XZ_DEC_ARMTHUMB=[mny]/CONFIG_XZ_DEC_ARMTHUMB=n/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_XZ_DEC_TEST=[mny]/CONFIG_XZ_DEC_TEST=n/g'                ${MAIN_KCONFIG_FILE}
 
+sed -i 's/CONFIG_DECOMPRESS_LZMA=[mny]/CONFIG_DECOMPRESS_LZMA=n/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DECOMPRESS_BZIP2=[mny]/CONFIG_DECOMPRESS_BZIP2=n/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DECOMPRESS_LZO=[mny]/CONFIG_DECOMPRESS_LZO=n/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DECOMPRESS_LZ4=[mny]/CONFIG_DECOMPRESS_LZ4=n/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DECOMPRESS_ZSTD=[mny]/CONFIG_DECOMPRESS_ZSTD=n/g'      ${MAIN_KCONFIG_FILE}
+
+# gzip xz 
+sed -i 's/CONFIG_RD_LZMA=[mny]/CONFIG_RD_LZMA=n/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_BZIP2=[mny]/CONFIG_RD_BZIP2=n/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_LZO=[mny]/CONFIG_RD_LZO=n/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_LZ4=[mny]/CONFIG_RD_LZ4=n/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_ZSTD=[mny]/CONFIG_RD_ZSTD=n/g'              ${MAIN_KCONFIG_FILE}
+
 echo 'CONFIG_HAVE_KERNEL_BZIP2=n/g'             >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HAVE_KERNEL_LZMA=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZO=n/g'               >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_HAVE_KERNEL_ZSTD=m/g'              >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HAVE_KERNEL_ZSTD=n/g'              >> ${MAIN_KCONFIG_FILE}
+
 echo 'CONFIG_HAVE_KERNEL_LZ4=y/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_CRYPTO_LZ4=y/g'                    >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
+
+echo 'CONFIG_RT_GROUP_SCHED=y/g'                >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_BASE_FULL=y/g'                     >> ${MAIN_KCONFIG_FILE}
+ 
 
 # CONFIG_KALLSYMS=y, so no need System.map file
 [  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
