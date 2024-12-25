@@ -38,7 +38,6 @@ export MAIN_KCONFIG_FILE=.config
 
 sed -i 's/CONFIG_X86_MSR=[mny]/CONFIG_X86_MSR=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X86_CPUID=[mny]/CONFIG_X86_CPUID=y/g'      ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_COMPAT/s/=y/=m/'                           ${MAIN_KCONFIG_FILE}
 
 # enable kvm,hyperv,vmware and disable xen
 sed -i 's/CONFIG_XEN=[mny]/CONFIG_XEN=n/g'                  ${MAIN_KCONFIG_FILE}
@@ -236,9 +235,10 @@ echo 'CONFIG_GPIO_BT8XX=n' >> ${MAIN_KCONFIG_FILE}
 
 # for xdp https://pulsar.sh/docs/faq/kernel-requirements
 sed -i 's/CONFIG_IKHEADERS=[mny]/CONFIG_IKHEADERS=n/g'         ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_PACKET=[mny]/CONFIG_PACKET=m/g'               ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_TEST_/# CONFIG_TEST_/g'                       ${MAIN_KCONFIG_FILE}
 
+# for udhcpc: socket(AF_PACKET,2,8)
+sed -i 's/CONFIG_PACKET=[mny]/CONFIG_PACKET=y/g'               ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TEST_/# CONFIG_TEST_/g'                       ${MAIN_KCONFIG_FILE}
 
 echo 'CONFIG_DEBUG_INFO_NONE=y' >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_DEBUG_INFO_DWARF4=n' >> ${MAIN_KCONFIG_FILE}
@@ -741,6 +741,8 @@ sed -i '/HIBERNAT/s/=y/=n/'                                             ${MAIN_K
 sed -i 's/CONFIG_SYSVIPC_COMPAT=[mny]/CONFIG_SYSVIPC_COMPAT=n/g'        ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_USELIB=[mny]/CONFIG_USELIB=n/g'                        ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_X86_16BIT=[mny]/CONFIG_X86_16BIT=n/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_COMPAT=[mny]/CONFIG_COMPAT=n/g'              ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_COMPAT_32=[mny]/CONFIG_COMPAT_32=n/g'        ${MAIN_KCONFIG_FILE} 
 
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
@@ -811,7 +813,8 @@ echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 
 echo 'CONFIG_RT_GROUP_SCHED=y/g'                >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_BASE_FULL=y/g'                     >> ${MAIN_KCONFIG_FILE}
- 
+echo 'CONFIG_HYPERV_STORAGE=y/g'                >> ${MAIN_KCONFIG_FILE}
+
 
 # CONFIG_KALLSYMS=y, so no need System.map file
 [  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
