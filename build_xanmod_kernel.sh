@@ -63,30 +63,42 @@ sed -i 's/CONFIG_SURFACE_PLATFORMS=[mny]/CONFIG_SURFACE_PLATFORMS=n/g'  ${MAIN_K
 sed -i 's/CONFIG_AGP=[mny]/CONFIG_AGP=n/g'                              ${MAIN_KCONFIG_FILE}
 
 # ktls
-sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=y/g'                              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_ECDSA=[mny]/CONFIG_CRYPTO_ECDSA=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_CURVE25519=[mny]/CONFIG_CRYPTO_CURVE25519=m/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_MD5=[mny]/CONFIG_CRYPTO_MD5=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA1=[mny]/CONFIG_CRYPTO_SHA1=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA1_SSSE3=[mny]/CONFIG_CRYPTO_SHA1_SSSE3=y/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA256=[mny]/CONFIG_CRYPTO_SHA256=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA3=[mny]/CONFIG_CRYPTO_SHA3=m/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_CRCT10DIF=[mny]/CONFIG_CRYPTO_CRCT10DIF=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_CRC64_ROCKSOFT=[mny]/CONFIG_CRYPTO_CRC64_ROCKSOFT=m/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_BLAKE2S_X86=[mny]/CONFIG_CRYPTO_BLAKE2S_X86=m/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=[mny]/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=[mny]/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=m/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=[mny]/CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=m/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=[mny]/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=m/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_LIB_SHA1=[mny]/CONFIG_CRYPTO_LIB_SHA1=m/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_LIB_SHA256=[mny]/CONFIG_CRYPTO_LIB_SHA256=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=[mny]/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=m/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_SHA1=[mny]/CONFIG_CRYPTO_LIB_SHA1=m/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_SHA256=[mny]/CONFIG_CRYPTO_LIB_SHA256=m/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ASYMMETRIC_KEY_TYPE=[mny]/CONFIG_ASYMMETRIC_KEY_TYPE=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=[mny]/CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X509_CERTIFICATE_PARSER=[mny]/CONFIG_X509_CERTIFICATE_PARSER=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_MESSAGE_PARSER=[mny]/CONFIG_PKCS7_MESSAGE_PARSER=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_TEST_KEY=[mny]/CONFIG_PKCS7_TEST_KEY=n/g'                            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_SIGNED_PE_FILE_VERIFICATION=[mny]/CONFIG_SIGNED_PE_FILE_VERIFICATION=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SIGNED_PE_FILE_VERIFICATION=[mny]/CONFIG_SIGNED_PE_FILE_VERIFICATION=m/g'  ${MAIN_KCONFIG_FILE}
+
+sed -i '/SHA3/s/=y/=m/'                                 ${MAIN_KCONFIG_FILE}
+sed -i '/SHA256/s/=y/=m/'                               ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_CRYPTO_AES_NI_INTEL=[mny]/CONFIG_CRYPTO_AES_NI_INTEL=y/g'          ${MAIN_KCONFIG_FILE}
+
+# Blowfish对称加密算法,一种又老又慢的对称加密算法.
+sed -i 's/CONFIG_CRYPTO_BLOWFISH=[mny]/CONFIG_CRYPTO_BLOWFISH=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CAST5=[mny]/CONFIG_CRYPTO_CAST5=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CAST6=[mny]/CONFIG_CRYPTO_CAST6=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_DES=[mny]/CONFIG_CRYPTO_DES=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=n/g'                  ${MAIN_KCONFIG_FILE}
+
 
 
 # input 
@@ -96,6 +108,7 @@ sed -i '/^CONFIG_RMI4/s/=y/=m/'                              ${MAIN_KCONFIG_FILE
 sed -i '/^CONFIG_GPIO/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_SENSORS/s/=y/=m/'                           ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_PWM/s/=y/=m/'                               ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_INPUT_VIVALDIFMAP=[mny]/CONFIG_INPUT_VIVALDIFMAP=m/g'       ${MAIN_KCONFIG_FILE}
 
 # disable for android
 sed -i '/^CONFIG_LIBNVDIMM/s/=y/=m/'                         ${MAIN_KCONFIG_FILE}
@@ -153,7 +166,9 @@ echo 'CONFIG_GPIO_BT8XX=n' >> ${MAIN_KCONFIG_FILE}
 
 # for xdp https://pulsar.sh/docs/faq/kernel-requirements
 sed -i 's/CONFIG_IKHEADERS=[mny]/CONFIG_IKHEADERS=n/g'         ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_TEST_/# CONFIG_TEST_/g'                     ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_PACKET=[mny]/CONFIG_PACKET=m/g'               ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TEST_/# CONFIG_TEST_/g'                       ${MAIN_KCONFIG_FILE}
+
 
 echo 'CONFIG_DEBUG_INFO_NONE=y' >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_DEBUG_INFO_DWARF4=n' >> ${MAIN_KCONFIG_FILE}
@@ -176,6 +191,7 @@ sed -i 's/CONFIG_SECURITY_IPE=[mny]/CONFIG_SECURITY_IPE=y/g'              ${MAIN
   
 ##### for server, no pc or laptop
 #sed -i 's/CONFIG_HW_CONSOLE=[mny]/CONFIG_HW_CONSOLE=n/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=m/g'         ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_UBSAN=[mny]/CONFIG_UBSAN=n/g'         ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FONTS=[mny]/CONFIG_FONTS=n/g'         ${MAIN_KCONFIG_FILE}
@@ -233,7 +249,11 @@ sed -i 's/CONFIG_NETFS_DEBUG=[mny]/CONFIG_NETFS_DEBUG=m/g'          ${MAIN_KCONF
 sed -i 's/CONFIG_SCHED_DEBUG=[mny]/CONFIG_SCHED_DEBUG=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FW_LOADER_DEBUG=[mny]/CONFIG_FW_LOADER_DEBUG=m/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MEMTEST=[mny]/CONFIG_MEMTEST=n/g'                  ${MAIN_KCONFIG_FILE}
- 
+
+# disable isa bus
+sed -i 's/CONFIG_ISA_BUS=[mny]/CONFIG_ISA_BUS=n/g'                    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ISA_DMA_API=[mny]/CONFIG_ISA_DMA_API=n/g'            ${MAIN_KCONFIG_FILE}
+
 # if [ ! -z "$BUILD_TYPE"  ]; then
 
 ##### for cloud 
@@ -251,8 +271,6 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
 
   # 二分
   #sed -i 's/CONFIG_PC104=[mny]/CONFIG_PC104=n/g'                        ${MAIN_KCONFIG_FILE}
-  #sed -i 's/CONFIG_ISA_BUS=[mny]/CONFIG_ISA_BUS=n/g'                    ${MAIN_KCONFIG_FILE}
-  #sed -i 's/CONFIG_ISA_DMA_API=[mny]/CONFIG_ISA_DMA_API=n/g'            ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_GART_IOMMU=[mny]/CONFIG_GART_IOMMU=n/g'              ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_X86_16BIT=[mny]/CONFIG_X86_16BIT=n/g'                ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_X86_PLATFORM_DEVICES=[mny]/CONFIG_X86_PLATFORM_DEVICES=n/g'              ${MAIN_KCONFIG_FILE}
@@ -639,6 +657,9 @@ fi
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
 
+# 支持睡眠Sleep，禁用休眠
+sed -i '/HIBERNAT/s/=y/=n/'                                 ${MAIN_KCONFIG_FILE}
+
 # 和 xanmod fullcone 冲突
 #sed -i '/^CONFIG_NF_/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NETFILTER=[mny]/CONFIG_NETFILTER=y/g'      ${MAIN_KCONFIG_FILE} 
@@ -651,6 +672,7 @@ sed -i '/^CONFIG_BRIDGE/s/=y/=m/'                   ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_XFS_/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_NFS_/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_NFSD/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_EXPORTFS/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_USB/s/=y/=m/'                      ${MAIN_KCONFIG_FILE}
 
 # build opt
