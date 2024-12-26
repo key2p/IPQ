@@ -106,7 +106,8 @@ sed -i 's/CONFIG_CRYPTO_SHA512=[mny]/CONFIG_CRYPTO_SHA512=m/g'          ${MAIN_K
 sed -i 's/CONFIG_CRYPTO_SHA3=[mny]/CONFIG_CRYPTO_SHA3=m/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_SHA512_SSSE3=[mny]/CONFIG_CRYPTO_SHA512_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
 
-sed -i 's/CONFIG_CRYPTO_HW=[mny]/CONFIG_CRYPTO_HW=m/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_HW=[mny]/CONFIG_CRYPTO_HW=y/g'                  ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_CRYPTO_DEV_/s/=y/=m/'                                       ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_CRYPTO_CRCT10DIF=[mny]/CONFIG_CRYPTO_CRCT10DIF=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_CRC64_ROCKSOFT=[mny]/CONFIG_CRYPTO_CRC64_ROCKSOFT=m/g'      ${MAIN_KCONFIG_FILE}
@@ -198,6 +199,11 @@ sed -i 's/CONFIG_SATA_AHCI=[mny]/CONFIG_SATA_AHCI=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISO9660_FS=[mny]/CONFIG_ISO9660_FS=y/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=y/g'    ${MAIN_KCONFIG_FILE}
+
+#fat efi need
+sed -i 's/CONFIG_MSDOS_FS=[mny]/CONFIG_MSDOS_FS=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VFAT_FS=[mny]/CONFIG_VFAT_FS=y/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_NLS_ISO8859_1=[mny]/CONFIG_NLS_ISO8859_1=y/g'      ${MAIN_KCONFIG_FILE}
 
 # hyperv_storage depends
 sed -i 's/CONFIG_SCSI_FC_ATTRS=[mny]/CONFIG_SCSI_FC_ATTRS=y/g'      ${MAIN_KCONFIG_FILE}
