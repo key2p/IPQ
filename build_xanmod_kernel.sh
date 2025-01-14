@@ -866,8 +866,8 @@ export xv=$(cat localversion)
 export rv=0
 
 PAREL_BUILD=$(nproc)
-if [ "$PAREL_BUILD" -ge '8' ]; then
-  PAREL_BUILD=8
+if [ "$PAREL_BUILD" -ge '10' ]; then
+  PAREL_BUILD=10
 fi
         
 date; make olddefconfig LLVM=1 LLVM_IAS=1
