@@ -65,6 +65,15 @@ sed -i '/CONFIG_VIRTIO/s/=m/=y/'                                       ${MAIN_KC
 sed -i 's/CONFIG_VSOCKETS=[mny]/CONFIG_VSOCKETS=y/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VMXNET3=[mny]/CONFIG_VMXNET3=y/g'                      ${MAIN_KCONFIG_FILE}
 
+# vmware 默认 模拟 LSI Logic Parallel SCSI 控制器，使用 SPI (SCSI Parallel Interface)。
+# 推荐 VMware Paravirtual (PVSCSI) pvscsi
+sed -i 's/CONFIG_FUSION=[mny]/CONFIG_FUSION=y/g'                        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_FUSION_SPI=[mny]/CONFIG_FUSION_SPI=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_FUSION_SAS=[mny]/CONFIG_FUSION_SAS=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VMWARE_VMCI=[mny]/CONFIG_VMWARE_VMCI=y/g'                    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VMWARE_VMCI_VSOCKETS=[mny]/CONFIG_VMWARE_VMCI_VSOCKETS=y/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VMWARE_PVSCSI=[mny]/CONFIG_VMWARE_PVSCSI=y/g'                ${MAIN_KCONFIG_FILE}
+
 # disable gpu
 sed -i 's/CONFIG_DRM_AMDGPU=[mny]/CONFIG_DRM_AMDGPU=n/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_DRM_RADEON=[mny]/CONFIG_DRM_RADEON=n/g'        ${MAIN_KCONFIG_FILE}
@@ -277,6 +286,7 @@ sed -i '/^CONFIG_DCB/s/=y/=m/'                          ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DNS_RESOLVER/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MCTP=[mny]/CONFIG_MCTP=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MPTCP=[mny]/CONFIG_MPTCP=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NET_NCSI=[mny]/CONFIG_NET_NCSI=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HAMRADIO=[mny]/CONFIG_HAMRADIO=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RXKAD=[mny]/CONFIG_RXKAD=m/g'          ${MAIN_KCONFIG_FILE}
@@ -352,9 +362,6 @@ sed -i 's/CONFIG_ISA_DMA_API=[mny]/CONFIG_ISA_DMA_API=n/g'            ${MAIN_KCO
 if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_HYPERV=[mny]/CONFIG_HYPERV=y/g'                              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_KVM=[mny]/CONFIG_KVM=m/g'                                    ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_VMWARE_VMCI=[mny]/CONFIG_VMWARE_VMCI=y/g'                    ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_VMWARE_VMCI_VSOCKETS=[mny]/CONFIG_VMWARE_VMCI_VSOCKETS=y/g'  ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_VMWARE_PVSCSI=[mny]/CONFIG_VMWARE_PVSCSI=y/g'                ${MAIN_KCONFIG_FILE}
   
   sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=y/g'                ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_VIRTIO_NET=[mny]/CONFIG_VIRTIO_NET=y/g'              ${MAIN_KCONFIG_FILE}  
@@ -480,7 +487,6 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_PATA_AMD=[mny]/CONFIG_PATA_AMD=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_PATA_CMD640_PCI=[mny]/CONFIG_PATA_CMD640_PCI=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_REMOTE_TARGET=[mny]/CONFIG_REMOTE_TARGET=n/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_FUSION=[mny]/CONFIG_FUSION=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_FIREWIRE=[mny]/CONFIG_FIREWIRE=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_MACINTOSH_DRIVERS=[mny]/CONFIG_MACINTOSH_DRIVERS=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_MII=[mny]/CONFIG_MII=n/g'              ${MAIN_KCONFIG_FILE}
@@ -787,7 +793,8 @@ sed -i 's/CONFIG_MODULE_DECOMPRESS=[mny]/CONFIG_MODULE_DECOMPRESS=y/g'          
 sed -i 's/CONFIG_FW_LOADER_COMPRESS_XZ=[mny]/CONFIG_FW_LOADER_COMPRESS_XZ=y/g'      ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_KERNEL_/#CONFIG_KERNEL_/g'         ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_LTO_CLANG_THIN=y'                  >> ${MAIN_KCONFIG_FILE}
+#echo 'CONFIG_LTO_CLANG_THIN=y'                  >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_LTO_CLANG_FULL=y'                  >> ${MAIN_KCONFIG_FILE}
 #echo 'CONFIG_DEBUG_INFO_COMPRESSED_ZLIB=y'      >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_DEBUG_INFO_COMPRESSED_XZ=y'      >> ${MAIN_KCONFIG_FILE}
 
