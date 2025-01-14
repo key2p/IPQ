@@ -284,9 +284,9 @@ sed -i 's/CONFIG_SECURITY_IPE=[mny]/CONFIG_SECURITY_IPE=y/g'              ${MAIN
 #sed -i '/^CONFIG_XFRM/s/=y/=m/'                         ${MAIN_KCONFIG_FILE}
 #sed -i '/^CONFIG_DCB/s/=y/=m/'                          ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DNS_RESOLVER/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MCTP=[mny]/CONFIG_MCTP=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MPTCP=[mny]/CONFIG_MPTCP=y/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=y/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NET_NCSI=[mny]/CONFIG_NET_NCSI=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HAMRADIO=[mny]/CONFIG_HAMRADIO=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RXKAD=[mny]/CONFIG_RXKAD=m/g'          ${MAIN_KCONFIG_FILE}
@@ -773,12 +773,16 @@ sed -i 's/CONFIG_NETFILTER_EGRESS=[mny]/CONFIG_NETFILTER_EGRESS=y/g'        ${MA
 sed -i 's/CONFIG_NETFILTER_SKIP_EGRESS=[mny]/CONFIG_NETFILTER_SKIP_EGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_NETFILTER_ADVANCED=[mny]/CONFIG_NETFILTER_ADVANCED=y/g'            ${MAIN_KCONFIG_FILE} 
 
+#sed -i '/^CONFIG_XFS_FS/s/=y/=m/'                   ${MAIN_KCONFIG_FILE}
+#sed -i '/^CONFIG_EXPORTFS/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
+#sed -i '/^CONFIG_NFS_/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
+#sed -i '/^CONFIG_NFSD/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_BRIDGE/s/=y/=m/'                   ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_XFS_/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_NFS_/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_NFSD/s/=y/=m/'                     ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_EXPORTFS/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_USB/s/=y/=m/'                      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_XFS_FS=[mny]/CONFIG_XFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_EXPORTFS=[mny]/CONFIG_EXPORTFS=m/g'    ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_NFSD=[mny]/CONFIG_NFSD=m/g'            ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_NFS_FS=[mny]/CONFIG_NFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
 
 # build opt
 sed -i '/BZIP2/s/^/#/'                              ${MAIN_KCONFIG_FILE}
