@@ -793,8 +793,12 @@ sed -i 's/CONFIG_MODULE_DECOMPRESS=[mny]/CONFIG_MODULE_DECOMPRESS=y/g'          
 sed -i 's/CONFIG_FW_LOADER_COMPRESS_XZ=[mny]/CONFIG_FW_LOADER_COMPRESS_XZ=y/g'      ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_KERNEL_/#CONFIG_KERNEL_/g'         ${MAIN_KCONFIG_FILE}
-#echo 'CONFIG_LTO_CLANG_THIN=y'                  >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_LTO_CLANG_FULL=y'                  >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_LTO_CLANG_THIN=y'                  >> ${MAIN_KCONFIG_FILE}
+
+# https://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html 
+# https://groups.google.com/g/android-building/c/I2Wt5o9ABjg
+#echo 'CONFIG_LTO_CLANG_FULL=y'                  >> ${MAIN_KCONFIG_FILE}
+
 #echo 'CONFIG_DEBUG_INFO_COMPRESSED_ZLIB=y'      >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_DEBUG_INFO_COMPRESSED_XZ=y'      >> ${MAIN_KCONFIG_FILE}
 
