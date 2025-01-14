@@ -243,7 +243,7 @@ sed -i 's/CONFIG_GFS2_FS=[mny]/CONFIG_GFS2_FS=n/g'              ${MAIN_KCONFIG_F
 sed -i 's/CONFIG_JFFS2_FS=[mny]/CONFIG_JFFS2_FS=n/g'            ${MAIN_KCONFIG_FILE}
 #sed -i 's/CONFIG_TEXTSEARCH=[mny]/CONFIG_TEXTSEARCH=m/g'        ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_SQUASHFS=[mny]/CONFIG_SQUASHFS=m/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_FS_ENCRYPTION=[mny]/CONFIG_FS_ENCRYPTION=m/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_FS_ENCRYPTION=[mny]/CONFIG_FS_ENCRYPTION=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ECRYPT_FS=[mny]/CONFIG_ECRYPT_FS=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_UNICODE=[mny]/CONFIG_UNICODE=m/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_TRUSTED_KEYS=[mny]/CONFIG_TRUSTED_KEYS=m/g'    ${MAIN_KCONFIG_FILE}
@@ -286,7 +286,7 @@ sed -i 's/CONFIG_SECURITY_IPE=[mny]/CONFIG_SECURITY_IPE=y/g'              ${MAIN
 sed -i '/^CONFIG_DNS_RESOLVER/s/=y/=m/'                 ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MCTP=[mny]/CONFIG_MCTP=m/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_MPTCP=[mny]/CONFIG_MPTCP=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MPTCP=[mny]/CONFIG_MPTCP=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NET_NCSI=[mny]/CONFIG_NET_NCSI=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HAMRADIO=[mny]/CONFIG_HAMRADIO=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RXKAD=[mny]/CONFIG_RXKAD=m/g'          ${MAIN_KCONFIG_FILE}
@@ -829,9 +829,10 @@ echo 'CONFIG_HAVE_KERNEL_BZIP2=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZMA=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZO=n/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_ZSTD=n/g'              >> ${MAIN_KCONFIG_FILE}
-
 echo 'CONFIG_HAVE_KERNEL_LZ4=y/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_CRYPTO_LZ4=y/g'                    >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_LZO=y/g'                    >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_ZSTD=y/g'                    >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 
 #https://github.com/amazonlinux/amazon-linux-2023/issues/315
