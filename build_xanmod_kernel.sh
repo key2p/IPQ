@@ -873,7 +873,7 @@ if [ "$PAREL_BUILD" -ge '12' ]; then
 fi
         
 date; make olddefconfig LLVM=1 LLVM_IAS=1
-date; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
+date; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 || (date; echo $PATH; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1)
 date
 
 # build perf
