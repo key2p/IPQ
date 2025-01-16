@@ -830,12 +830,14 @@ sed -i 's/CONFIG_DECOMPRESS_LZO=[mny]/CONFIG_DECOMPRESS_LZO=n/g'        ${MAIN_K
 sed -i 's/CONFIG_DECOMPRESS_LZ4=[mny]/CONFIG_DECOMPRESS_LZ4=n/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_DECOMPRESS_ZSTD=[mny]/CONFIG_DECOMPRESS_ZSTD=n/g'      ${MAIN_KCONFIG_FILE}
 
-# gzip xz 
-sed -i 's/CONFIG_RD_LZMA=[mny]/CONFIG_RD_LZMA=n/g'              ${MAIN_KCONFIG_FILE}
+# gzip xz zstd. CONFIG_RD_ZSTD 是用于支持 Zstandard 压缩的 initramfs 的内核选项。
 sed -i 's/CONFIG_RD_BZIP2=[mny]/CONFIG_RD_BZIP2=n/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_RD_LZO=[mny]/CONFIG_RD_LZO=n/g'                ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_RD_LZ4=[mny]/CONFIG_RD_LZ4=n/g'                ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_RD_ZSTD=[mny]/CONFIG_RD_ZSTD=n/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_LZMA=[mny]/CONFIG_RD_LZMA=y/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_LZO=[mny]/CONFIG_RD_LZO=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_LZ4=[mny]/CONFIG_RD_LZ4=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_ZSTD=[mny]/CONFIG_RD_ZSTD=y/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_XZ=[mny]/CONFIG_RD_XZ=y/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_GZIP=[mny]/CONFIG_RD_GZIP=y/g'              ${MAIN_KCONFIG_FILE}
 
 echo 'CONFIG_HAVE_KERNEL_BZIP2=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZMA=n/g'             >> ${MAIN_KCONFIG_FILE}
