@@ -803,7 +803,7 @@ sed -i '/BZIP2/s/^/#/'                              ${MAIN_KCONFIG_FILE}
 #sed -i '/GZIP/s/^/#/'                              ${MAIN_KCONFIG_FILE}
 sed -i '/ZSTD/s/=y/=n/'                             ${MAIN_KCONFIG_FILE}
 sed -i '/LZMA/s/=y/=n/'                             ${MAIN_KCONFIG_FILE}
-sed -i '/LZ4/s/=y/=n/'                             ${MAIN_KCONFIG_FILE}
+sed -i '/LZ4/s/=n/=y/'                             ${MAIN_KCONFIG_FILE}
 sed -i '/LZO/s/=y/=n/'                             ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_MODULE_COMPRESS_XZ=[mny]/CONFIG_MODULE_COMPRESS_XZ=y/g'            ${MAIN_KCONFIG_FILE}
@@ -835,7 +835,7 @@ sed -i 's/CONFIG_XZ_DEC_TEST=[mny]/CONFIG_XZ_DEC_TEST=n/g'                ${MAIN
 sed -i 's/CONFIG_DECOMPRESS_LZMA=[mny]/CONFIG_DECOMPRESS_LZMA=n/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_DECOMPRESS_BZIP2=[mny]/CONFIG_DECOMPRESS_BZIP2=n/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_DECOMPRESS_LZO=[mny]/CONFIG_DECOMPRESS_LZO=n/g'        ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_DECOMPRESS_LZ4=[mny]/CONFIG_DECOMPRESS_LZ4=n/g'        ${MAIN_KCONFIG_FILE}
+#sed -i 's/CONFIG_DECOMPRESS_LZ4=[mny]/CONFIG_DECOMPRESS_LZ4=n/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_DECOMPRESS_ZSTD=[mny]/CONFIG_DECOMPRESS_ZSTD=n/g'      ${MAIN_KCONFIG_FILE}
 
 # gzip xz zstd. CONFIG_RD_ZSTD 是用于支持 Zstandard 压缩的 initramfs 的内核选项。
@@ -892,12 +892,12 @@ create_package() {
     local pname="$1" pdir="$2"
     local dpkg_deb_opts
 
-    mkdir -m 755 -p "$pdir/DEBIAN"
-    mkdir -p "$pdir/usr/share/doc/$pname"
-    cp debian/copyright "$pdir/usr/share/doc/$pname/"
-    cp debian/changelog "$pdir/usr/share/doc/$pname/changelog.Debian"
-    gzip -n -9 "$pdir/usr/share/doc/$pname/changelog.Debian"
-    sh -c "cd '$pdir'; find . -type f ! -path './DEBIAN/*' -printf '%P\\0' | xargs -r0 md5sum > DEBIAN/md5sums"
+    sudo -E mkdir -m 755 -p "$pdir/DEBIAN"
+    sudo -E mkdir -p "$pdir/usr/share/doc/$pname"
+    sudo -E cp debian/copyright "$pdir/usr/share/doc/$pname/"
+    sudo -E cp debian/changelog "$pdir/usr/share/doc/$pname/changelog.Debian"
+    sudo -E gzip -n -9 "$pdir/usr/share/doc/$pname/changelog.Debian"
+    sudo -E sh -c "cd '$pdir'; find . -type f ! -path './DEBIAN/*' -printf '%P\\0' | xargs -r0 md5sum > DEBIAN/md5sums"
 
     # Fix ownership and permissions
     if [ "$DEB_RULES_REQUIRES_ROOT" = "no" ]; then
@@ -905,6 +905,7 @@ create_package() {
     else
         sudo -E chown -R root:root "$pdir"
     fi
+
     # a+rX in case we are in a restrictive umask environment like 0077
     # ug-s in case we build in a setuid/setgid directory
     sudo -E chmod -R go-w,a+rX,ug-s "$pdir"
@@ -967,6 +968,7 @@ make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_
 make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_DIR}/${KERNEL_BASE_VER} DESTDIR=$TOOLS_DIR prefix=/usr install 
 
 ### build deb
+cd ${WORK_DIR}/${KERNEL_BASE_VER}
 cat <<DEOF > debian/control   
 Package: $tools_packagename
 Architecture: amd64
@@ -981,6 +983,21 @@ Version: $tools_version
 DEOF
 
 # create perf deb
+KDEB_COMPRESS=xz create_package \"$tools_packagename\" $tools_destdir
+
+sudo -E rm -f $TOOLS_DIR/usr/lib64/*.a  || true
+sudo -E rm -f $TOOLS_DIR/usr/lib/*.a  || true
+sudo -E rm -f $TOOLS_DIR/usr/share/man/* || true
+sudo -E rm -f $TOOLS_DIR/usr/share/doc/* || true
+sudo -E strip $TOOLS_DIR/usr/sbin/*  || true
+sudo -E strip $TOOLS_DIR/usr/bin/*  || true
+sudo -E strip $TOOLS_DIR/lib/modules/${KERNELRELEASE}/kernel/net/pf_ring/*.ko  || true
+sudo -E rm -f $TOOLS_DIR/usr/bin/z*  || true
+sudo -E mv $TOOLS_DIR/usr/bin/pfcount $TOOLS_DIR/usr/bin/fcount  || true
+sudo -E rm -f $TOOLS_DIR/usr/bin/pf*  || true
+sudo -E mv $TOOLS_DIR/usr/bin/fcount $TOOLS_DIR/usr/bin/pfcount  || true
+
+tools_packagename=linux-tools-release
 KDEB_COMPRESS=xz create_package \"$tools_packagename\" $tools_destdir
 
 # build x64v3
