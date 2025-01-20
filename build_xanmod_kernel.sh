@@ -854,7 +854,6 @@ echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RT_GROUP_SCHED=[mny]/CONFIG_RT_GROUP_SCHED=n/g'      ${MAIN_KCONFIG_FILE}
 
 echo 'CONFIG_BASE_FULL=y/g'                     >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_HYPERV_STORAGE=y/g'                >> ${MAIN_KCONFIG_FILE}
 
 
 # CONFIG_KALLSYMS=y, so no need System.map file
@@ -916,7 +915,49 @@ sudo -E rm -rf $tools_destdir || true
 
 make -C ./tools/perf prefix=/usr DESTDIR=$tools_destdir install  NO_LIBZSTD=1 NO_LIBPERL=1  NO_LIBBABELTRACE=1
 make -C ./tools/power/cpupower DESTDIR=$tools_destdir prefix=/usr install  NO_LIBZSTD=1 NO_LIBPERL=1 NO_LIBBABELTRACE=1
+make -C ./tools/bpf DESTDIR=$tools_destdir prefix=/usr install  NO_LIBZSTD=1 NO_LIBPERL=1 NO_LIBBABELTRACE=1
 
+
+# build pfring and xdp
+KERNELRELEASE=$(cat ${WORK_DIR}/${KERNEL_BASE_VER}/include/config/kernel.release)
+
+LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.0}
+LIBXDP_VERSION=${LIBBPF_VERSION:-1.5.1}
+TOOLS_DIR=$tools_destdir
+
+# xdp-tools ./configure use $LIBBPF_DIR
+export LIBBPF_DIR=$WORK_DIR/libbpf-${LIBBPF_VERSION}
+curl -L https://github.com/libbpf/libbpf/archive/refs/tags/v${LIBBPF_VERSION}.tar.gz  -o /dev/shm/libbpf.tar.gz
+
+cd $WORK_DIR/; tar -zxvf /dev/shm/libbpf.tar.gz; rm /dev/shm/libbpf.tar.gz
+cd ${LIBBPF_DIR}/src; make CC=clang  LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR install
+
+curl -L https://github.com/xdp-project/xdp-tools/archive/refs/tags/v${LIBXDP_VERSION}.tar.gz -o /dev/shm/libxdp.tar.gz
+cd $WORK_DIR/; tar -zxvf  /dev/shm/libxdp.tar.gz; rm /dev/shm/libxdp.tar.gz
+
+export LIBBPF_UNBUILT=1
+export LIBBPF_INCLUDE_DIR=$TOOLS_DIR/usr/include
+export LIBBPF_LIB_DIR=$TOOLS_DIR/usr/lib64
+export BPFTOOL=$TOOLS_DIR/usr/sbin/bpftool
+
+export PRODUCTION=1
+export DYNAMIC_LIBXDP=1
+cd $WORK_DIR/xdp-tools-${LIBXDP_VERSION}; ./configure
+
+make VERBOSE=1 CC=clang-18  CLANG=clang-18 LLC=llc-18 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
+
+# build pfring
+curl -L https://github.com/key2p/PF_RING/archive/refs/heads/stable.zip  -o /dev/shm/pfring.zip
+cd $WORK_DIR; 7z x /dev/shm/pfring.zip; rm /dev/shm/pfring.zip
+
+cd PF_RING-stable
+make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} DESTDIR=$TOOLS_DIR prefix=/usr CUSTOM_INCLUDE="-I$TOOLS_DIR/usr/include" CUSTOM_LIBS="-L$TOOLS_DIR/usr/lib64" LEXLIB= install
+
+cd kernel;
+make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_DIR}/${KERNEL_BASE_VER} DESTDIR=$TOOLS_DIR prefix=/usr
+make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_DIR}/${KERNEL_BASE_VER} DESTDIR=$TOOLS_DIR prefix=/usr install 
+
+### build deb
 cat <<DEOF > debian/control   
 Package: $tools_packagename
 Architecture: amd64
