@@ -53,7 +53,7 @@ jobs:
           echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/main/${XANMOD_PATCH_VER}/patch-${XANMOD_PATCH_VER}.xz/download" >> $GITHUB_ENV
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY || true
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
-          sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
+          sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean; apt-get update -y; apt-get -y install libpcap-dev" || true
           sudo -E timedatectl set-timezone "$TZ" || true
 
       - name: Checkout

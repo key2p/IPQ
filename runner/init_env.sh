@@ -29,7 +29,7 @@ useradd -m docker && echo 'docker ALL=NOPASSWD: ALL' > /etc/sudoers.d/docker
 # for linux kernel build
 apt install -y --no-install-suggests --no-install-recommends curl libc6 libgcc-s1 libicu-dev liblzma5 libstdc++6 libxml2 libzstd1 zlib1g xz-utils \
   fakeroot build-essential git wget openssl libssl-dev ca-certificates libncurses-dev zstd xz-utils flex libelf-dev bison bc debhelper rsync kmod cpio gpg pahole python3 \
-  pkg-config libdwarf-dev libdw-dev systemtap-sdt-dev libunwind-dev python3-dev libzstd-dev libcap-dev libnuma-dev libtraceevent-dev uuid-dev libpfm4-dev libbfd-dev libbabeltrace-dev libperl-dev libpci-dev 
+  pkg-config libdwarf-dev libdw-dev systemtap-sdt-dev libunwind-dev python3-dev libzstd-dev libcap-dev libnuma-dev libtraceevent-dev uuid-dev libpfm4-dev libbfd-dev libbabeltrace-dev libperl-dev libpci-dev libpcap-dev
   
 # for openwrt build  
 apt install -y --no-install-suggests --no-install-recommends dosfstools xorriso mtools sudo ack antlr3 asciidoc autoconf make automake autopoint binutils bison btrfs-progs \

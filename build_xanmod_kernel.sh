@@ -41,8 +41,12 @@ sed -i "s/KBUILD_CFLAGS += -O2/KBUILD_CFLAGS += -O3/g" arch/x86/Makefile
 cat arch/x86/Makefile | grep KBUILD_CFLAGS
 
 # build kernel
-cp -a CONFIGS/xanmod/gcc/${XANMOD_CONFIG} .config
+[ -e "CONFIGS/xanmod/gcc/${XANMOD_CONFIG}" ] && cp -a CONFIGS/xanmod/gcc/${XANMOD_CONFIG} .config
+[ -e "CONFIGS/x86_64/config" ] && cp -a CONFIGS/x86_64/config .config
+
 export MAIN_KCONFIG_FILE=.config
+sed -i 's/x64v3/x64v2/g'                          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_X86_64_VERSION=3/CONFIG_X86_64_VERSION=2/g'      ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_X86_MSR=[mny]/CONFIG_X86_MSR=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X86_CPUID=[mny]/CONFIG_X86_CPUID=y/g'      ${MAIN_KCONFIG_FILE}
@@ -94,7 +98,7 @@ sed -i 's/CONFIG_SURFACE_PLATFORMS=[mny]/CONFIG_SURFACE_PLATFORMS=n/g'  ${MAIN_K
 sed -i 's/CONFIG_AGP=[mny]/CONFIG_AGP=n/g'                              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ACPI_VIDEO=[mny]/CONFIG_ACPI_VIDEO=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VGA_ARB=[mny]/CONFIG_VGA_ARB=n/g'                      ${MAIN_KCONFIG_FILE}
- 
+  
 # ktls
 sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=m/g'                ${MAIN_KCONFIG_FILE}
@@ -395,10 +399,10 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   #sed -i 's/CONFIG_GART_IOMMU=[mny]/CONFIG_GART_IOMMU=n/g'              ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_X86_PLATFORM_DEVICES=[mny]/CONFIG_X86_PLATFORM_DEVICES=n/g'              ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_ACPI_AC=[mny]/CONFIG_ACPI_AC=n/g'                       ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_ACPI_BATTERY=[mny]/CONFIG_ACPI_BATTERY=n/g'             ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_ACPI_BATTERY=[mny]/CONFIG_ACPI_BATTERY=n/g'              ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_ACPI_IPMI=[mny]/CONFIG_ACPI_IPMI=n/g'                   ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_ACPI_BGRT=[mny]/CONFIG_ACPI_BGRT=n/g'                   ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_ACPI_NHLT=[mny]/CONFIG_ACPI_NHLT=n/g'                   ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_ACPI_BGRT=[mny]/CONFIG_ACPI_BGRT=n/g'                    ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_ACPI_NHLT=[mny]/CONFIG_ACPI_NHLT=n/g'                    ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_ACPI_DPTF=[mny]/CONFIG_ACPI_DPTF=n/g'                   ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_PCIE_EDR=[mny]/CONFIG_PCIE_EDR=n/g'                     ${MAIN_KCONFIG_FILE}
   #sed -i 's/CONFIG_PCI_STUB=[mny]/CONFIG_PCI_STUB=n/g'                     ${MAIN_KCONFIG_FILE}
@@ -786,6 +790,7 @@ sed -i 's/CONFIG_IA32_EMULATION=[mny]/CONFIG_IA32_EMULATION=n/g'        ${MAIN_K
 
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ACPI_CMPC=[mny]/CONFIG_ACPI_CMPC=n/g'      ${MAIN_KCONFIG_FILE}   
 sed -i '/^CONFIG_ACPI_ADXL/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_ACPI_APEI_EINJ/s/=y/=m/'                   ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DRM_PRIVACY_SCREEN/s/=y/=n/'               ${MAIN_KCONFIG_FILE}
@@ -1031,12 +1036,10 @@ KDEB_COMPRESS=xz create_package $tools_packagename $tools_destdir
 
 # build x64v3
 cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.v2
-if [[ $XANMOD_CONFIG =~ "-v2" ]]; then
-  sed -i 's/x64v2/x64v3/g'                          ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_X86_64_VERSION=2/CONFIG_X86_64_VERSION=3/g'      ${MAIN_KCONFIG_FILE}
-  make olddefconfig LLVM=1 LLVM_IAS=1
-  make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
-fi
+sed -i 's/x64v2/x64v3/g'                          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_X86_64_VERSION=2/CONFIG_X86_64_VERSION=3/g'      ${MAIN_KCONFIG_FILE}
+make olddefconfig LLVM=1 LLVM_IAS=1
+make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
 
 # dbg info not need
 rm -f ${WORK_DIR}/*-dbg*.deb || true
