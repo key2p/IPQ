@@ -59,7 +59,6 @@ sed -i 's/CONFIG_KVM=[mny]/CONFIG_KVM=m/g'                  ${MAIN_KCONFIG_FILE}
 # hyperv
 sed -i 's/CONFIG_HYPERVISOR_GUEST=[mny]/CONFIG_HYPERVISOR_GUEST=y/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV=[mny]/CONFIG_HYPERV=y/g'                        ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_HYPERV_NET=[mny]/CONFIG_HYPERV_NET=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_KEYBOARD=[mny]/CONFIG_HYPERV_KEYBOARD=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_VSOCKETS=[mny]/CONFIG_HYPERV_VSOCKETS=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HYPERV_STORAGE=[mny]/CONFIG_HYPERV_STORAGE=y/g'        ${MAIN_KCONFIG_FILE}
@@ -69,18 +68,21 @@ sed -i '/CONFIG_PCI_HYPERV/s/=m/=y/'                                   ${MAIN_KC
 sed -i '/CONFIG_HYPERV/s/=m/=y/'                                       ${MAIN_KCONFIG_FILE}
 sed -i '/CONFIG_VMWARE/s/=m/=y/'                                       ${MAIN_KCONFIG_FILE}
 sed -i '/CONFIG_VIRTIO/s/=m/=y/'                                       ${MAIN_KCONFIG_FILE}
-
 sed -i 's/CONFIG_VSOCKETS=[mny]/CONFIG_VSOCKETS=y/g'                    ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_VMXNET3=[mny]/CONFIG_VMXNET3=y/g'                      ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_HYPERV_NET=[mny]/CONFIG_HYPERV_NET=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VMXNET3=[mny]/CONFIG_VMXNET3=m/g'                      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VIRTIO_NET=[mny]/CONFIG_VIRTIO_NET=m/g'                ${MAIN_KCONFIG_FILE}  
 
 # vmware 默认 模拟 LSI Logic Parallel SCSI 控制器，使用 SPI (SCSI Parallel Interface)。
 # 推荐 VMware Paravirtual (PVSCSI) pvscsi
 sed -i 's/CONFIG_FUSION=[mny]/CONFIG_FUSION=y/g'                        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FUSION_SPI=[mny]/CONFIG_FUSION_SPI=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FUSION_SAS=[mny]/CONFIG_FUSION_SAS=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VMWARE_PVSCSI=[mny]/CONFIG_VMWARE_PVSCSI=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VMWARE_BALLOON=[mny]/CONFIG_VMWARE_BALLOON=y/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VMWARE_VMCI=[mny]/CONFIG_VMWARE_VMCI=y/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VMWARE_VMCI_VSOCKETS=[mny]/CONFIG_VMWARE_VMCI_VSOCKETS=y/g'  ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_VMWARE_PVSCSI=[mny]/CONFIG_VMWARE_PVSCSI=y/g'                ${MAIN_KCONFIG_FILE}
 
 # disable gpu
 sed -i 's/CONFIG_DRM_AMDGPU=[mny]/CONFIG_DRM_AMDGPU=n/g'        ${MAIN_KCONFIG_FILE}
@@ -94,10 +96,10 @@ sed -i 's/CONFIG_ACPI_VIDEO=[mny]/CONFIG_ACPI_VIDEO=n/g'                ${MAIN_K
 sed -i 's/CONFIG_VGA_ARB=[mny]/CONFIG_VGA_ARB=n/g'                      ${MAIN_KCONFIG_FILE}
  
 # ktls
-sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=y/g'                              ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=y/g'                ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_ECDSA=[mny]/CONFIG_CRYPTO_ECDSA=y/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_CURVE25519=[mny]/CONFIG_CRYPTO_CURVE25519=y/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ECDSA=[mny]/CONFIG_CRYPTO_ECDSA=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CURVE25519=[mny]/CONFIG_CRYPTO_CURVE25519=m/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_DH=[mny]/CONFIG_CRYPTO_DH=m/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_ECC=[mny]/CONFIG_CRYPTO_ECC=m/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_ECDH=[mny]/CONFIG_CRYPTO_ECDH=m/g'              ${MAIN_KCONFIG_FILE}
@@ -145,7 +147,9 @@ sed -i 's/CONFIG_SIGNED_PE_FILE_VERIFICATION=[mny]/CONFIG_SIGNED_PE_FILE_VERIFIC
 sed -i '/SHA3/s/=y/=m/'                                 ${MAIN_KCONFIG_FILE}
 sed -i '/SHA256/s/=y/=m/'                               ${MAIN_KCONFIG_FILE}
 
-sed -i 's/CONFIG_CRYPTO_AES_NI_INTEL=[mny]/CONFIG_CRYPTO_AES_NI_INTEL=y/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_DRBG_CTR=[mny]/CONFIG_CRYPTO_DRBG_CTR=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AES=[mny]/CONFIG_CRYPTO_AES=m/g'                            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AES_NI_INTEL=[mny]/CONFIG_CRYPTO_AES_NI_INTEL=m/g'          ${MAIN_KCONFIG_FILE}
 
 # Blowfish对称加密算法,一种又老又慢的对称加密算法.
 sed -i 's/CONFIG_CRYPTO_BLOWFISH=[mny]/CONFIG_CRYPTO_BLOWFISH=n/g'                  ${MAIN_KCONFIG_FILE}
@@ -215,10 +219,14 @@ sed -i 's/CONFIG_SCSI=[mny]/CONFIG_SCSI=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SATA_AHCI=[mny]/CONFIG_SATA_AHCI=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISO9660_FS=[mny]/CONFIG_ISO9660_FS=y/g'    ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=y/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=m/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_FUSE_FS=[mny]/CONFIG_FUSE_FS=m/g'          ${MAIN_KCONFIG_FILE}
+# The Virtio Filesystem allows guests to mount file systems from the host. depends on FUSE_FS
+sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=m/g'          ${MAIN_KCONFIG_FILE}
 
 #fat efi need
-sed -i 's/CONFIG_MSDOS_FS=[mny]/CONFIG_MSDOS_FS=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MSDOS_FS=[mny]/CONFIG_MSDOS_FS=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_FAT_FS=[mny]/CONFIG_FAT_FS=y/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VFAT_FS=[mny]/CONFIG_VFAT_FS=y/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NLS_ISO8859_1=[mny]/CONFIG_NLS_ISO8859_1=y/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_UNICODE=[mny]/CONFIG_UNICODE=y/g'              ${MAIN_KCONFIG_FILE}
@@ -251,8 +259,9 @@ sed -i 's/CONFIG_F2FS_FS=[mny]/CONFIG_F2FS_FS=n/g'              ${MAIN_KCONFIG_F
 sed -i 's/CONFIG_GFS2_FS=[mny]/CONFIG_GFS2_FS=n/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_JFFS2_FS=[mny]/CONFIG_JFFS2_FS=n/g'            ${MAIN_KCONFIG_FILE}
 #sed -i 's/CONFIG_TEXTSEARCH=[mny]/CONFIG_TEXTSEARCH=m/g'        ${MAIN_KCONFIG_FILE}
-# initrd.img need SQUASHFS 
-sed -i 's/CONFIG_SQUASHFS=[mny]/CONFIG_SQUASHFS=y/g'            ${MAIN_KCONFIG_FILE}
+
+# initrd.img maybe need SQUASHFS 
+sed -i 's/CONFIG_SQUASHFS=[mny]/CONFIG_SQUASHFS=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FS_ENCRYPTION=[mny]/CONFIG_FS_ENCRYPTION=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ECRYPT_FS=[mny]/CONFIG_ECRYPT_FS=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_TRUSTED_KEYS=[mny]/CONFIG_TRUSTED_KEYS=m/g'    ${MAIN_KCONFIG_FILE}
@@ -377,8 +386,7 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_HYPERV=[mny]/CONFIG_HYPERV=y/g'                              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_KVM=[mny]/CONFIG_KVM=m/g'                                    ${MAIN_KCONFIG_FILE}
   
-  sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=y/g'                ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_VIRTIO_NET=[mny]/CONFIG_VIRTIO_NET=y/g'              ${MAIN_KCONFIG_FILE}  
+  #sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=y/g'                ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_VIRTIO_BLK=[mny]/CONFIG_VIRTIO_BLK=y/g'              ${MAIN_KCONFIG_FILE}  
   sed -i 's/CONFIG_VIRTIO_MEM=[mny]/CONFIG_VIRTIO_MEM=y/g'              ${MAIN_KCONFIG_FILE}  
 
@@ -778,6 +786,16 @@ sed -i 's/CONFIG_IA32_EMULATION=[mny]/CONFIG_IA32_EMULATION=n/g'        ${MAIN_K
 
 # reduce size
 sed -i '/^CONFIG_NETFILTER/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_ACPI_ADXL/s/=y/=m/'                        ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_ACPI_APEI_EINJ/s/=y/=m/'                   ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_DRM_PRIVACY_SCREEN/s/=y/=n/'               ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_FB_ASILIANT/s/=y/=n/'                      ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_FB_IMSTT/s/=y/=n/'                         ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_SECURITY_SMACK/s/=y/=n/'                   ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_GDB_SCRIPTS/s/=y/=n/'                      ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_CRASH_DUMP/s/=y/=n/'                       ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_HOTPLUG/s/=y/=n/'                          ${MAIN_KCONFIG_FILE}
+
 
 # 和 xanmod fullcone 冲突
 #sed -i '/^CONFIG_NF_/s/=y/=m/'                              ${MAIN_KCONFIG_FILE}
@@ -853,16 +871,13 @@ echo 'CONFIG_HAVE_KERNEL_LZO=n/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_ZSTD=n/g'              >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZ4=y/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_CRYPTO_LZ4=y/g'                    >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_CRYPTO_LZO=y/g'                    >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_CRYPTO_ZSTD=y/g'                    >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_LZO=m/g'                    >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_ZSTD=m/g'                    >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 
 #https://github.com/amazonlinux/amazon-linux-2023/issues/315
 # echo 'CONFIG_RT_GROUP_SCHED=y/g'                >> ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RT_GROUP_SCHED=[mny]/CONFIG_RT_GROUP_SCHED=n/g'      ${MAIN_KCONFIG_FILE}
-
-echo 'CONFIG_BASE_FULL=y/g'                     >> ${MAIN_KCONFIG_FILE}
-
 
 # CONFIG_KALLSYMS=y, so no need System.map file
 [  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
@@ -889,7 +904,7 @@ date
 
 # build perf
 create_package() {
-    local pname="$1" pdir="$2"
+    local pname=$1 pdir=$2
     local dpkg_deb_opts
 
     sudo -E mkdir -m 755 -p "$pdir/DEBIAN"
@@ -913,6 +928,8 @@ create_package() {
     # Create the package
     #dpkg-gencontrol -p$pname -P"$pdir"
     sudo -E cp ./debian/control "$pdir/DEBIAN/"
+
+    cat "$pdir/DEBIAN/control" || true
     sudo -E dpkg-deb $dpkg_deb_opts ${KDEB_COMPRESS:+-Z$KDEB_COMPRESS} --build "$pdir" ..
 }
 
@@ -968,37 +985,49 @@ make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_
 make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_DIR}/${KERNEL_BASE_VER} DESTDIR=$TOOLS_DIR prefix=/usr install 
 
 ### build deb
-cd ${WORK_DIR}/${KERNEL_BASE_VER}
-cat <<DEOF > debian/control   
-Package: $tools_packagename
+create_debian_control() {
+  local deb_name=$1 deb_ver=$2
+  mkdir ./debian || true
+
+  cat <<DEOF > ./debian/control   
+Package: $deb_name
 Architecture: amd64
-Replaces: linux-base, linux-tools-common
+Replaces: linux-base, linux-tools-common, linux-tools-full
 Depends: libc6, libcap2, libdw1, libelf1, liblzma5, libnuma1, libpci3, libudev1, libunwind8, zlib1g
-Description: Performance analysis tools for Linux $tools_version
+Description: Performance analysis tools for Linux $deb_ver
  This package contains the 'perf' performance analysis tools for Linux
- kernel version $tools_version .
+ kernel version $deb_ver .
 Maintainer: linux
-Version: $tools_version
+Version: $deb_ver
 
 DEOF
+}
+
+cd ${WORK_DIR}/${KERNEL_BASE_VER}
 
 # create perf deb
-KDEB_COMPRESS=xz create_package \"$tools_packagename\" $tools_destdir
+sudo -E rm -rf $TOOLS_DIR/usr/share/man/* || true
+sudo -E rm -rf $TOOLS_DIR/usr/share/doc/* || true
 
-sudo -E rm -f $TOOLS_DIR/usr/lib64/*.a  || true
-sudo -E rm -f $TOOLS_DIR/usr/lib/*.a  || true
-sudo -E rm -f $TOOLS_DIR/usr/share/man/* || true
-sudo -E rm -f $TOOLS_DIR/usr/share/doc/* || true
+tools_packagename=linux-tools-full
+create_debian_control $tools_packagename $tools_version
+KDEB_COMPRESS=xz create_package $tools_packagename $tools_destdir
+
+sudo -E rm -rf $TOOLS_DIR/usr/lib64/*.a  || true
+sudo -E rm -rf $TOOLS_DIR/usr/lib/*.a  || true
+sudo -E rm -rf $TOOLS_DIR/usr/share/man/* || true
+sudo -E rm -rf $TOOLS_DIR/usr/share/doc/* || true
 sudo -E strip $TOOLS_DIR/usr/sbin/*  || true
 sudo -E strip $TOOLS_DIR/usr/bin/*  || true
 sudo -E strip $TOOLS_DIR/lib/modules/${KERNELRELEASE}/kernel/net/pf_ring/*.ko  || true
-sudo -E rm -f $TOOLS_DIR/usr/bin/z*  || true
+sudo -E rm -rf $TOOLS_DIR/usr/bin/z*  || true
 sudo -E mv $TOOLS_DIR/usr/bin/pfcount $TOOLS_DIR/usr/bin/fcount  || true
-sudo -E rm -f $TOOLS_DIR/usr/bin/pf*  || true
+sudo -E rm -rf $TOOLS_DIR/usr/bin/pf*  || true
 sudo -E mv $TOOLS_DIR/usr/bin/fcount $TOOLS_DIR/usr/bin/pfcount  || true
 
-tools_packagename=linux-tools-release
-KDEB_COMPRESS=xz create_package \"$tools_packagename\" $tools_destdir
+tools_packagename=linux-tools
+create_debian_control $tools_packagename $tools_version
+KDEB_COMPRESS=xz create_package $tools_packagename $tools_destdir
 
 # build x64v3
 cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.v2
