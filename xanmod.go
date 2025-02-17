@@ -346,6 +346,7 @@ func main() {
 	re_xanmod_lts := regexp.MustCompile(`/releases/lts/([0-9]+\.[0-9]+)`)
 	re_xanmod_main := regexp.MustCompile(`/releases/main/([0-9]+\.[0-9]+)`)
 	re_xanmod_edge := regexp.MustCompile(`/releases/edge/([0-9]+\.[0-9]+)`)
+	re_xanmod_ver := regexp.MustCompile(`ChangeLog-([0-9.]+)-xanmod[0-9]+`)
 
 	fmt.Printf("%s %q\n", date_now_string(), re_kernel_lts.FindStringSubmatch("<tr><td>6.6</td><tr><td>6.1</td>"))
 	fmt.Printf("%s %q\n", date_now_string(), re_xanmod_lts.FindStringSubmatch("master.dl.sourceforge.net/project/xanmod/releases/lts/6.6.63-xanmod1"))
@@ -363,9 +364,19 @@ func main() {
 		queryParams := r.URL.Query()
 		notice_type := queryParams.Get("t")
 		notice_msg := queryParams.Get("msg")
+		notice_class := queryParams.Get("c")
 
 		if len(notice_token) > 5 {
 			notice_chan <- NoticeMsg{Type: notice_type, Msg: notice_msg}
+		}
+
+		if notice_class == "ok" {
+			build_log := fmt.Sprintf("%s %s %s\n", date_now_string(), notice_msg, notice_type)
+			f, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+			if err == nil {
+				_, err = f.Write([]byte(build_log))
+				f.Close()
+			}
 		}
 
 		w.WriteHeader(200)
@@ -376,6 +387,7 @@ func main() {
 		// Get query parameters as a map
 		queryParams := r.URL.Query()
 		version := queryParams.Get("version")
+		q_type := queryParams.Get("type")
 
 		requestURL := ""
 		if version == "lts" || version == "main" || version == "edge" {
@@ -440,8 +452,25 @@ func main() {
 		} else {
 			defer res.Body.Close()
 
+			data, err := io.ReadAll(res.Body)
+			if err == nil {
+				data_str := string(data)
+				matchs := re_xanmod_ver.FindStringSubmatch(data_str)
+				if len(matchs) == 2 {
+					version := fmt.Sprintf("%s%s", q_type, matchs[1])
+					build_log, _ := os.ReadFile("log.txt")
+					build_log_str := string(build_log)
+
+					if strings.Index(build_log_str, version) >= 0 {
+						w.WriteHeader(res.StatusCode)
+						w.Write([]byte(version))
+						return
+					}
+				}
+			}
+
 			w.WriteHeader(res.StatusCode)
-			io.Copy(w, res.Body)
+			w.Write(data)
 		}
 	})
 

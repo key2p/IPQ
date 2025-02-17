@@ -1,18 +1,18 @@
-name: xanmod edge kernel deb
+name: xanmod main kernel deb by github
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 22 * * *
+    - cron: 0 2 * * *
 
 env:
   TZ: Asia/Shanghai
-  BUILD_RUNNER: selfhost
-  BUILD_CLASS: edge
+  BUILD_RUNNER: github
+  BUILD_CLASS: main
   BUILD_TYPE: std
   
 jobs:
   Build:
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-22.04
     uses: ./.github/workflows/reuse_build_xanmod_kernel.yml
     secrets: inherit
