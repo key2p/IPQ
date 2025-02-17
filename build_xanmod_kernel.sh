@@ -884,6 +884,11 @@ echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 # echo 'CONFIG_RT_GROUP_SCHED=y/g'                >> ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RT_GROUP_SCHED=[mny]/CONFIG_RT_GROUP_SCHED=n/g'      ${MAIN_KCONFIG_FILE}
 
+# default timer set to 1000HZ
+sed -i '/CONFIG_HZ/s/^/#/'                              ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HZ_1000=y'                                 >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HZ=1000'                                   >> ${MAIN_KCONFIG_FILE}
+
 # CONFIG_KALLSYMS=y, so no need System.map file
 [  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
 
