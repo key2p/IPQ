@@ -366,10 +366,14 @@ func main() {
 		notice_msg := queryParams.Get("msg")
 		notice_class := queryParams.Get("c")
 
-		if len(notice_token) > 5 {
-			notice_chan <- NoticeMsg{Type: notice_type, Msg: notice_msg}
-		}
+		if notice_class == "fail" {
+			// 失败不重要，不通知，记录即可。
+			fmt.Printf("%s %s %s\n", date_now_string(), notice_msg, notice_type)
+			w.WriteHeader(200)
+			_, _ = w.Write([]byte(notice_msg))
 
+			return
+		}
 		if notice_class == "ok" {
 			build_log := fmt.Sprintf("%s %s %s\n", date_now_string(), notice_msg, notice_type)
 			f, err := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
@@ -377,6 +381,10 @@ func main() {
 				_, err = f.Write([]byte(build_log))
 				f.Close()
 			}
+		}
+
+		if len(notice_token) > 5 {
+			notice_chan <- NoticeMsg{Type: notice_type, Msg: notice_msg}
 		}
 
 		w.WriteHeader(200)

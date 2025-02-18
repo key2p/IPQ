@@ -7,7 +7,7 @@ on:
 
 env:
   TZ: Asia/Shanghai
-  BUILD_RUNNER: selfhost
+  BUILD_RUNNER: github
   BUILD_CLASS: lts
   BUILD_TYPE: std
   
@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check Xanmod Version
+        id: checkver
         run: |
           echo "CPU物理数量: $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
           echo "CPU核心数量: $(nproc)"
@@ -38,8 +39,9 @@ jobs:
           xanmod_ver=$(grep ChangeLog /dev/shm/changelog | grep -v "\-rt" | head -n 1)
           [ -z "${xanmod_ver}" ] && (cat /dev/shm/changelog; exit 1)
 
-          xanmod_regex='ChangeLog-([0-9.]+-xanmod[0-9]+)'
-          [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+          xanmod_regex='ChangeLog-([0-9.]+)(-xanmod[0-9]+)'
+          [[ $xanmod_ver =~ $xanmod_regex ]] && echo "XANMOD_PATCH_VER=${BASH_REMATCH[1]}${BASH_REMATCH[2]}" >> $GITHUB_ENV
+          echo "KERNEL_FULL_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
           echo "KERNEL_BASE_VER=${KERNEL_BASE_VER}" >> $GITHUB_ENV
           echo "KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_BASE_VER}.tar.xz" >> $GITHUB_ENV
 
@@ -86,9 +88,9 @@ jobs:
         run: |
           set -ex
           [ "$BUILD_RUNNER" == "selfhost" ] && (sudo -E rm -rf $WORK_DIR || true)
-          sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
-          export PATH="/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.7-x86_64/bin/:$PATH"
           cd $GITHUB_WORKSPACE
+          sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
+          export PATH="/opt/llvm19_krl/llvm-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.7-x86_64/bin/:$PATH"
           bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
           mkdir -p $WORK_DIR/debs || true
           mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true
@@ -126,9 +128,9 @@ jobs:
       - name: report ok
         if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&c=ok&msg=${BUILD_TYPE}${KERNEL_BASE_VER}" || true
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&c=ok&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true
 
       - name: report fail
-        if: ${{ always() && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
+        if: ${{ always() && (steps.checkver.outcome == 'success') && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&c=fail&msg=${BUILD_TYPE}${KERNEL_BASE_VER}" || true
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&c=fail&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true

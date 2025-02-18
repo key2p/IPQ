@@ -14,7 +14,7 @@ mkdir -p ${WORK_DIR} || true
 
 ## https://blobfolio.com/2024/building-a-custom-xanmod-kernel-on-ubuntu-23-10/
 # if not exist llvm19 then build it
-[ ! -e /opt/llvm19_krl ] && build_xanmod_docker.sh
+[ ! -e /opt/llvm19_krl ] && sudo -E bash build_xanmod_docker.sh
 
 
 # download source
@@ -975,7 +975,7 @@ export DYNAMIC_LIBXDP=1
 cd $WORK_DIR/; tar -zxvf  /dev/shm/libxdp.tar.gz; rm /dev/shm/libxdp.tar.gz
 cd $WORK_DIR/xdp-tools-${LIBXDP_VERSION}; ./configure
 
-make VERBOSE=1 CC=clang-18  CLANG=clang-18 LLC=llc-18 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
+make VERBOSE=1 CC=clang-19  CLANG=clang-19 LLC=llc-19 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
 
 # build pfring userland and kernel
 cd $WORK_DIR; 7z x /dev/shm/pfring.zip; rm /dev/shm/pfring.zip

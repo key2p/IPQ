@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -ex
 
 export http_proxy=socks5h://192.168.0.25:9090
@@ -13,7 +12,7 @@ apt-get update -y && apt-get install -y --no-install-suggests --no-install-recom
 
 # config apt
 sed -i '/llvm-toolchain/d' /etc/apt/sources.list
-echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main" >> /etc/apt/sources.list
+echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-19 main" >> /etc/apt/sources.list
 
 mkdir -p /etc/apt/trusted.gpg.d/ || true
 curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc
@@ -37,20 +36,25 @@ apt install -y --no-install-suggests --no-install-recommends dosfstools xorriso 
   gettext git git-core gperf gzip haveged intltool jq libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev \
   libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool libz-dev lrzsz mkisofs msmtp nano ninja-build \
   p7zip p7zip-full patch pigz pkgconf python3 python3-pip python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools swig \
-  tar uglifyjs unzip upx upx-ucl vim wget xmlto xsltproc xxd xz-utils yasm zip zlib1g-dev zstd liblzma-dev libpam0g-dev pahole dwarves llvm-18 clang-18
+  tar uglifyjs unzip upx upx-ucl vim wget xmlto xsltproc xxd xz-utils yasm zip zlib1g-dev zstd liblzma-dev libpam0g-dev pahole dwarves llvm-19 clang-19
 
-ln -s /usr/bin/llc-18 /usr/bin/llc || true
-ln -s /usr/bin/clang-18 /usr/bin/clang  || true
+ln -s /usr/bin/llc-19 /usr/bin/llc || true
+ln -s /usr/bin/clang-19 /usr/bin/clang  || true
+ls -al /usr/bin/llc* || true
 
 # llvm pgo version
-curl -L https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-19.1.4-x86_64.tar.xz -o /dev/shm/llvm19.tar.xz
+curl -L https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-19.1.7-x86_64.tar.xz -o /dev/shm/llvm19.tar.xz
 
 rm -rf /opt/llvm19_krl || true
 mkdir -p /opt/llvm19_krl || true
 
-cd /opt/llvm19_krl
-tar -xJf /dev/shm/llvm19.tar.xz
+tar -C /opt/llvm19_krl -xJf /dev/shm/llvm19.tar.xz
 rm /dev/shm/llvm19.tar.xz || true
+ls -al /opt/llvm19_krl/llvm-19.1.7-x86_64/bin || true
+
+rm /opt/llvm19_krl/llvm-x86_64 || true
+ln -s /opt/llvm19_krl/llvm-19.1.7-x86_64 /opt/llvm19_krl/llvm-x86_64 || true
+ls -al /opt/llvm19_krl/ || true
 
 # cd into the user directory, download and unzip the github actions runner
 cd /home/docker/actions-runner 
