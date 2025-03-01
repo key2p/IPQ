@@ -3,7 +3,7 @@ name: xanmod main cloud kernel deb by github
 on:
   workflow_dispatch:
   schedule:
-    - cron: 10 0 * * *
+    - cron: 0 10 * * *
 
 env:
   TZ: Asia/Shanghai
