@@ -3,7 +3,7 @@ name: xanmod lts kernel deb by github
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 7 * * *
+    - cron: 30 13 * * *
 
 env:
   TZ: Asia/Shanghai

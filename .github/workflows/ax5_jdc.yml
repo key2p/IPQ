@@ -3,7 +3,7 @@ name: ax5-jdc
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 21 * * 6
+    - cron: 0 17 * * 6
 
 env:
   REPO_URL: https://github.com/VIKINGYFY/immortalwrt.git

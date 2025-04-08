@@ -3,7 +3,7 @@ name: xanmod edge kernel deb
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 22 * * *
+    - cron: 30 0 * * *
 
 env:
   TZ: Asia/Shanghai
