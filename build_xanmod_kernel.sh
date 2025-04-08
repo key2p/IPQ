@@ -106,18 +106,20 @@ sed -i 's/CONFIG_DRM_ACCEL_QAIC=[mny]/CONFIG_DRM_ACCEL_QAIC=n/g'      ${MAIN_KCO
 sed -i '/CRC32/s/=[ymn]/=y/'                                ${MAIN_KCONFIG_FILE}
 sed -i '/SHA3/s/=[ymn]/=m/'                                 ${MAIN_KCONFIG_FILE}
 sed -i '/SHA256/s/=[ymn]/=m/'                               ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_AS_SHA256_NI=[mny]/CONFIG_AS_SHA256_NI=y/g'      ${MAIN_KCONFIG_FILE}
 
 # ktls
 sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_CRYPTO/s/=[ym]/=y/'                                       ${MAIN_KCONFIG_FILE}
 
-sed -i 's/CONFIG_XOR_BLOCKS=[my]/CONFIG_XOR_BLOCKS=y/g'                              ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_ASYNC/s/=[ym]/=y/'                                       ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_ASYNC/s/=[ymn]/=y/'                                            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_XOR_BLOCKS=[myn]/CONFIG_XOR_BLOCKS=y/g'                        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ASYNC_XOR=[myn]/CONFIG_ASYNC_XOR=y/g'                          ${MAIN_KCONFIG_FILE}
 
 # Blowfish对称加密算法,一种又老又慢的对称加密算法.
-sed -i 's/CONFIG_CRYPTO_BLOWFISH=[mny]/CONFIG_CRYPTO_BLOWFISH=n/g'                  ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_CAST5=[mny]/CONFIG_CRYPTO_CAST5=n/g'                  ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_CRYPTO_CAST6=[mny]/CONFIG_CRYPTO_CAST6=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_BLOWFISH=[mny]/CONFIG_CRYPTO_BLOWFISH=n/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CAST5=[mny]/CONFIG_CRYPTO_CAST5=n/g'                    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CAST6=[mny]/CONFIG_CRYPTO_CAST6=n/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_DES=[mny]/CONFIG_CRYPTO_DES=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_DRBG_CTR=[mny]/CONFIG_CRYPTO_DRBG_CTR=n/g'                  ${MAIN_KCONFIG_FILE}
@@ -164,6 +166,9 @@ sed -i 's/CONFIG_CRYPTO_TEST=[mny]/CONFIG_CRYPTO_TEST=n/g'              ${MAIN_K
 
 sed -i 's/CONFIG_CRYPTO_HW=[mny]/CONFIG_CRYPTO_HW=y/g'                  ${MAIN_KCONFIG_FILE}
 sed -i '/CONFIG_CRYPTO_DEV_/s/=[ymn]/=m/'                                       ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_CRYPTO_DEV_CCP/s/=[ymn]/=y/'                                       ${MAIN_KCONFIG_FILE}
+sed -i '/CONFIG_CRYPTO_DEV_SP/s/=[ymn]/=y/'                                       ${MAIN_KCONFIG_FILE}
+sed -i 's/CRYPTO_DEV_AMLOGIC_GXL_DEBUG=[mny]/CRYPTO_DEV_AMLOGIC_GXL_DEBUG=n/g'                  ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_CRC4=[mny]/CONFIG_CRC4=n/g'                                        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRC7=[mny]/CONFIG_CRC7=n/g'                                        ${MAIN_KCONFIG_FILE}
@@ -174,8 +179,8 @@ sed -i 's/CONFIG_ASYMMETRIC_KEY_TYPE=[mny]/CONFIG_ASYMMETRIC_KEY_TYPE=y/g'      
 sed -i 's/CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=[mny]/CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ASN1=[mny]/CONFIG_ASN1=y/g'                                                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_POLYNOMIAL=[mny]/CONFIG_POLYNOMIAL=y/g'                                    ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_X509_CERTIFICATE_PARSER=[mny]/CONFIG_X509_CERTIFICATE_PARSER=m/g'          ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_PKCS7_MESSAGE_PARSER=[mny]/CONFIG_PKCS7_MESSAGE_PARSER=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_X509_CERTIFICATE_PARSER=[mny]/CONFIG_X509_CERTIFICATE_PARSER=y/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_PKCS7_MESSAGE_PARSER=[mny]/CONFIG_PKCS7_MESSAGE_PARSER=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_TEST_KEY=[mny]/CONFIG_PKCS7_TEST_KEY=n/g'                            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SIGNED_PE_FILE_VERIFICATION=[mny]/CONFIG_SIGNED_PE_FILE_VERIFICATION=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CORDIC=[mny]/CONFIG_CORDIC=y/g'                ${MAIN_KCONFIG_FILE}
@@ -244,6 +249,8 @@ sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISO9660_FS=[mny]/CONFIG_ISO9660_FS=y/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FUSE_FS=[mny]/CONFIG_FUSE_FS=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CIFS=[mny]/CONFIG_CIFS=m/g'                ${MAIN_KCONFIG_FILE}
+
 # The Virtio Filesystem allows guests to mount file systems from the host. depends on FUSE_FS
 sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=m/g'          ${MAIN_KCONFIG_FILE}
 
@@ -413,6 +420,7 @@ sed -i 's/CONFIG_ISA_DMA_API=[mny]/CONFIG_ISA_DMA_API=n/g'            ${MAIN_KCO
 sed -i '/^CONFIG_BRIDGE/s/=[ym]/=m/'                   ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_USB/s/=[ym]/=m/'                      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_XFS_FS=[mny]/CONFIG_XFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_XFS_ONLINE_SCRUB=[mny]/CONFIG_XFS_ONLINE_SCRUB=n/g'        ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_EXPORTFS=[mny]/CONFIG_EXPORTFS=m/g'    ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_NFSD=[mny]/CONFIG_NFSD=m/g'            ${MAIN_KCONFIG_FILE} 
 sed -i 's/CONFIG_NFS_FS=[mny]/CONFIG_NFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
@@ -534,7 +542,7 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_ATA_PIIX=[mny]/CONFIG_ATA_PIIX=y/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_WAN=[mny]/CONFIG_WAN=y/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_ATA=[mny]/CONFIG_ATA=y/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_CIFS=[mny]/CONFIG_CIFS=y/g'                          ${MAIN_KCONFIG_FILE}
+
   sed -i 's/CONFIG_PPP=[mny]/CONFIG_PPP=y/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_RXKAD=[mny]/CONFIG_RXKAD=y/g'          ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_RFKILL=[mny]/CONFIG_RFKILL=y/g'        ${MAIN_KCONFIG_FILE}
@@ -1022,6 +1030,8 @@ sed -i 's/CONFIG_RD_ZSTD=[mny]/CONFIG_RD_ZSTD=y/g'              ${MAIN_KCONFIG_F
 sed -i 's/CONFIG_RD_XZ=[mny]/CONFIG_RD_XZ=y/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RD_GZIP=[mny]/CONFIG_RD_GZIP=y/g'              ${MAIN_KCONFIG_FILE}
 
+echo 'CONFIG_ALPINE_MSI=y/g'             >> ${MAIN_KCONFIG_FILE}
+
 echo 'CONFIG_HAVE_KERNEL_BZIP2=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZMA=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZO=n/g'               >> ${MAIN_KCONFIG_FILE}
@@ -1043,6 +1053,15 @@ echo 'CONFIG_HZ=1000'                                   >> ${MAIN_KCONFIG_FILE}
 
 # CONFIG_KALLSYMS=y, so no need System.map file
 [  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
+[  -e ./fs/xfs/Makefile ] && sed -i '/xfs_trace.o/s/^/#/' ./fs/xfs/Makefile
+[  -e ./fs/smb/client/Makefile ] && sed -i 's/trace.o//g' ./fs/smb/client/Makefile
+[  -e ./drivers/hid/Makefile ] && sed -i '/debug.o/s/^/#/' ./drivers/hid/Makefile
+
+[  -e ./drivers/hv/Makefile ] && sed -i 's/hv_trace.o//g'      ./drivers/hv/Makefile
+[  -e ./drivers/hv/Makefile ] && sed -i '/hv_debugfs.o/s/^/#/' ./drivers/hv/Makefile
+[  -e ./drivers/net/hyperv/Makefile ] && sed -i 's/netvsc_trace.o//g'      ./drivers/net/hyperv/Makefile
+
+
 
 # Append a timestamp or something to the localversion to make it unique:
 # echo "$( cat localversion )-$( date +%s )" > localversion
@@ -1063,6 +1082,10 @@ fi
 date; make olddefconfig LLVM=1 LLVM_IAS=1
 date; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 || (date; echo $PATH; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1)
 date
+
+# 统计builtin的文件大小
+# make KDEB_COMPRESS=xz bzImage -j8 LLVM=1 LLVM_IAS=1
+bash report-object-sizes.sh
 
 # build perf
 create_package() {
