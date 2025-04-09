@@ -3,6 +3,7 @@ set -ex
 
 export KERNEL_BASE_VER=linux-${KERNEL_BASE_VER}
 export XANMOD_CONFIG=config_x86-64-v2
+export SCRIPT_DIR=$PWD
 
 # define outer
 #export WORK_DIR=/dev/shm/linux
@@ -75,6 +76,8 @@ sed -i '/CONFIG_VIRTIO/s/=m/=y/'                                       ${MAIN_KC
 sed -i 's/CONFIG_VSOCKETS=[mny]/CONFIG_VSOCKETS=y/g'                    ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_HYPERV_NET=[mny]/CONFIG_HYPERV_NET=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_HYPERV_TESTING=[mny]/CONFIG_HYPERV_TESTING=n/g'        ${MAIN_KCONFIG_FILE}
+
 sed -i 's/CONFIG_VMXNET3=[mny]/CONFIG_VMXNET3=m/g'                      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_VIRTIO_NET=[mny]/CONFIG_VIRTIO_NET=m/g'                ${MAIN_KCONFIG_FILE}  
 
@@ -181,6 +184,7 @@ sed -i 's/CONFIG_ASN1=[mny]/CONFIG_ASN1=y/g'                                    
 sed -i 's/CONFIG_POLYNOMIAL=[mny]/CONFIG_POLYNOMIAL=y/g'                                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X509_CERTIFICATE_PARSER=[mny]/CONFIG_X509_CERTIFICATE_PARSER=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_MESSAGE_PARSER=[mny]/CONFIG_PKCS7_MESSAGE_PARSER=y/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_PKCS8_PRIVATE_KEY_PARSER=[mny]/CONFIG_PKCS8_PRIVATE_KEY_PARSER=y/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_PKCS7_TEST_KEY=[mny]/CONFIG_PKCS7_TEST_KEY=n/g'                            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SIGNED_PE_FILE_VERIFICATION=[mny]/CONFIG_SIGNED_PE_FILE_VERIFICATION=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CORDIC=[mny]/CONFIG_CORDIC=y/g'                ${MAIN_KCONFIG_FILE}
@@ -254,8 +258,9 @@ sed -i 's/CONFIG_FUSE_FS=[mny]/CONFIG_FUSE_FS=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CIFS=[mny]/CONFIG_CIFS=m/g'                ${MAIN_KCONFIG_FILE}
 
 # The Virtio Filesystem allows guests to mount file systems from the host. depends on FUSE_FS
-sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=m/g'          ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_DEBUG_FS=[mny]/CONFIG_DEBUG_FS=n/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_DEBUG_FS/s/=[ymn]/=n/'                             ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_BLK_DEBUG_FS=[mny]/CONFIG_BLK_DEBUG_FS=n/g'        ${MAIN_KCONFIG_FILE}
 
 #fat efi need
 sed -i 's/CONFIG_MSDOS_FS=[mny]/CONFIG_MSDOS_FS=m/g'                ${MAIN_KCONFIG_FILE}
@@ -400,7 +405,11 @@ sed -i 's/CONFIG_SOC_TI=[mny]/CONFIG_SOC_TI=n/g'            ${MAIN_KCONFIG_FILE}
 
 # debug
 sed -i 's/CONFIG_DEBUG_MISC=[mny]/CONFIG_DEBUG_MISC=n/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_SLUB_DEBUG=[mny]/CONFIG_SLUB_DEBUG=n/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SLUB_DEBUG=[mny]/CONFIG_SLUB_DEBUG=n/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_SLUB_DEBUG_ON=[mny]/CONFIG_SLUB_DEBUG_ON=n/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DEBUG_SLAB=[mny]/CONFIG_DEBUG_SLAB=n/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DEBUG_VM=[mny]/CONFIG_DEBUG_VM=n/g'                ${MAIN_KCONFIG_FILE}
+
 sed -i 's/CONFIG_PM_DEBUG=[mny]/CONFIG_PM_DEBUG=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ACPI_DEBUG=[mny]/CONFIG_ACPI_DEBUG=n/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ACPI_DEBUGGER=[mny]/CONFIG_ACPI_DEBUGGER=n/g'      ${MAIN_KCONFIG_FILE}
@@ -412,6 +421,13 @@ sed -i 's/CONFIG_SUNRPC_DEBUG=[mny]/CONFIG_SUNRPC_DEBUG=n/g'        ${MAIN_KCONF
 sed -i 's/CONFIG_SCHED_DEBUG=[mny]/CONFIG_SCHED_DEBUG=n/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FW_LOADER_DEBUG=[mny]/CONFIG_FW_LOADER_DEBUG=n/g'  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MEMTEST=[mny]/CONFIG_MEMTEST=n/g'                  ${MAIN_KCONFIG_FILE}
+
+sed -i 's/CONFIG_DEBUG_RODATA_TEST=[mny]/CONFIG_DEBUG_RODATA_TEST=n/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_NET_SELFTESTS=[mny]/CONFIG_NET_SELFTESTS=n/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_PCI_ENDPOINT_TEST=[mny]/CONFIG_PCI_ENDPOINT_TEST=n/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_THERMAL_CORE_TESTING=[mny]/CONFIG_THERMAL_CORE_TESTING=n/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_X86_DECODER_SELFTEST=[mny]/CONFIG_X86_DECODER_SELFTEST=n/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ASYNC_RAID6_TEST=[mny]/CONFIG_ASYNC_RAID6_TEST=n/g'            ${MAIN_KCONFIG_FILE}
 
 # disable isa bus
 sed -i 's/CONFIG_ISA_BUS=[mny]/CONFIG_ISA_BUS=n/g'                    ${MAIN_KCONFIG_FILE}
@@ -1056,7 +1072,7 @@ echo 'CONFIG_HZ_1000=y'                                 >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HZ=1000'                                   >> ${MAIN_KCONFIG_FILE}
 
 # CONFIG_KALLSYMS=y, so no need System.map file
-bash ./patch-linux-files.sh
+bash ${SCRIPT_DIR}/patch-linux-files.sh
 
 # Append a timestamp or something to the localversion to make it unique:
 # echo "$( cat localversion )-$( date +%s )" > localversion
@@ -1080,7 +1096,7 @@ date
 
 # 统计builtin的文件大小
 # make KDEB_COMPRESS=xz bzImage -j8 LLVM=1 LLVM_IAS=1
-bash ./report-object-sizes.sh
+bash ${SCRIPT_DIR}/report-object-sizes.sh
 
 # build perf
 create_package() {

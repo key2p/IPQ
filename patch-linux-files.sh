@@ -42,7 +42,7 @@ HDR_EOF
 
 if [ -e ./drivers/hv/Makefile ]; then
   sed -i 's/hv_trace.o//g'      ./drivers/hv/Makefile
-  sed -i 's/hv_debugfs.o//g'    ./drivers/hv/Makefile
+  sed -i '/hv_debugfs.o/s/^/#/' ./drivers/hv/Makefile
   
   c_src=$(find ./drivers/hv/ | grep ".c$" | tr ' ' '\n' | uniq;)
 
@@ -75,7 +75,7 @@ fi
 #[  -e ./drivers/hid/Makefile ] && sed -i '/debug.o/s/^/#/' ./drivers/hid/Makefile
 
 if [ -e ./drivers/hid/Makefile ]; then
-  sed -i 's/debug.o//g'      ./drivers/hid/Makefile
+  sed -i '/debug.o/s/^/#/'      ./drivers/hid/Makefile
   
   c_src=$(find ./drivers/hid/ | grep ".c$" | tr ' ' '\n' | uniq;)
 
@@ -155,7 +155,7 @@ fi
 #[  -e ./fs/xfs/Makefile ] && sed -i '/xfs_trace.o/s/^/#/' ./fs/xfs/Makefile
 
 if [ -e ./fs/xfs/Makefile ]; then
-  sed -i 's/xfs_trace.o//g'      ./fs/xfs/Makefile
+  sed -i '/xfs_trace.o/s/^/#/'      ./fs/xfs/Makefile
   
   c_src=$(find ./fs/xfs/ | grep ".c$" | tr ' ' '\n' | uniq;)
 
