@@ -225,11 +225,13 @@ sed -i 's/CONFIG_NET_VENDOR_NETRONOME=[mny]/CONFIG_NET_VENDOR_NETRONOME=n/g'    
 sed -i 's/CONFIG_NET_DSA_MV88E6060=[mny]/CONFIG_NET_DSA_MV88E6060=n/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NET_DSA_MV88E6XXX=[mny]/CONFIG_NET_DSA_MV88E6XXX=n/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NET_DSA_SJA1105=[mny]/CONFIG_NET_DSA_SJA1105=n/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_NETDEVSIM=[mny]/CONFIG_NETDEVSIM=n/g'                      ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_BT=[mny]/CONFIG_BT=n/g'                    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_WLAN=[mny]/CONFIG_WLAN=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_WWAN=[mny]/CONFIG_WWAN=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISDN=[mny]/CONFIG_ISDN=n/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MISDN=[mny]/CONFIG_MISDN=n/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NEW_LEDS=[mny]/CONFIG_NEW_LEDS=n/g'        ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NFC=[mny]/CONFIG_NFC=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_INFINIBAND=[mny]/CONFIG_INFINIBAND=n/g'    ${MAIN_KCONFIG_FILE}
@@ -253,6 +255,7 @@ sed -i 's/CONFIG_CIFS=[mny]/CONFIG_CIFS=m/g'                ${MAIN_KCONFIG_FILE}
 
 # The Virtio Filesystem allows guests to mount file systems from the host. depends on FUSE_FS
 sed -i 's/CONFIG_VIRTIO_FS=[mny]/CONFIG_VIRTIO_FS=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_DEBUG_FS=[mny]/CONFIG_DEBUG_FS=n/g'          ${MAIN_KCONFIG_FILE}
 
 #fat efi need
 sed -i 's/CONFIG_MSDOS_FS=[mny]/CONFIG_MSDOS_FS=m/g'                ${MAIN_KCONFIG_FILE}
@@ -281,6 +284,7 @@ sed -i 's/CONFIG_KARMA_PARTITION=[mny]/CONFIG_KARMA_PARTITION=n/g'              
 sed -i 's/CONFIG_SYSV68_PARTITION=[mny]/CONFIG_SYSV68_PARTITION=n/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CMDLINE_PARTITION=[mny]/CONFIG_CMDLINE_PARTITION=n/g'          ${MAIN_KCONFIG_FILE}
 
+sed -i 's/CONFIG_AFS_FS=[mny]/CONFIG_AFS_FS=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_BCACHEFS_FS=[mny]/CONFIG_BCACHEFS_FS=n/g'      ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_BCACHE=[mny]/CONFIG_BCACHE=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_BTRFS_FS=[mny]/CONFIG_BTRFS_FS=n/g'            ${MAIN_KCONFIG_FILE}
@@ -527,13 +531,13 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_XFS_FS=[mny]/CONFIG_XFS_FS=y/g'        ${MAIN_KCONFIG_FILE} 
   
   # NFS server use EXPORTFS
-  sed -i 's/CONFIG_EXPORTFS=[mny]/CONFIG_EXPORTFS=n/g'    ${MAIN_KCONFIG_FILE} 
-  sed -i 's/CONFIG_NFSD=[mny]/CONFIG_NFSD=n/g'            ${MAIN_KCONFIG_FILE} 
-  sed -i 's/CONFIG_NFS_FS=[mny]/CONFIG_NFS_FS=n/g'        ${MAIN_KCONFIG_FILE} 
+  #sed -i 's/CONFIG_EXPORTFS=[mny]/CONFIG_EXPORTFS=n/g'    ${MAIN_KCONFIG_FILE} 
+  #sed -i 's/CONFIG_NFSD=[mny]/CONFIG_NFSD=n/g'            ${MAIN_KCONFIG_FILE} 
+  #sed -i 's/CONFIG_NFS_FS=[mny]/CONFIG_NFS_FS=n/g'        ${MAIN_KCONFIG_FILE} 
 
   sed -i 's/CONFIG_CEPH_LIB=[mny]/CONFIG_CEPH_LIB=n/g'      ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_CEPH_FS=[mny]/CONFIG_CEPH_FS=n/g'        ${MAIN_KCONFIG_FILE} 
-
+  sed -i '/^CEPH/s/=[mny]/=n/'                              ${MAIN_KCONFIG_FILE}
 
   sed -i 's/CONFIG_NET_IFE=[mny]/CONFIG_NET_IFE=y/g'      ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_EDD=[mny]/CONFIG_EDD=y/g'              ${MAIN_KCONFIG_FILE}
@@ -1052,16 +1056,7 @@ echo 'CONFIG_HZ_1000=y'                                 >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HZ=1000'                                   >> ${MAIN_KCONFIG_FILE}
 
 # CONFIG_KALLSYMS=y, so no need System.map file
-[  -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
-[  -e ./fs/xfs/Makefile ] && sed -i '/xfs_trace.o/s/^/#/' ./fs/xfs/Makefile
-[  -e ./fs/smb/client/Makefile ] && sed -i 's/trace.o//g' ./fs/smb/client/Makefile
-[  -e ./drivers/hid/Makefile ] && sed -i '/debug.o/s/^/#/' ./drivers/hid/Makefile
-
-[  -e ./drivers/hv/Makefile ] && sed -i 's/hv_trace.o//g'      ./drivers/hv/Makefile
-[  -e ./drivers/hv/Makefile ] && sed -i '/hv_debugfs.o/s/^/#/' ./drivers/hv/Makefile
-[  -e ./drivers/net/hyperv/Makefile ] && sed -i 's/netvsc_trace.o//g'      ./drivers/net/hyperv/Makefile
-
-
+bash ./patch-linux-files.sh
 
 # Append a timestamp or something to the localversion to make it unique:
 # echo "$( cat localversion )-$( date +%s )" > localversion
@@ -1085,7 +1080,7 @@ date
 
 # 统计builtin的文件大小
 # make KDEB_COMPRESS=xz bzImage -j8 LLVM=1 LLVM_IAS=1
-bash report-object-sizes.sh
+bash ./report-object-sizes.sh
 
 # build perf
 create_package() {

@@ -29,7 +29,7 @@ for lib in $libs; do
         if [ -f "$obj" ]; then
             size=$(stat -c%s "$obj")
             total_size=$((total_size + size))
-            echo "==> Processing $lib $obj $size total:$total_size"
+            echo "==> Processing $lib $obj $size total:$total_size" 
 
             seen_objs["$obj"]=$size
         fi
@@ -39,7 +39,9 @@ done
 
 
 # 按大小倒序输出
-echo "${#seen_objs[@]} 按文件大小倒序排序 前 512:"
+rm max_obj.txt || true
+
+echo "${#seen_objs[@]} 按文件大小倒序排序 前 512:" >> max_obj.txt
 
 top_size=0
 for obj in "${!seen_objs[@]}"; do
@@ -52,4 +54,5 @@ done | sort -rn | head -n 512 | awk '
     END {
         print "Total size of top 512 objects:", top_size;
     }
-'
+' >> max_obj.txt
+cat max_obj.txt
