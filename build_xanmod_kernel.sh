@@ -10,7 +10,10 @@ export SCRIPT_DIR=$PWD
 #export KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.tar.xz
 #export XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/edge/6.12.1-xanmod1/patch-6.12.1-xanmod1.xz/download
 
-sudo -E rm -rf ${WORK_DIR} || true
+if [[ ! "$WORK_DIR" == "$SCRIPT_DIR" ]]; then
+  sudo -E rm -rf ${WORK_DIR} || true
+fi
+
 mkdir -p ${WORK_DIR} || true
 
 ## https://blobfolio.com/2024/building-a-custom-xanmod-kernel-on-ubuntu-23-10/
@@ -1111,7 +1114,7 @@ create_package() {
     sudo -E sh -c "cd '$pdir'; find . -type f ! -path './DEBIAN/*' -printf '%P\\0' | xargs -r0 md5sum > DEBIAN/md5sums"
 
     # Fix ownership and permissions
-    if [ "$DEB_RULES_REQUIRES_ROOT" = "no" ]; then
+    if [ "$DEB_RULES_REQUIRES_ROOT" == "no" ]; then
         dpkg_deb_opts="--root-owner-group"
     else
         sudo -E chown -R root:root "$pdir"

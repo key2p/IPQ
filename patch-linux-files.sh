@@ -76,6 +76,7 @@ fi
 
 if [ -e ./drivers/hid/Makefile ]; then
   sed -i '/debug.o/s/^/#/'      ./drivers/hid/Makefile
+  sed -i '/hid-wiimote/s/^/#/'      ./drivers/hid/Makefile
   
   c_src=$(find ./drivers/hid/ | grep ".c$" | tr ' ' '\n' | uniq;)
 
