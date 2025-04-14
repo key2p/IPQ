@@ -6,3 +6,4 @@ iso/src_old
 iso/*.iso
 xdp-tools
 max_obj.txt
+*.code-workspace

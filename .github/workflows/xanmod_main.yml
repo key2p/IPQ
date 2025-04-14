@@ -95,6 +95,8 @@ jobs:
           bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
           mkdir -p $WORK_DIR/debs || true
           mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true
+          mv -f $WORK_DIR/.config $WORK_DIR/debs/.config || true
+          mv -f $WORK_DIR/.config.bak $WORK_DIR/debs/.config.bak || true
           echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
           echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
           cd $WORK_DIR/debs/

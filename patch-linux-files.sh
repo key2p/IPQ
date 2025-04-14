@@ -229,3 +229,35 @@ if [ -e ./drivers/net/hyperv/Makefile ]; then
 
   done
 fi
+
+
+# fix buid 6.13
+awk '
+BEGIN { in_block=0; move_lines="" }
+/^#ifdef CONFIG_PARAVIRT_XXL/ { in_block=1; print; next }
+/^#endif/ {
+    in_block=0;
+    print;
+    if (move_lines != "") {
+        print move_lines;
+        move_lines="";
+    }
+    next
+}
+{
+    if (in_block) {
+        if ($0 ~ /void \(\*safe_halt\)\(void\);/ || $0 ~ /void \(\*halt\)\(void\);/) {
+            move_lines = move_lines $0 "\n";
+        } else {
+            print;
+        }
+    } else {
+        print;
+    }
+}
+' ./arch/x86/include/asm/paravirt_types.h > ./arch/x86/include/asm/paravirt_types.new
+
+if [ -e ./arch/x86/include/asm/paravirt_types.new ]; then
+  mv ./arch/x86/include/asm/paravirt_types.h   ./arch/x86/include/asm/paravirt_types.old
+  mv ./arch/x86/include/asm/paravirt_types.new ./arch/x86/include/asm/paravirt_types.h
+fi

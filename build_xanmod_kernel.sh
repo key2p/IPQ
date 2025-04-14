@@ -1092,7 +1092,8 @@ PAREL_BUILD=$(nproc)
 if [ "$PAREL_BUILD" -ge '12' ]; then
   PAREL_BUILD=12
 fi
-        
+
+cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.bak        
 date; make olddefconfig LLVM=1 LLVM_IAS=1
 date; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 || (date; echo $PATH; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1)
 date
