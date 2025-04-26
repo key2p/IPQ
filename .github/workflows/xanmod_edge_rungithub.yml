@@ -128,9 +128,9 @@ jobs:
       - name: report ok
         if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&c=ok&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=fail&c=ok&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true
 
       - name: report fail
         if: ${{ always() && (steps.checkver.outcome == 'success') && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&c=fail&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=fail&c=fail&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true

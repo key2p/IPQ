@@ -152,9 +152,9 @@ jobs:
       - name: report ok
         if: ${{ always() && (steps.compile.outputs.status == 'success' && env.FIRMWARE_PATH != '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译成功&msg=WRT_X86" || true
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=ok&msg=WRT_X86" || true
 
       - name: report fail
         if: ${{ always() && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=编译失败&msg=WRT_X86" || true
+          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=fail&msg=WRT_X86" || true
