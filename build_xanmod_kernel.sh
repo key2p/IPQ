@@ -33,7 +33,7 @@ rm /dev/shm/linux.tar.xz && rm /dev/shm/patch*
 
 # download libbpf libxdp pfring
 LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.0}
-LIBXDP_VERSION=${LIBBPF_VERSION:-1.5.1}
+LIBXDP_VERSION=${LIBXDP_VERSION:-1.5.4}
 
 curl -L https://github.com/libbpf/libbpf/archive/refs/tags/v${LIBBPF_VERSION}.tar.gz  -o /dev/shm/libbpf.tar.gz
 curl -L https://github.com/xdp-project/xdp-tools/archive/refs/tags/v${LIBXDP_VERSION}.tar.gz -o /dev/shm/libxdp.tar.gz
