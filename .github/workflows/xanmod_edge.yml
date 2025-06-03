@@ -10,7 +10,7 @@ env:
   BUILD_RUNNER: selfhost
   BUILD_CLASS: edge
   BUILD_TYPE: std
-  
+
 jobs:
   Build:
     runs-on: [self-hosted, Linux]
@@ -54,7 +54,7 @@ jobs:
           [ -z "${XANMOD_PATCH_VER}"  ] && echo "invalid xanmod version ${XANMOD_PATCH_VER}, exit" && exit 1
           echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/${BUILD_CLASS}/${XANMOD_PATCH_VER}/patch-${XANMOD_PATCH_VER}.xz/download" >> $GITHUB_ENV
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY || true
-          sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+          sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* aspnet* powershell openjdk* mongodb* moby* || true
           sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
           sudo -E timedatectl set-timezone "$TZ" || true
 
@@ -91,7 +91,7 @@ jobs:
           [ "$BUILD_RUNNER" == "selfhost" ] && (sudo -E rm -rf $WORK_DIR || true)
           cd $GITHUB_WORKSPACE
           sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
-          export PATH="/opt/llvm19_krl/llvm-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.4-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.7-x86_64/bin/:$PATH"
+          export PATH="/opt/llvm19_krl/llvm-x86_64/bin/:/opt/llvm19_krl/llvm-20.1.5-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.7-x86_64/bin/:$PATH"
           bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
           mkdir -p $WORK_DIR/debs || true
           mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true

@@ -1165,7 +1165,7 @@ export DYNAMIC_LIBXDP=1
 cd $WORK_DIR/; tar -zxvf  /dev/shm/libxdp.tar.gz; rm /dev/shm/libxdp.tar.gz
 cd $WORK_DIR/xdp-tools-${LIBXDP_VERSION}; ./configure
 
-make VERBOSE=1 CC=clang-19  CLANG=clang-19 LLC=llc-19 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
+make VERBOSE=1 CC=clang-20  CLANG=clang-20 LLC=llc-20 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
 
 # build pfring userland and kernel
 cd $WORK_DIR; 7z x /dev/shm/pfring.zip; rm /dev/shm/pfring.zip
