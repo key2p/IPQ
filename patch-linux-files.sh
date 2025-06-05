@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -e ./net/ipv4/tcp_bbr.c ] && sed -i "s/bbr_can_use_ecn(const/bbr_can_use_ecn(/g" ./net/ipv4/tcp_bbr.c
+
 [ -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
 
 [ -e ./kernel/trace/power-traces.c ] && echo "" > ./kernel/trace/power-traces.c
