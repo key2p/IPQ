@@ -11,9 +11,9 @@ export
 git config --global user.name "OpenWrt Builder"
 git config --global user.email "buster-openwrt@ovvo.uk"
 
-git config http.proxy http://192.168.0.25:9090
-export http_proxy=http://192.168.0.25:9090
-export https_proxy=http://192.168.0.25:9090
+git config http.proxy http://192.168.1.18:9090
+export http_proxy=http://192.168.1.18:9090
+export https_proxy=http://192.168.1.18:9090
 
 
 git clone $REPO_URL -b $REPO_BRANCH openwrt

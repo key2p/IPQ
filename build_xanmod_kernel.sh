@@ -5,6 +5,8 @@ export KERNEL_BASE_VER=linux-${KERNEL_BASE_VER}
 export XANMOD_CONFIG=config_x86-64-v2
 export SCRIPT_DIR=$PWD
 
+export PATH="/usr/lib/llvm-20/bin/:$PATH"
+
 # define outer
 #export WORK_DIR=/dev/shm/linux
 #export KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.tar.xz
@@ -22,14 +24,17 @@ mkdir -p ${WORK_DIR} || true
 
 
 # download source
-curl -L ${KERNEL_BASE_URL}  -o /dev/shm/linux.tar.xz
-curl -L ${XANMOD_PATCH}  -o /dev/shm/patch.xz
+#curl -L ${KERNEL_BASE_URL}  -o /dev/shm/linux.tar.xz
+#curl -L ${XANMOD_PATCH}  -o /dev/shm/patch.xz
+curl -L https://gitlab.com/xanmod/linux/-/archive/${XANMOD_PATCH_VER}/linux-${XANMOD_PATCH_VER}.tar.gz -o /dev/shm/linux.tar.gz
 
 # Unpack the kernel sources and patches
-cd ${WORK_DIR} && tar -xJf /dev/shm/linux.tar.xz && unxz -k /dev/shm/patch.xz
-cd ${WORK_DIR}/${KERNEL_BASE_VER}
-patch -Np1 -i /dev/shm/patch
-rm /dev/shm/linux.tar.xz && rm /dev/shm/patch*
+#cd ${WORK_DIR} && tar -xJf /dev/shm/linux.tar.xz && unxz -k /dev/shm/patch.xz
+#cd ${WORK_DIR}/${KERNEL_BASE_VER}
+#patch -Np1 -i /dev/shm/patch
+#rm /dev/shm/linux.tar.xz && rm /dev/shm/patch*
+cd ${WORK_DIR} && tar -xzf /dev/shm/linux.tar.gz && rm /dev/shm/linux.tar.gz 
+cd ${WORK_DIR}/linux-${XANMOD_PATCH_VER}
 
 # download libbpf libxdp pfring
 LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.0}
@@ -1165,7 +1170,7 @@ export DYNAMIC_LIBXDP=1
 cd $WORK_DIR/; tar -zxvf  /dev/shm/libxdp.tar.gz; rm /dev/shm/libxdp.tar.gz
 cd $WORK_DIR/xdp-tools-${LIBXDP_VERSION}; ./configure
 
-make VERBOSE=1 CC=clang-20  CLANG=clang-20 LLC=llc-20 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
+make VERBOSE=1 CC=clang-20  CLANG=clang-20 LLC=llc-20 LLD=lld-20 LLVM=1 LLVM_IAS=1 DESTDIR=$TOOLS_DIR prefix=/usr PREFIX=/usr LIBDIR=/usr/lib64 install
 
 # build pfring userland and kernel
 cd $WORK_DIR; 7z x /dev/shm/pfring.zip; rm /dev/shm/pfring.zip

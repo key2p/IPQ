@@ -91,7 +91,7 @@ jobs:
           [ "$BUILD_RUNNER" == "selfhost" ] && (sudo -E rm -rf $WORK_DIR || true)
           cd $GITHUB_WORKSPACE
           sudo -E bash $GITHUB_WORKSPACE/build_xanmod_docker.sh
-          export PATH="/opt/llvm19_krl/llvm-x86_64/bin/:/opt/llvm19_krl/llvm-20.1.5-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.7-x86_64/bin/:$PATH"
+          # export PATH="/opt/llvm19_krl/llvm-x86_64/bin/:/opt/llvm19_krl/llvm-20.1.5-x86_64/bin/:/opt/llvm19_krl/llvm-19.1.7-x86_64/bin/:$PATH"
           bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
           mkdir -p $WORK_DIR/debs || true
           mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true

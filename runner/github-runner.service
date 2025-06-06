@@ -1,0 +1,16 @@
+[Unit]
+Description=GithubRunner
+After=network.target
+After=docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/github_runner
+ExecStartPre=-/bin/bash -c "mkdir /dev/shm/cache; mkdir /dev/shm/containers;"
+ExecStart=/usr/bin/docker compose --compatibility up --force-recreate --remove-orphans
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # set the github runner version
 # https://github.com/actions/runner/releases
-ARG RUNNER_VERSION="2.322.0"
+ARG RUNNER_VERSION="2.325.0"
 
 COPY init_env.sh /tmp/init_env.sh
 COPY start.sh    /tmp/start.sh
@@ -19,8 +19,10 @@ WORKDIR /home/docker
 # set the entrypoint to the start.sh script
 ENTRYPOINT ["./start.sh"]
 
+## rmdir /var/lib/docker/containers; ln -s /dev/shm/containers /var/lib/docker/containers 
+## 
 ## ## build
-## docker build --shm-size 512M --tag github-runner-2.322 -f github_runner.dockerfile .
+## docker build --shm-size 512M --tag github-runner-2.325 -f github_runner.dockerfile .
 ##
 ## ## run
-## docker run -e http_proxy=socks5h://192.168.0.25:9090 -e https_proxy=socks5h://192.168.0.25:9090 -e RUNNER_REPOSITORY_URL=<YOUR-REPO-URL> -e ACCESS_TOKEN=<YOUR-GITHUB-ACCESS-TOKEN> -v /dev/shm:/dev/shm --name runner --detach --restart unless-stopped github-runner-2.321
+## docker run -e http_proxy=socks5h://192.168.1.18:9090 -e https_proxy=socks5h://192.168.1.18:9090 -e RUNNER_REPOSITORY_URL=<YOUR-REPO-URL> -e ACCESS_TOKEN=<YOUR-GITHUB-ACCESS-TOKEN> -v /dev/shm:/dev/shm --name runner --detach --restart unless-stopped github-runner-2.325
