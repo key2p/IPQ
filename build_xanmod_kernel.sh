@@ -22,7 +22,7 @@ mkdir -p ${WORK_DIR} || true
 # if not exist llvm19 then build it
 [ ! -e /opt/llvm19_krl ] && sudo -E bash build_xanmod_docker.sh
 
-
+export KERNEL_SRC_DIR=${WORK_DIR}/linux-${XANMOD_PATCH_VER}
 # download source
 #curl -L ${KERNEL_BASE_URL}  -o /dev/shm/linux.tar.xz
 #curl -L ${XANMOD_PATCH}  -o /dev/shm/patch.xz
@@ -34,7 +34,7 @@ curl -L https://gitlab.com/xanmod/linux/-/archive/${XANMOD_PATCH_VER}/linux-${XA
 #patch -Np1 -i /dev/shm/patch
 #rm /dev/shm/linux.tar.xz && rm /dev/shm/patch*
 cd ${WORK_DIR} && tar -xzf /dev/shm/linux.tar.gz && rm /dev/shm/linux.tar.gz 
-cd ${WORK_DIR}/linux-${XANMOD_PATCH_VER}
+cd ${KERNEL_SRC_DIR}
 
 # download libbpf libxdp pfring
 LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.0}
@@ -989,6 +989,11 @@ fi
         
 #### cloud end
 
+# 6.15 + llvm-20 failed
+if [[ "$KERNEL_BASE_VER" == "linux-6.15" ]]; then
+  sed -i 's/CONFIG_MLX5_/# CONFIG_MLX5_/g'                  ${MAIN_KCONFIG_FILE}
+fi
+
 # 支持睡眠Sleep，禁用休眠; 禁用老系统选项
 sed -i '/HIBERNAT/s/=[ymn]/=n/'                                             ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SYSVIPC=[mny]/CONFIG_SYSVIPC=n/g'                      ${MAIN_KCONFIG_FILE} 
@@ -1150,7 +1155,7 @@ make -C ./tools/bpf DESTDIR=$tools_destdir prefix=/usr install  NO_LIBZSTD=1 NO_
 
 
 # build pfring and xdp
-KERNELRELEASE=$(cat ${WORK_DIR}/${KERNEL_BASE_VER}/include/config/kernel.release)
+KERNELRELEASE=$(cat ${KERNEL_SRC_DIR}/include/config/kernel.release)
 TOOLS_DIR=$tools_destdir
 
 # xdp-tools ./configure use $LIBBPF_DIR
@@ -1186,8 +1191,8 @@ cd $WORK_DIR/PF_RING-stable/userland;
 make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} DESTDIR=$TOOLS_DIR prefix=/usr CUSTOM_INCLUDE="-I$TOOLS_DIR/usr/include" CUSTOM_LIBS="-L$TOOLS_DIR/usr/lib64" LEXLIB= install
 
 cd $WORK_DIR/PF_RING-stable/kernel;
-make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_DIR}/${KERNEL_BASE_VER} DESTDIR=$TOOLS_DIR prefix=/usr
-make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${WORK_DIR}/${KERNEL_BASE_VER} DESTDIR=$TOOLS_DIR prefix=/usr install 
+make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${KERNEL_SRC_DIR} DESTDIR=$TOOLS_DIR prefix=/usr
+make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} KERNEL_SRC=${KERNEL_SRC_DIR} DESTDIR=$TOOLS_DIR prefix=/usr install 
 
 ### build deb
 create_debian_control() {
@@ -1208,7 +1213,7 @@ Version: $deb_ver
 DEOF
 }
 
-cd ${WORK_DIR}/${KERNEL_BASE_VER}
+cd ${KERNEL_SRC_DIR}
 
 # create perf deb
 sudo -E rm -rf $TOOLS_DIR/usr/share/man/* || true
