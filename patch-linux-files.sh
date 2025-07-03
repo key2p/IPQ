@@ -4,6 +4,9 @@
 
 [ -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
 
+[ -e ./scripts/package/kernel.spec ] && sed -i '/cp System.map/s/^/#/' ./scripts/package/kernel.spec
+[ -e ./scripts/package/kernel.spec ] && sed -i 's/System.map//g' ./scripts/package/kernel.spec
+
 [ -e ./kernel/trace/power-traces.c ] && echo "" > ./kernel/trace/power-traces.c
 [ -e ./include/trace/events/power.h ] && cat > ./include/trace/events/power.h << HDR_EOF
 

@@ -24,16 +24,21 @@ mkdir -p ${WORK_DIR} || true
 
 export KERNEL_SRC_DIR=${WORK_DIR}/linux-${XANMOD_PATCH_VER}
 # download source
-#curl -L ${KERNEL_BASE_URL}  -o /dev/shm/linux.tar.xz
-#curl -L ${XANMOD_PATCH}  -o /dev/shm/patch.xz
-curl -L https://gitlab.com/xanmod/linux/-/archive/${XANMOD_PATCH_VER}/linux-${XANMOD_PATCH_VER}.tar.gz -o /dev/shm/linux.tar.gz
 
-# Unpack the kernel sources and patches
-#cd ${WORK_DIR} && tar -xJf /dev/shm/linux.tar.xz && unxz -k /dev/shm/patch.xz
-#cd ${WORK_DIR}/${KERNEL_BASE_VER}
-#patch -Np1 -i /dev/shm/patch
-#rm /dev/shm/linux.tar.xz && rm /dev/shm/patch*
-cd ${WORK_DIR} && tar -xzf /dev/shm/linux.tar.gz && rm /dev/shm/linux.tar.gz 
+if [[ ! -e "/dev/shm/linux-${XANMOD_PATCH_VER}.tar.bz2" ]]; then
+    #curl -L ${KERNEL_BASE_URL}  -o /dev/shm/linux.tar.xz
+    #curl -L ${XANMOD_PATCH}  -o /dev/shm/patch.xz
+    curl -L https://gitlab.com/xanmod/linux/-/archive/${XANMOD_PATCH_VER}/linux-${XANMOD_PATCH_VER}.tar.bz2 -o "/dev/shm/linux-${XANMOD_PATCH_VER}.tar.bz2"
+
+    # Unpack the kernel sources and patches
+    #cd ${WORK_DIR} && tar -xJf /dev/shm/linux.tar.xz && unxz -k /dev/shm/patch.xz
+    #cd ${WORK_DIR}/${KERNEL_BASE_VER}
+    #patch -Np1 -i /dev/shm/patch
+    #rm /dev/shm/linux.tar.xz && rm /dev/shm/patch*
+    # cd ${WORK_DIR} && tar -xjf /dev/shm/linux.tar.bz2 && rm /dev/shm/linux.tar.bz2 
+fi
+
+cd ${WORK_DIR} && tar -xjf "/dev/shm/linux-${XANMOD_PATCH_VER}.tar.bz2"
 cd ${KERNEL_SRC_DIR}
 
 # download libbpf libxdp pfring
@@ -1105,7 +1110,7 @@ fi
 
 cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.bak        
 date; make olddefconfig LLVM=1 LLVM_IAS=1
-date; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 || (date; echo $PATH; make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1)
+date; make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 || (date; echo $PATH; make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1)
 date
 
 # 统计builtin的文件大小
@@ -1244,7 +1249,18 @@ cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.v2
 sed -i 's/x64v2/x64v3/g'                          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X86_64_VERSION=2/CONFIG_X86_64_VERSION=3/g'      ${MAIN_KCONFIG_FILE}
 make olddefconfig LLVM=1 LLVM_IAS=1
-make KDEB_COMPRESS=xz bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
+make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
+
+if [[ "$BUILD_TYPE" == "cloud" ]]; then
+  if [[ "$BUILD_CLASS" == "main" ]]; then
+    echo '%_binary_payload w7.xzdio' > ~/.rpmmacros
+    export RPMOPTS="--define='_binary_payload w7.xzdio'"
+    date; make INSTALL_MOD_STRIP=1 binrpm-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 
+    date
+    ls -al ./rpmbuild/RPMS/x86_64/ || true
+    mv ./rpmbuild/RPMS/x86_64/*.rpm ${WORK_DIR}/ || true
+  fi
+fi
 
 # dbg info not need
 rm -f ${WORK_DIR}/*-dbg*.deb || true

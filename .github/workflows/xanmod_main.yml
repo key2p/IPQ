@@ -136,4 +136,4 @@ jobs:
       - name: report fail
         if: ${{ always() && (steps.checkver.outcome == 'success') && (steps.compile.outputs.status != 'success' || env.FIRMWARE_PATH == '') }}
         run: |
-          cd /dev/shm && curl "https://xanmod.key2p.com/notice?t=fail&c=fail&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true
+          cd /dev/shm; rm *.tar.bz2; curl "https://xanmod.key2p.com/notice?t=fail&c=fail&msg=${BUILD_TYPE}${KERNEL_FULL_VER}" || true

@@ -55,7 +55,7 @@ jobs:
           echo "XANMOD_PATCH=https://sourceforge.net/projects/xanmod/files/releases/${BUILD_CLASS}/${XANMOD_PATCH_VER}/patch-${XANMOD_PATCH_VER}.xz/download" >> $GITHUB_ENV
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY || true
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* aspnet* powershell openjdk* mongodb* moby* || true
-          sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
+          sudo -E /bin/bash -c "systemctl daemon-reload; apt update -y; apt install rpm -y || true; apt-get -y autoremove --purge; apt-get -y clean" || true
           sudo -E timedatectl set-timezone "$TZ" || true
 
       - name: Combine Disks
@@ -95,6 +95,7 @@ jobs:
           bash $GITHUB_WORKSPACE/build_xanmod_kernel.sh
           mkdir -p $WORK_DIR/debs || true
           mv -f $WORK_DIR/*.deb $WORK_DIR/debs/ || true
+          mv -f $WORK_DIR/*.rpm $WORK_DIR/debs/ || true
           echo "DATE=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
           echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
           cd $WORK_DIR/debs/
