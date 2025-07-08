@@ -264,7 +264,7 @@ sed -i 's/CONFIG_VIDEO_DEV=[mny]/CONFIG_VIDEO_DEV=n/g'          ${MAIN_KCONFIG_F
 # sata, ahci
 sed -i 's/CONFIG_SCSI=[mny]/CONFIG_SCSI=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_SATA_AHCI=[mny]/CONFIG_SATA_AHCI=y/g'      ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=y/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_EXT4_FS=[mny]/CONFIG_EXT4_FS=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_ISO9660_FS=[mny]/CONFIG_ISO9660_FS=y/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_OVERLAY_FS=[mny]/CONFIG_OVERLAY_FS=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_FUSE_FS=[mny]/CONFIG_FUSE_FS=m/g'          ${MAIN_KCONFIG_FILE}
@@ -1252,7 +1252,7 @@ make olddefconfig LLVM=1 LLVM_IAS=1
 make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
 
 if [[ "$BUILD_TYPE" == "cloud" ]]; then
-  if [[ "$BUILD_CLASS" == "main" ]]; then
+  if [[ "$BUILD_CLASS" == "main" || "$BUILD_CLASS" == "lts" ]]; then
     echo '%_binary_payload w7.xzdio' > ~/.rpmmacros
     export RPMOPTS="--define='_binary_payload w7.xzdio'"
     date; make INSTALL_MOD_STRIP=1 binrpm-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 
