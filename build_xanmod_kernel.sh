@@ -125,8 +125,9 @@ sed -i '/SHA256/s/=[ymn]/=m/'                               ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_AS_SHA256_NI=[mny]/CONFIG_AS_SHA256_NI=y/g'      ${MAIN_KCONFIG_FILE}
 
 # ktls
-sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_CRYPTO/s/=[ym]/=y/'                                       ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                                      ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_CRYPTO/s/=[ym]/=y/'                                            ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_CRYPTO_SIMD/s/=[ymn]/=y/'                                      ${MAIN_KCONFIG_FILE}
 
 sed -i '/^CONFIG_ASYNC/s/=[ymn]/=y/'                                            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_XOR_BLOCKS=[myn]/CONFIG_XOR_BLOCKS=y/g'                        ${MAIN_KCONFIG_FILE}
@@ -712,11 +713,11 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_IGC=[mny]/CONFIG_IGC=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_NET_VENDOR_MARVELL=[mny]/CONFIG_NET_VENDOR_MARVELL=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_NET_VENDOR_MELLANOX=[mny]/CONFIG_NET_VENDOR_MELLANOX=n/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_MLX5_ESWITCH=[mny]/CONFIG_MLX5_ESWITCH=n/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_MLX5_MACSEC=[mny]/CONFIG_MLX5_MACSEC=n/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_MLX5_EN_IPSEC=[mny]/CONFIG_MLX5_EN_IPSEC=n/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_MLX5_SF=[mny]/CONFIG_MLX5_SF=n/g'              ${MAIN_KCONFIG_FILE}
-  sed -i 's/CONFIG_FBNIC=[mny]/CONFIG_FBNIC=n/g'              ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_MLX5_ESWITCH=[mny]/CONFIG_MLX5_ESWITCH=m/g'              ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_MLX5_MACSEC=[mny]/CONFIG_MLX5_MACSEC=m/g'                ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_MLX5_EN_IPSEC=[mny]/CONFIG_MLX5_EN_IPSEC=m/g'            ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_MLX5_SF=[mny]/CONFIG_MLX5_SF=m/g'                        ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_FBNIC=[mny]/CONFIG_FBNIC=n/g'                            ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_NET_VENDOR_MICREL=[mny]/CONFIG_NET_VENDOR_MICREL=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_NET_VENDOR_MICROCHIP=[mny]/CONFIG_NET_VENDOR_MICROCHIP=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_NET_VENDOR_NVIDIA=[mny]/CONFIG_NET_VENDOR_NVIDIA=n/g'              ${MAIN_KCONFIG_FILE}
@@ -994,7 +995,7 @@ fi
         
 #### cloud end
 
-# 6.15 + llvm-20 failed
+# 6.16 + llvm-20 failed
 if [[ "$KERNEL_BASE_VER" == "linux-6.15" ]]; then
   sed -i 's/CONFIG_MLX5_/# CONFIG_MLX5_/g'                  ${MAIN_KCONFIG_FILE}
 fi
@@ -1032,7 +1033,9 @@ sed -i 's/CONFIG_MODULE_DECOMPRESS=[mny]/CONFIG_MODULE_DECOMPRESS=y/g'          
 sed -i 's/CONFIG_FW_LOADER_COMPRESS_XZ=[mny]/CONFIG_FW_LOADER_COMPRESS_XZ=y/g'      ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_KERNEL_/#CONFIG_KERNEL_/g'         ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_LTO_CLANG_THIN=y'                  >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_LTO=y'                                 >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_LTO_CLANG=y'                           >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_LTO_CLANG_THIN=y'                      >> ${MAIN_KCONFIG_FILE}
 
 # https://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html 
 # https://groups.google.com/g/android-building/c/I2Wt5o9ABjg
@@ -1084,10 +1087,10 @@ echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
 # echo 'CONFIG_RT_GROUP_SCHED=y/g'                >> ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RT_GROUP_SCHED=[mny]/CONFIG_RT_GROUP_SCHED=n/g'      ${MAIN_KCONFIG_FILE}
 
-# default timer set to 1000HZ
+# default timer set to 500HZ
 sed -i '/CONFIG_HZ/s/^/#/'                              ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_HZ_1000=y'                                 >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_HZ=1000'                                   >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HZ_500=y'                                 >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_HZ=500'                                   >> ${MAIN_KCONFIG_FILE}
 
 # CONFIG_KALLSYMS=y, so no need System.map file
 bash ${SCRIPT_DIR}/patch-linux-files.sh

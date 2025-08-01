@@ -2,6 +2,16 @@
 
 [ -e ./net/ipv4/tcp_bbr.c ] && sed -i "s/bbr_can_use_ecn(const/bbr_can_use_ecn(/g" ./net/ipv4/tcp_bbr.c
 
+# linux 6.16 https://github.com/torvalds/linux/commit/1cefe495cacba5fb0417da3a75a1a76e3546d176
+[ -e ./drivers/cpufreq/intel_pstate.c ] && sed -i "s/intel_cpufreq_hwp_update(cpu, target_pstate, max_pstate, 0,/intel_cpufreq_hwp_update(cpu, target_pstate, max_pstate, target_pstate,/g" ./drivers/cpufreq/intel_pstate.c 
+# linux 6.16 https://github.com/torvalds/linux/commit/fc64e0421598aaa87d61184f6777b52614a095be
+[ -e ./drivers/cpufreq/intel_pstate.c ] && sed -i '/intel_pstate_cpu_ids\[\]/,/MODULE_DEVICE_TABLE/ { s/INTEL_EMERALDRAPIDS_X/INTEL_EMERALDRAPIDS_X,	core_funcs), X86_MATCH(INTEL_GRANITERAPIDS_D, core_funcs), X86_MATCH(INTEL_GRANITERAPIDS_X/}' ./drivers/cpufreq/intel_pstate.c
+
+[ -e ./drivers/cpufreq/intel_pstate.c ] && sed -i "/linux\/cpufreq.h/a #include <linux/cacheinfo.h>" ./drivers/cpufreq/intel_pstate.c
+cat ./drivers/cpufreq/intel_pstate.c | grep -E "(cacheinfo|INTEL_GRANITERAPIDS|intel_cpufreq_hwp_update)"
+
+# linux 6.16 end
+
 [ -e ./scripts/package/builddeb ] && sed -i '/System.map/s/^/#/' ./scripts/package/builddeb
 
 [ -e ./scripts/package/kernel.spec ] && sed -i '/cp System.map/s/^/#/' ./scripts/package/kernel.spec
