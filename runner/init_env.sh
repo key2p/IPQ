@@ -4,7 +4,7 @@ set -ex
 export http_proxy=socks5h://192.168.1.18:9090
 export https_proxy=${http_proxy}
 
-export LLVMVER="20.1.5"
+export LLVMVER="20.1.8"
 
 mkdir -p /etc/apt/apt.conf.d || true
 echo -e "Acquire::http::Proxy \"${http_proxy}\";\nAcquire::https::Proxy \"${https_proxy}\";" > /etc/apt/apt.conf.d/01proxy
@@ -12,7 +12,7 @@ echo -e "Acquire::http::Proxy \"${http_proxy}\";\nAcquire::https::Proxy \"${http
 df -h && ls -al /dev/shm && ls -al /tmp
 apt-get update -y && apt-get install -y --no-install-suggests --no-install-recommends curl ca-certificates jq git tzdata sudo
 
-# config apt
+# config apt llvm
 sed -i '/llvm-toolchain/d' /etc/apt/sources.list
 echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-20 main" >> /etc/apt/sources.list
 
@@ -20,6 +20,7 @@ mkdir -p /etc/apt/trusted.gpg.d/ || true
 curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc
 apt update -y
 
+## https://blobfolio.com/2024/building-a-custom-xanmod-kernel-on-ubuntu-23-10/
 # common config
 timedatectl set-timezone "Asia/Shanghai" || (ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && dpkg-reconfigure -f noninteractive tzdata)
 #git config --global http.proxy http://192.168.1.18:9090 || true
@@ -30,20 +31,22 @@ useradd -m docker && echo 'docker ALL=NOPASSWD: ALL' > /etc/sudoers.d/docker
 # for linux kernel build
 apt install -y --no-install-suggests --no-install-recommends curl libc6 libgcc-s1 libicu-dev liblzma5 libstdc++6 libxml2 libzstd1 zlib1g xz-utils \
   fakeroot build-essential git wget openssl libssl-dev ca-certificates libncurses-dev zstd xz-utils flex libelf-dev bison bc debhelper rsync kmod cpio gpg pahole python3 \
-  libdwarf-dev libdw-dev systemtap-sdt-dev libunwind-dev python3-dev libzstd-dev libcap-dev libnuma-dev libtraceevent-dev uuid-dev libpfm4-dev libbfd-dev libbabeltrace-dev libperl-dev libpci-dev libpcap-dev
+  pkgconf libdwarf-dev libdw-dev systemtap-sdt-dev libunwind-dev python3-dev libzstd-dev libcap-dev libnuma-dev libtraceevent-dev uuid-dev libpfm4-dev libbfd-dev libbabeltrace-dev libperl-dev libpci-dev libpcap-dev rpm
   
 # for openwrt build  
 apt install -y --no-install-suggests --no-install-recommends dosfstools xorriso mtools sudo ack antlr3 asciidoc autoconf make automake autopoint binutils bison btrfs-progs \
-  build-essential  bzip2 ca-certificates ccache cmake coreutils cpio curl device-tree-compiler fastjar flex g++-multilib gawk gcc-multilib \
+  build-essential bzip2 ca-certificates ccache cmake coreutils cpio curl device-tree-compiler fastjar flex g++-multilib gawk gcc-multilib \
   gettext git git-core gperf gzip haveged intltool jq libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev \
   libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool libz-dev lrzsz mkisofs msmtp nano ninja-build \
   p7zip p7zip-full patch pigz pkgconf python3 python3-pip python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools swig \
   tar uglifyjs unzip upx upx-ucl vim wget xmlto xsltproc xxd xz-utils yasm zip zlib1g-dev zstd liblzma-dev libpam0g-dev pahole dwarves llvm-20 clang-20 lld-20
 
+apt-get clean
+which llc || true
+ln -s /usr/bin/llc-20 /usr/bin/llc || true
+ln -s /usr/bin/lld-20 /usr/bin/lld || true
 ln -s /usr/bin/lld-20 /usr/bin/ld.lld || true
 ln -s /usr/bin/lld-20 /usr/bin/ld64.lld || true
-ln -s /usr/bin/lld-20 /usr/bin/lld || true
-ln -s /usr/bin/llc-20 /usr/bin/llc || true
 ln -s /usr/bin/clang-20 /usr/bin/clang  || true
 ls -al /usr/bin/ll* || true
 
@@ -72,6 +75,7 @@ tar xzf /dev/shm/${RUNNER_TAR_BIN} && rm /dev/shm/${RUNNER_TAR_BIN}
 /home/docker/actions-runner/bin/installdependencies.sh
     
 (apt-get -y autoremove --purge || true ) && (apt-get -y clean || true) && rm -rf /var/lib/apt/lists/* && rm -rf /var/cache/apt/* 
+rm -rf /var/lib/apt/lists/* /var/lib/apt/mirrors/* /var/cache/apt/* /var/lib/snapd* /var/snap*
 
 # copy over the start.sh script
 cp /tmp/start.sh /home/docker/start.sh && chmod +x /home/docker/start.sh

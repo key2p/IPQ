@@ -6,7 +6,7 @@ SAVE_DIR=${PWD}
 [ -e "${GITHUB_WORKSPACE}/runner/01_nodoc" ] && cp -a ${GITHUB_WORKSPACE}/runner/01_nodoc /etc/dpkg/dpkg.cfg.d/ || true
 [ -e "runner/01_nodoc" ] && cp -a runner/01_nodoc /etc/dpkg/dpkg.cfg.d/ || true
 
-export LLVMVER="20.1.5"
+export LLVMVER="20.1.8"
 export PATH="/opt/llvm19_krl/llvm-x86_64/bin/:/opt/llvm19_krl/llvm-${LLVMVER}-x86_64/bin/:/usr/lib/llvm-20/bin/:$PATH"
 
 # avoid redownload
