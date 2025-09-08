@@ -361,7 +361,7 @@ sed -i 's/CONFIG_SECURITY_IPE=[mny]/CONFIG_SECURITY_IPE=y/g'              ${MAIN
 #sed -i '/^CONFIG_DCB/s/=[ym]/=m/'                          ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DNS_RESOLVER/s/=[ym]/=m/'                 ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MCTP=[mny]/CONFIG_MCTP=y/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_MPTCP=[mny]/CONFIG_MPTCP=y/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_MPTCP=[mny]/CONFIG_MPTCP=m/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_MPLS=[mny]/CONFIG_MPLS=y/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NET_NCSI=[mny]/CONFIG_NET_NCSI=m/g'    ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_HAMRADIO=[mny]/CONFIG_HAMRADIO=m/g'    ${MAIN_KCONFIG_FILE}
@@ -467,7 +467,9 @@ sed -i '/^CONFIG_ACPI_APEI_EINJ/s/=[ym]/=m/'                   ${MAIN_KCONFIG_FI
 sed -i '/^CONFIG_DRM_PRIVACY_SCREEN/s/=y/=n/'               ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_FB_ASILIANT/s/=y/=n/'                      ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_FB_IMSTT/s/=y/=n/'                         ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_SECURITY_SMACK/s/=y/=n/'                   ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_SECURITY_SMACK/s/=[ym]/=n/'                   ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_SECURITY_TOMOYO/s/=[ym]/=n/'                  ${MAIN_KCONFIG_FILE}
+
 sed -i '/^CONFIG_GDB_SCRIPTS/s/=y/=n/'                      ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_CRASH_DUMP/s/=y/=n/'                       ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_HOTPLUG/s/=y/=n/'                          ${MAIN_KCONFIG_FILE}
@@ -478,6 +480,34 @@ echo "build_type: $BUILD_TYPE"
 
 ##### for cloud 
 if [[ "$BUILD_TYPE" == "cloud" ]]; then
+  # reduce cloud image size
+  sed -i 's/CONFIG_SECURITY_SELINUX=[my]/CONFIG_SECURITY_SELINUX=n/g'          ${MAIN_KCONFIG_FILE} 
+  sed -i '/^CONFIG_SECURITY_SELINUX/s/=[ym]/=n/'                                            ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_AMD_MEM_ENCRYPT=[my]/CONFIG_AMD_MEM_ENCRYPT=n/g'            ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_X86_MEM_ENCRYPT=[my]/CONFIG_X86_MEM_ENCRYPT=n/g'            ${MAIN_KCONFIG_FILE} 
+
+  sed -i '/^CONFIG_PPTP/s/=[ym]/=n/'                                            ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_NF_NAT_PPTP=[my]/CONFIG_NF_NAT_PPTP=n/g'                     ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_NF_CONNTRACK_PPTP=[my]/CONFIG_NF_CONNTRACK_PPTP=n/g'         ${MAIN_KCONFIG_FILE} 
+
+  sed -i '/^CONFIG_L2TP/s/=[ym]/=n/'                                            ${MAIN_KCONFIG_FILE}
+  sed -i '/^CONFIG_PPPOL2TP/s/=[ym]/=n/'                                        ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_NETFILTER_XT_MATCH_L2TP=[my]/CONFIG_NETFILTER_XT_MATCH_L2TP=n/g'     ${MAIN_KCONFIG_FILE} 
+
+  sed -i 's/CONFIG_NF_CT_PROTO_SCTP=[my]/CONFIG_NF_CT_PROTO_SCTP=n/g'     ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_NETFILTER_XT_MATCH_SCTP=[my]/CONFIG_NETFILTER_XT_MATCH_SCTP=n/g'     ${MAIN_KCONFIG_FILE} 
+
+  # wo no need IPSec, wireguard, l2tp ...
+  sed -i '/^CONFIG_XFRM/s/=[ym]/=n/'                                        ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_XFRM=[my]/CONFIG_XFRM=n/g'                               ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_NFT_XFRM=[my]/CONFIG_NFT_XFRM=n/g'                       ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_INET_XFRM_TUNNEL=[my]/CONFIG_INET_XFRM_TUNNEL=n/g'                   ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_INET6_XFRM_TUNNEL=[my]/CONFIG_INET6_XFRM_TUNNEL=n/g'                 ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_SECURITY_NETWORK_XFRM=[my]/CONFIG_SECURITY_NETWORK_XFRM=n/g'         ${MAIN_KCONFIG_FILE} 
+
+  # no need BMC
+  sed -i '/^CONFIG_MCTP/s/=[ym]/=n/'                                        ${MAIN_KCONFIG_FILE}
+
   sed -i 's/CONFIG_HYPERV=[mny]/CONFIG_HYPERV=y/g'                              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_KVM=[mny]/CONFIG_KVM=n/g'                                    ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_HYPERV_NET=[mny]/CONFIG_HYPERV_NET=y/g'                ${MAIN_KCONFIG_FILE}
@@ -488,7 +518,7 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_VIRTIO_BLK=[mny]/CONFIG_VIRTIO_BLK=y/g'              ${MAIN_KCONFIG_FILE}  
   sed -i 's/CONFIG_VIRTIO_MEM=[mny]/CONFIG_VIRTIO_MEM=y/g'              ${MAIN_KCONFIG_FILE}  
 
-  sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=y/g'                              ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                              ${MAIN_KCONFIG_FILE}
 
   # sed -i 's/CONFIG_MOUSE_PS2=[mny]/CONFIG_MOUSE_PS2=n/g'       ${MAIN_KCONFIG_FILE}
 
@@ -1036,6 +1066,10 @@ sed -i 's/CONFIG_KERNEL_/#CONFIG_KERNEL_/g'         ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_LTO=y'                                 >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_LTO_CLANG=y'                           >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_LTO_CLANG_THIN=y'                      >> ${MAIN_KCONFIG_FILE}
+
+# disable Profiler Clang 
+sed -i 's/CONFIG_PROPELLER_CLANG=[mny]/CONFIG_PROPELLER_CLANG=n/g'            ${MAIN_KCONFIG_FILE} 
+echo 'CONFIG_PROPELLER_CLANG=n'                      >> ${MAIN_KCONFIG_FILE}
 
 # https://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html 
 # https://groups.google.com/g/android-building/c/I2Wt5o9ABjg
