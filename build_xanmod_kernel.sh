@@ -126,8 +126,8 @@ sed -i 's/CONFIG_AS_SHA256_NI=[mny]/CONFIG_AS_SHA256_NI=y/g'      ${MAIN_KCONFIG
 
 # ktls
 sed -i 's/CONFIG_TLS=[mny]/CONFIG_TLS=m/g'                                      ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_CRYPTO/s/=[ym]/=y/'                                            ${MAIN_KCONFIG_FILE}
-sed -i '/^CONFIG_CRYPTO_SIMD/s/=[ymn]/=y/'                                      ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_CRYPTO/s/=[ymn]/=m/'                                            ${MAIN_KCONFIG_FILE}
+sed -i '/^CONFIG_CRYPTO_SIMD/s/=[ymn]/=m/'                                      ${MAIN_KCONFIG_FILE}
 
 sed -i '/^CONFIG_ASYNC/s/=[ymn]/=y/'                                            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_XOR_BLOCKS=[myn]/CONFIG_XOR_BLOCKS=y/g'                        ${MAIN_KCONFIG_FILE}
@@ -141,43 +141,43 @@ sed -i 's/CONFIG_CRYPTO_DES=[mny]/CONFIG_CRYPTO_DES=n/g'                  ${MAIN
 sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=n/g'                  ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_CRYPTO_DRBG_CTR=[mny]/CONFIG_CRYPTO_DRBG_CTR=n/g'                  ${MAIN_KCONFIG_FILE}
 
-# sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_ECDSA=[mny]/CONFIG_CRYPTO_ECDSA=m/g'            ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_CURVE25519=[mny]/CONFIG_CRYPTO_CURVE25519=m/g'  ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_DH=[mny]/CONFIG_CRYPTO_DH=m/g'                  ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_ECC=[mny]/CONFIG_CRYPTO_ECC=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_ECDH=[mny]/CONFIG_CRYPTO_ECDH=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_RSA=[mny]/CONFIG_CRYPTO_RSA=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ECDSA=[mny]/CONFIG_CRYPTO_ECDSA=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CURVE25519=[mny]/CONFIG_CRYPTO_CURVE25519=m/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_DH=[mny]/CONFIG_CRYPTO_DH=m/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ECC=[mny]/CONFIG_CRYPTO_ECC=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ECDH=[mny]/CONFIG_CRYPTO_ECDH=m/g'              ${MAIN_KCONFIG_FILE}
 
-# sed -i 's/CONFIG_CRYPTO_AKCIPHER2=[mny]/CONFIG_CRYPTO_AKCIPHER2=m/g'    ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_AKCIPHER=[mny]/CONFIG_CRYPTO_AKCIPHER=m/g'      ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_KPP2=[mny]/CONFIG_CRYPTO_KPP2=m/g'              ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_KPP=[mny]/CONFIG_CRYPTO_KPP=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_ACOMP2=[mny]/CONFIG_CRYPTO_ACOMP2=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AKCIPHER2=[mny]/CONFIG_CRYPTO_AKCIPHER2=m/g'    ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AKCIPHER=[mny]/CONFIG_CRYPTO_AKCIPHER=m/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_KPP2=[mny]/CONFIG_CRYPTO_KPP2=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_KPP=[mny]/CONFIG_CRYPTO_KPP=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ACOMP2=[mny]/CONFIG_CRYPTO_ACOMP2=m/g'          ${MAIN_KCONFIG_FILE}
 
-# sed -i 's/CONFIG_CRYPTO_CBC=[mny]/CONFIG_CRYPTO_CBC=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_CTS=[mny]/CONFIG_CRYPTO_CTS=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_GENIV=[mny]/CONFIG_CRYPTO_GENIV=m/g'            ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SEQIV=[mny]/CONFIG_CRYPTO_SEQIV=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CBC=[mny]/CONFIG_CRYPTO_CBC=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CTS=[mny]/CONFIG_CRYPTO_CTS=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_GENIV=[mny]/CONFIG_CRYPTO_GENIV=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SEQIV=[mny]/CONFIG_CRYPTO_SEQIV=m/g'            ${MAIN_KCONFIG_FILE}
 
-# sed -i 's/CONFIG_CRYPTO_HMAC=[mny]/CONFIG_CRYPTO_HMAC=m/g'              ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_MD5=[mny]/CONFIG_CRYPTO_MD5=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SHA1=[mny]/CONFIG_CRYPTO_SHA1=m/g'              ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SHA1_SSSE3=[mny]/CONFIG_CRYPTO_SHA1_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SHA256=[mny]/CONFIG_CRYPTO_SHA256=m/g'          ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SHA512=[mny]/CONFIG_CRYPTO_SHA512=m/g'          ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SHA3=[mny]/CONFIG_CRYPTO_SHA3=m/g'              ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_SHA512_SSSE3=[mny]/CONFIG_CRYPTO_SHA512_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_CRCT10DIF=[mny]/CONFIG_CRYPTO_CRCT10DIF=m/g'                ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_CRC64_ROCKSOFT=[mny]/CONFIG_CRYPTO_CRC64_ROCKSOFT=m/g'      ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_AES=[mny]/CONFIG_CRYPTO_AES=m/g'                            ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_AES_NI_INTEL=[mny]/CONFIG_CRYPTO_AES_NI_INTEL=m/g'          ${MAIN_KCONFIG_FILE}
-# sed -i 's/CONFIG_CRYPTO_BLAKE2S_X86=[mny]/CONFIG_CRYPTO_BLAKE2S_X86=m/g'            ${MAIN_KCONFIG_FILE}
-#sed -i 's/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=[mny]/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=m/g'        ${MAIN_KCONFIG_FILE}
-#sed -i 's/CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=[mny]/CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=m/g'            ${MAIN_KCONFIG_FILE}
-#sed -i 's/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=[mny]/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=m/g'      ${MAIN_KCONFIG_FILE}
-#sed -i 's/CONFIG_CRYPTO_LIB_SHA1=[mny]/CONFIG_CRYPTO_LIB_SHA1=m/g'                  ${MAIN_KCONFIG_FILE}
-#sed -i 's/CONFIG_CRYPTO_LIB_SHA256=[mny]/CONFIG_CRYPTO_LIB_SHA256=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_HMAC=[mny]/CONFIG_CRYPTO_HMAC=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_MD4=[mny]/CONFIG_CRYPTO_MD4=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_MD5=[mny]/CONFIG_CRYPTO_MD5=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA1=[mny]/CONFIG_CRYPTO_SHA1=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA1_SSSE3=[mny]/CONFIG_CRYPTO_SHA1_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA256=[mny]/CONFIG_CRYPTO_SHA256=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA512=[mny]/CONFIG_CRYPTO_SHA512=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA3=[mny]/CONFIG_CRYPTO_SHA3=m/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_SHA512_SSSE3=[mny]/CONFIG_CRYPTO_SHA512_SSSE3=m/g'  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CRCT10DIF=[mny]/CONFIG_CRYPTO_CRCT10DIF=m/g'                ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_CRC64_ROCKSOFT=[mny]/CONFIG_CRYPTO_CRC64_ROCKSOFT=m/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AES=[mny]/CONFIG_CRYPTO_AES=m/g'                            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_AES_NI_INTEL=[mny]/CONFIG_CRYPTO_AES_NI_INTEL=m/g'          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_BLAKE2S_X86=[mny]/CONFIG_CRYPTO_BLAKE2S_X86=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=[mny]/CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=m/g'        ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=[mny]/CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=m/g'            ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=[mny]/CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=m/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_SHA1=[mny]/CONFIG_CRYPTO_LIB_SHA1=m/g'                  ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_CRYPTO_LIB_SHA256=[mny]/CONFIG_CRYPTO_LIB_SHA256=m/g'              ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_CRYPTO_TEST=[mny]/CONFIG_CRYPTO_TEST=n/g'              ${MAIN_KCONFIG_FILE}
 
@@ -480,6 +480,9 @@ echo "build_type: $BUILD_TYPE"
 
 ##### for cloud 
 if [[ "$BUILD_TYPE" == "cloud" ]]; then
+  sed -i '/^CONFIG_GENERIC_PHY/s/=[ym]/=n/'                                            ${MAIN_KCONFIG_FILE}
+  sed -i '/^CONFIG_ETHERNET/s/=[ym]/=n/'                                            ${MAIN_KCONFIG_FILE}
+
   # reduce cloud image size
   sed -i 's/CONFIG_SECURITY_SELINUX=[my]/CONFIG_SECURITY_SELINUX=n/g'          ${MAIN_KCONFIG_FILE} 
   sed -i '/^CONFIG_SECURITY_SELINUX/s/=[ym]/=n/'                                            ${MAIN_KCONFIG_FILE}
@@ -588,7 +591,7 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i '/^CONFIG_NETFILTER/s/=m/=y/'                        ${MAIN_KCONFIG_FILE}
   sed -i '/^CONFIG_BRIDGE/s/=m/=y/'                           ${MAIN_KCONFIG_FILE}
 
-  sed -i 's/CONFIG_XFS_FS=[mny]/CONFIG_XFS_FS=y/g'        ${MAIN_KCONFIG_FILE} 
+  sed -i 's/CONFIG_XFS_FS=[mny]/CONFIG_XFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
   
   # NFS server use EXPORTFS
   #sed -i 's/CONFIG_EXPORTFS=[mny]/CONFIG_EXPORTFS=n/g'    ${MAIN_KCONFIG_FILE} 
@@ -1098,7 +1101,7 @@ sed -i 's/CONFIG_DECOMPRESS_ZSTD=[mny]/CONFIG_DECOMPRESS_ZSTD=n/g'      ${MAIN_K
 
 # gzip xz zstd. CONFIG_RD_ZSTD 是用于支持 Zstandard 压缩的 initramfs 的内核选项。
 sed -i 's/CONFIG_RD_BZIP2=[mny]/CONFIG_RD_BZIP2=n/g'            ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_RD_LZMA=[mny]/CONFIG_RD_LZMA=y/g'              ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_RD_LZMA=[mny]/CONFIG_RD_LZMA=n/g'              ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RD_LZO=[mny]/CONFIG_RD_LZO=n/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RD_LZ4=[mny]/CONFIG_RD_LZ4=y/g'                ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_RD_ZSTD=[mny]/CONFIG_RD_ZSTD=y/g'              ${MAIN_KCONFIG_FILE}
@@ -1112,10 +1115,10 @@ echo 'CONFIG_HAVE_KERNEL_LZMA=n/g'             >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZO=n/g'               >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_ZSTD=n/g'              >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_HAVE_KERNEL_LZ4=y/g'               >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_CRYPTO_LZ4=y/g'                    >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_CRYPTO_LZO=n/g'                    >> ${MAIN_KCONFIG_FILE}
-echo 'CONFIG_CRYPTO_ZSTD=y/g'                    >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_LZ4=m/g'                    >> ${MAIN_KCONFIG_FILE}
 echo 'CONFIG_ZRAM_BACKEND_LZ4=y/g'              >> ${MAIN_KCONFIG_FILE}
+echo 'CONFIG_CRYPTO_ZSTD=m/g'                    >> ${MAIN_KCONFIG_FILE}
 
 #https://github.com/amazonlinux/amazon-linux-2023/issues/315
 # echo 'CONFIG_RT_GROUP_SCHED=y/g'                >> ${MAIN_KCONFIG_FILE}
