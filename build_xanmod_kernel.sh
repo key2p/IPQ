@@ -1225,6 +1225,12 @@ make VERBOSE=1 CC=clang-20  CLANG=clang-20 LLC=llc-20 LLD=lld-20 LLVM=1 LLVM_IAS
 # build pfring userland and kernel
 cd $WORK_DIR; 7z x /dev/shm/pfring.zip; rm /dev/shm/pfring.zip
 
+[ -e "$WORK_DIR/PF_RING-stable/kernel/pf_ring.c" ] && sed -i '/pf_ring.h/a\
+#if(LINUX_VERSION_CODE >= KERNEL_VERSION(6,17,0)) \
+#define dev_get_flags netif_get_flags \
+#endif \
+' $WORK_DIR/PF_RING-stable/kernel/pf_ring.c
+
 cd $WORK_DIR/PF_RING-stable/userland;
 make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} DESTDIR=$TOOLS_DIR prefix=/usr CUSTOM_INCLUDE="-I$TOOLS_DIR/usr/include" CUSTOM_LIBS="-L$TOOLS_DIR/usr/lib64" LEXLIB= pcap build_tcpdump || true
 make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} DESTDIR=$TOOLS_DIR prefix=/usr CUSTOM_INCLUDE="-I$TOOLS_DIR/usr/include" CUSTOM_LIBS="-L$TOOLS_DIR/usr/lib64" LEXLIB= pcap tcpdump
