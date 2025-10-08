@@ -42,8 +42,8 @@ cd ${WORK_DIR} && tar -xjf "/dev/shm/linux-${XANMOD_PATCH_VER}.tar.bz2"
 cd ${KERNEL_SRC_DIR}
 
 # download libbpf libxdp pfring
-LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.0}
-LIBXDP_VERSION=${LIBXDP_VERSION:-1.5.4}
+LIBBPF_VERSION=${LIBBPF_VERSION:-1.6.2}
+LIBXDP_VERSION=${LIBXDP_VERSION:-1.5.7}
 
 curl -L https://github.com/libbpf/libbpf/archive/refs/tags/v${LIBBPF_VERSION}.tar.gz  -o /dev/shm/libbpf.tar.gz
 curl -L https://github.com/xdp-project/xdp-tools/archive/refs/tags/v${LIBXDP_VERSION}.tar.gz -o /dev/shm/libxdp.tar.gz
@@ -1224,6 +1224,12 @@ make VERBOSE=1 CC=clang-20  CLANG=clang-20 LLC=llc-20 LLD=lld-20 LLVM=1 LLVM_IAS
 
 # build pfring userland and kernel
 cd $WORK_DIR; 7z x /dev/shm/pfring.zip; rm /dev/shm/pfring.zip
+
+[ -e "$WORK_DIR/PF_RING-stable/kernel/pf_ring.c" ] && sed -i '/pf_ring.h/a\
+#if(LINUX_VERSION_CODE >= KERNEL_VERSION(6,17,0)) \
+#define dev_get_flags netif_get_flags \
+#endif \
+' $WORK_DIR/PF_RING-stable/kernel/pf_ring.c
 
 cd $WORK_DIR/PF_RING-stable/userland;
 make CC=clang LLVM=1 LLVM_IAS=1 BUILD_KERNEL=${KERNELRELEASE} DESTDIR=$TOOLS_DIR prefix=/usr CUSTOM_INCLUDE="-I$TOOLS_DIR/usr/include" CUSTOM_LIBS="-L$TOOLS_DIR/usr/lib64" LEXLIB= pcap build_tcpdump || true
