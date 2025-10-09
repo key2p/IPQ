@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# disable kernel bzip2 lzo lzma
+[ -e ./arch/x86/Kconfig ] && sed -i "/KERNEL_BZIP2/d" ./arch/x86/Kconfig
+[ -e ./arch/x86/Kconfig ] && sed -i "/KERNEL_LZMA/d" ./arch/x86/Kconfig
+[ -e ./arch/x86/Kconfig ] && sed -i "/KERNEL_LZO/d" ./arch/x86/Kconfig
+
+# fix kernel bbr 
 [ -e ./net/ipv4/tcp_bbr.c ] && sed -i "s/bbr_can_use_ecn(const/bbr_can_use_ecn(/g" ./net/ipv4/tcp_bbr.c
 
 # linux 6.16 https://github.com/torvalds/linux/commit/1cefe495cacba5fb0417da3a75a1a76e3546d176
