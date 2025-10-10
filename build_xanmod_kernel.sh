@@ -42,7 +42,7 @@ cd ${WORK_DIR} && tar -xjf "/dev/shm/linux-${XANMOD_PATCH_VER}.tar.bz2"
 cd ${KERNEL_SRC_DIR}
 
 # download libbpf libxdp pfring
-LIBBPF_VERSION=${LIBBPF_VERSION:-1.6.2}
+LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.1}
 LIBXDP_VERSION=${LIBXDP_VERSION:-1.5.7}
 
 curl -L https://github.com/libbpf/libbpf/archive/refs/tags/v${LIBBPF_VERSION}.tar.gz  -o /dev/shm/libbpf.tar.gz
