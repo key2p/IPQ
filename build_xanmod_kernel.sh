@@ -42,7 +42,8 @@ cd ${WORK_DIR} && tar -xjf "/dev/shm/linux-${XANMOD_PATCH_VER}.tar.bz2"
 cd ${KERNEL_SRC_DIR}
 
 # download libbpf libxdp pfring
-LIBBPF_VERSION=${LIBBPF_VERSION:-1.6.2}
+# LIBBPF_VERSION 1.6 compiler error libbpf_errstr
+LIBBPF_VERSION=${LIBBPF_VERSION:-1.5.1}
 LIBXDP_VERSION=${LIBXDP_VERSION:-1.5.7}
 
 curl -L https://github.com/libbpf/libbpf/archive/refs/tags/v${LIBBPF_VERSION}.tar.gz  -o /dev/shm/libbpf.tar.gz
@@ -606,7 +607,7 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
 
   sed -i '/^CONFIG_ACPI_ADXL/s/=m/=y/'                        ${MAIN_KCONFIG_FILE}
   sed -i '/^CONFIG_ACPI_APEI_EINJ/s/=m/=y/'                   ${MAIN_KCONFIG_FILE}
-  sed -i '/^CONFIG_NETFILTER/s/=m/=y/'                        ${MAIN_KCONFIG_FILE}
+  #sed -i '/^CONFIG_NETFILTER/s/=m/=y/'                        ${MAIN_KCONFIG_FILE}
   sed -i '/^CONFIG_BRIDGE/s/=m/=y/'                           ${MAIN_KCONFIG_FILE}
 
   sed -i 's/CONFIG_XFS_FS=[mny]/CONFIG_XFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
@@ -643,6 +644,7 @@ if [[ "$BUILD_TYPE" == "cloud" ]]; then
   sed -i 's/CONFIG_BRIDGE_MRP=[mny]/CONFIG_BRIDGE_MRP=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_BRIDGE_CFM=[mny]/CONFIG_BRIDGE_CFM=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_NET_DSA=[mny]/CONFIG_NET_DSA=n/g'              ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_LLC=[mny]/CONFIG_LLC=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_LLC2=[mny]/CONFIG_LLC2=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_ATALK=[mny]/CONFIG_ATALK=n/g'              ${MAIN_KCONFIG_FILE}
   sed -i 's/CONFIG_LAPB=[mny]/CONFIG_LAPB=n/g'              ${MAIN_KCONFIG_FILE}
@@ -1067,11 +1069,12 @@ sed -i '/^CONFIG_PATA/s/=[ym]/=n/'                                      ${MAIN_K
 
 # 和 xanmod fullcone 冲突
 #sed -i '/^CONFIG_NF_/s/=[ym]/=m/'                              ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_NETFILTER=[mny]/CONFIG_NETFILTER=y/g'      ${MAIN_KCONFIG_FILE} 
-sed -i 's/CONFIG_NETFILTER_INGRESS=[mny]/CONFIG_NETFILTER_INGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
-sed -i 's/CONFIG_NETFILTER_EGRESS=[mny]/CONFIG_NETFILTER_EGRESS=y/g'        ${MAIN_KCONFIG_FILE} 
-sed -i 's/CONFIG_NETFILTER_SKIP_EGRESS=[mny]/CONFIG_NETFILTER_SKIP_EGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
-sed -i 's/CONFIG_NETFILTER_ADVANCED=[mny]/CONFIG_NETFILTER_ADVANCED=y/g'            ${MAIN_KCONFIG_FILE} 
+
+#sed -i 's/CONFIG_NETFILTER=[mny]/CONFIG_NETFILTER=y/g'      ${MAIN_KCONFIG_FILE} 
+#sed -i 's/CONFIG_NETFILTER_INGRESS=[mny]/CONFIG_NETFILTER_INGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
+#sed -i 's/CONFIG_NETFILTER_EGRESS=[mny]/CONFIG_NETFILTER_EGRESS=y/g'        ${MAIN_KCONFIG_FILE} 
+#sed -i 's/CONFIG_NETFILTER_SKIP_EGRESS=[mny]/CONFIG_NETFILTER_SKIP_EGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
+#sed -i 's/CONFIG_NETFILTER_ADVANCED=[mny]/CONFIG_NETFILTER_ADVANCED=y/g'            ${MAIN_KCONFIG_FILE} 
 
 # build opt
 sed -i '/BZIP2/s/^/#/'                              ${MAIN_KCONFIG_FILE}
