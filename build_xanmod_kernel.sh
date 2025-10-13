@@ -467,8 +467,8 @@ sed -i 's/CONFIG_NFSD=[mny]/CONFIG_NFSD=m/g'            ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_NFS_FS=[mny]/CONFIG_NFS_FS=m/g'        ${MAIN_KCONFIG_FILE} 
 
 # reduce size
-sed -i '/^CONFIG_NETFILTER/s/=[ym]/=m/'                        ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_ACPI_CMPC=[mny]/CONFIG_ACPI_CMPC=n/g'      ${MAIN_KCONFIG_FILE}   
+#sed -i '/^CONFIG_NETFILTER/s/=[ym]/=m/'                       ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_ACPI_CMPC=[mny]/CONFIG_ACPI_CMPC=n/g'         ${MAIN_KCONFIG_FILE}   
 sed -i '/^CONFIG_ACPI_ADXL/s/=[ym]/=m/'                        ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_ACPI_APEI_EINJ/s/=[ym]/=m/'                   ${MAIN_KCONFIG_FILE}
 sed -i '/^CONFIG_DRM_PRIVACY_SCREEN/s/=y/=n/'               ${MAIN_KCONFIG_FILE}
@@ -1070,7 +1070,7 @@ sed -i '/^CONFIG_PATA/s/=[ym]/=n/'                                      ${MAIN_K
 # 和 xanmod fullcone 冲突
 #sed -i '/^CONFIG_NF_/s/=[ym]/=m/'                              ${MAIN_KCONFIG_FILE}
 
-#sed -i 's/CONFIG_NETFILTER=[mny]/CONFIG_NETFILTER=y/g'      ${MAIN_KCONFIG_FILE} 
+sed -i 's/CONFIG_NETFILTER=[mny]/CONFIG_NETFILTER=y/g'      ${MAIN_KCONFIG_FILE} 
 #sed -i 's/CONFIG_NETFILTER_INGRESS=[mny]/CONFIG_NETFILTER_INGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
 #sed -i 's/CONFIG_NETFILTER_EGRESS=[mny]/CONFIG_NETFILTER_EGRESS=y/g'        ${MAIN_KCONFIG_FILE} 
 #sed -i 's/CONFIG_NETFILTER_SKIP_EGRESS=[mny]/CONFIG_NETFILTER_SKIP_EGRESS=y/g'      ${MAIN_KCONFIG_FILE} 
