@@ -60,8 +60,8 @@ cat arch/x86/Makefile | grep KBUILD_CFLAGS
 [ -e "CONFIGS/x86_64/config" ] && cp -a CONFIGS/x86_64/config .config
 
 export MAIN_KCONFIG_FILE=.config
-sed -i 's/x64v3/x64v2/g'                          ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_X86_64_VERSION=3/CONFIG_X86_64_VERSION=2/g'      ${MAIN_KCONFIG_FILE}
+sed -i 's/x64v2/x64v3/g'                          ${MAIN_KCONFIG_FILE}
+sed -i 's/CONFIG_X86_64_VERSION=2/CONFIG_X86_64_VERSION=3/g'      ${MAIN_KCONFIG_FILE}
 
 sed -i 's/CONFIG_X86_MSR=[mny]/CONFIG_X86_MSR=y/g'          ${MAIN_KCONFIG_FILE}
 sed -i 's/CONFIG_X86_CPUID=[mny]/CONFIG_X86_CPUID=y/g'      ${MAIN_KCONFIG_FILE}
@@ -1180,6 +1180,14 @@ date; make olddefconfig LLVM=1 LLVM_IAS=1
 date; make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1 || (date; echo $PATH; make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1)
 date
 
+if [[ "$BUILD_TYPE" == "cloud" ]]; then
+  if [[ "$BUILD_CLASS" == "edge" ]]; then
+    ls -al *.deb
+    ln -s *.deb kernel_amd64.deb || cp -f *.deb kernel_amd64.deb || true
+  fi
+fi
+
+
 # 统计builtin的文件大小
 # make KDEB_COMPRESS=xz bzImage -j8 LLVM=1 LLVM_IAS=1
 bash ${SCRIPT_DIR}/report-object-sizes.sh
@@ -1317,12 +1325,14 @@ tools_packagename=linux-tools
 create_debian_control $tools_packagename $tools_version
 KDEB_COMPRESS=xz create_package $tools_packagename $tools_destdir
 
-# build x64v3
-cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.v2
-sed -i 's/x64v2/x64v3/g'                          ${MAIN_KCONFIG_FILE}
-sed -i 's/CONFIG_X86_64_VERSION=2/CONFIG_X86_64_VERSION=3/g'      ${MAIN_KCONFIG_FILE}
-make olddefconfig LLVM=1 LLVM_IAS=1
-make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
+if (( KERNEL_PATCH_VER % 2 == 0 )); then
+  # build x64v2
+  cp ${MAIN_KCONFIG_FILE} ${MAIN_KCONFIG_FILE}.v3
+  sed -i 's/x64v3/x64v2/g'                          ${MAIN_KCONFIG_FILE}
+  sed -i 's/CONFIG_X86_64_VERSION=3/CONFIG_X86_64_VERSION=2/g'      ${MAIN_KCONFIG_FILE}
+  make olddefconfig LLVM=1 LLVM_IAS=1
+  make KDEB_COMPRESS=xz INSTALL_MOD_STRIP=1 bindeb-pkg -j${PAREL_BUILD} LLVM=1 LLVM_IAS=1
+fi
 
 if [[ "$BUILD_TYPE" == "cloud" ]]; then
   if [[ "$BUILD_CLASS" == "main" || "$BUILD_CLASS" == "lts" ]]; then

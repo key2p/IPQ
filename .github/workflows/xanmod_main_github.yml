@@ -111,6 +111,7 @@ jobs:
         with:
           name: R${{ env.DATE }} ${{env.BUILD_TYPE}} kernel for ${{ env.KERNEL_BASE_VER }}
           allowUpdates: true
+          makeLatest: false
           tag: ${{ env.KERNEL_BASE_VER }}_${{env.BUILD_TYPE}}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ${{ env.FIRMWARE_PATH }}/*

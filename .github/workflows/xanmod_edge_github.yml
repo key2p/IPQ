@@ -44,6 +44,9 @@ jobs:
           echo "KERNEL_FULL_VER=${BASH_REMATCH[1]}" >> $GITHUB_ENV
           echo "KERNEL_BASE_VER=${KERNEL_BASE_VER}" >> $GITHUB_ENV
           echo "KERNEL_BASE_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_BASE_VER}.tar.xz" >> $GITHUB_ENV
+          IFS='.' read -r -a version_parts <<< "$KERNEL_FULL_VER"
+          KERNEL_PATCH_VER=${version_parts[2]:-0} && echo "KERNEL_PATCH_VER=${KERNEL_PATCH_VER}" >> $GITHUB_ENV
+          [[ KERNEL_PATCH_VER -lt 3 ]] && exit 1
 
       - name: Initialization Environment
         env:
@@ -111,6 +114,7 @@ jobs:
         with:
           name: R${{ env.DATE }} ${{env.BUILD_TYPE}} kernel for ${{ env.KERNEL_BASE_VER }}
           allowUpdates: true
+          makeLatest: false
           tag: ${{ env.KERNEL_BASE_VER }}_${{env.BUILD_TYPE}}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ${{ env.FIRMWARE_PATH }}/*
