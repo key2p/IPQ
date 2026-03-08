@@ -16,7 +16,7 @@ env:
 
 jobs:
   Build:
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Check Server Performance
@@ -46,15 +46,20 @@ jobs:
           sudo -E /bin/bash -c "systemctl daemon-reload; apt-get -y autoremove --purge; apt-get -y clean" || true
           sudo -E timedatectl set-timezone "$TZ" || true
 
+      - name: Combine Disks
+        if: ${{ env.BUILD_RUNNER == 'github' }}
+        uses: easimon/maximize-build-space@master
+        with:
+          swap-size-mb: 2048
+          temp-reserve-mb: 1024
+          root-reserve-mb: 8192
+          
       - name: Checkout
         uses: actions/checkout@main
 
       - name: Clone Source Code
         run: |
           df -hT $GITHUB_WORKSPACE
-          sudo -E rm -rf /dev/shm/build_ax5 || true
-          mkdir -p /dev/shm/build_ax5 || true
-          cd /dev/shm/build_ax5
           git clone $REPO_URL -b $REPO_BRANCH openwrt
           cd openwrt
           echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
