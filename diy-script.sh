@@ -109,13 +109,15 @@ sed -i 's/TARGET_CFLAGS.*/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE
 rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
 rm -rf feeds/packages/multimedia/{ffmpeg*, fswebcam}
 rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+
+# 不要删除 OpenWrt packages feed 的语言基础设施
 #rm -rf feeds/packages/lang/{golang,node,python}
-rm -rf feeds/packages/lang/{golang,python}
+#rm -rf feeds/packages/lang/{golang,python}
+#rm -rf feeds/packages/lang/{golang,python}
 
 #git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
 
 ./scripts/feeds install -a  
-
 
 # Configure startup scripts auto resize rootfs
 # https://openwrt.org/docs/guide-user/advanced/expand_root
